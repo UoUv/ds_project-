@@ -10,4 +10,6 @@ set(CMAKE_AR "swar")
 option(BUILD_TEST "Build the test sources" ON)
 
 file(GLOB SLAVE_SOURCES "./slave/tensor_trans/*.c" "./slave/im2col/*.c"
-  "./slave/col2
+  "./slave/col2im/*.c" "./slave/bias/*.c" "./slave/winograd/*.c"
+  "./slave/implicit_conv/*.c" "./slave/batch_norm/*.c"
+  "./slave/pooling/*.c" "./slave/softmax/*.c" "./slave/scale/*.c" "./slave/lstm/*.c")
