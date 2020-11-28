@@ -19,4 +19,6 @@ file(GLOB TEST_SOURCES "./unitest/src/*.c" "./unitest/src/*.cpp")
 add_definitions(-msimd -O2)
 add_definitions(-D_MEM_ALIGN_)
 
-set_source_files_
+set_source_files_properties(${SLAVE_SOURCES} COMPILE_FLAGS "-slave")
+set_source_files_properties(${HOST_SOURCES} ${TEST_SOURCES} COMPILE_FLAGS "-host")
+set_source_files_properties($
