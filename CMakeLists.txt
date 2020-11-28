@@ -5,4 +5,9 @@ set (swim2coltest_VERSION_MINOR 0)
 
 
 set(CMAKE_C_COMPILER "sw5cc.new")
-set(CMAKE_CX
+set(CMAKE_CXX_COMPILER "mpiCC")
+set(CMAKE_AR "swar")
+option(BUILD_TEST "Build the test sources" ON)
+
+file(GLOB SLAVE_SOURCES "./slave/tensor_trans/*.c" "./slave/im2col/*.c"
+  "./slave/col2
