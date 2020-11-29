@@ -30,4 +30,9 @@ link_libraries("-hybrid -lm_slave -allshare")
 link_libraries(swdnnlib)
 link_libraries(rt)
 link_libraries(stdc++)
-link_director
+link_directories(".")
+include_directories(.)
+include_directories(/home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/)
+set_source_files_properties(main.cpp COMPILE_FLAGS "-host")
+add_executable(swdnn main.cpp)
+target_li
