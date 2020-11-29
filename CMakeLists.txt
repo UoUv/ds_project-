@@ -21,4 +21,7 @@ add_definitions(-D_MEM_ALIGN_)
 
 set_source_files_properties(${SLAVE_SOURCES} COMPILE_FLAGS "-slave")
 set_source_files_properties(${HOST_SOURCES} ${TEST_SOURCES} COMPILE_FLAGS "-host")
-set_source_files_properties($
+set_source_files_properties(${TEST_SOURCES} COMPILE_FLAGS "-host -std=c99")
+#set_source_files_properties(${HOST_SOURCES} ${TEST_SOURCES} COMPILE_FLAGS
+#  "-host -DUSE_SWDNN -DUSE_BLAS -DUSE_ALL")
+add_library(sw
