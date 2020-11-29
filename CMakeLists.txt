@@ -24,4 +24,10 @@ set_source_files_properties(${HOST_SOURCES} ${TEST_SOURCES} COMPILE_FLAGS "-host
 set_source_files_properties(${TEST_SOURCES} COMPILE_FLAGS "-host -std=c99")
 #set_source_files_properties(${HOST_SOURCES} ${TEST_SOURCES} COMPILE_FLAGS
 #  "-host -DUSE_SWDNN -DUSE_BLAS -DUSE_ALL")
-add_library(sw
+add_library(swdnnlib ${SLAVE_SOURCES} ${HOST_SOURCES} ${TEST_SOURCES})
+
+link_libraries("-hybrid -lm_slave -allshare")
+link_libraries(swdnnlib)
+link_libraries(rt)
+link_libraries(stdc++)
+link_director
