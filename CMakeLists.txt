@@ -37,4 +37,6 @@ set_source_files_properties(main.cpp COMPILE_FLAGS "-host")
 add_executable(swdnn main.cpp)
 target_link_libraries(swdnnlib
   /home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/build/libswBLASlib.a)
-target_link_libraries(swdnnlib /home/export/online1/swyf/swdnn/fjr/2018-09/
+target_link_libraries(swdnnlib /home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/thirdparty/lib/cblas_LINUX0324.a)
+target_link_libraries(swdnnlib /home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/thirdparty/lib/libswblas0324.a)
+#add_executable(sam
