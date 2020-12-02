@@ -35,4 +35,6 @@ include_directories(.)
 include_directories(/home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/)
 set_source_files_properties(main.cpp COMPILE_FLAGS "-host")
 add_executable(swdnn main.cpp)
-target_li
+target_link_libraries(swdnnlib
+  /home/export/online1/swyf/swdnn/fjr/2018-09/BLAS/swGEMM/build/libswBLASlib.a)
+target_link_libraries(swdnnlib /home/export/online1/swyf/swdnn/fjr/2018-09/
