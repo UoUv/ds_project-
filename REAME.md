@@ -17,4 +17,11 @@ three convolutional layer implementations.
 ### Tensor Transformation
 
 ## How to
-#
+### Use
+mkdir ./build/  
+cd build && cmake .. && make
+
+### Add new layers
+1. mkdir a directory using your new layer name in ./slave/  
+`mkdir ./slave/conv`
+2. write your slave code wit
