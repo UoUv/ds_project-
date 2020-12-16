@@ -127,3 +127,48 @@ void sw_conv_backward_pad_weight_diff_impl_f(
         int pad);
 
 void sw_conv_backward_pad_in_diff_impl_f(
+        const float* in,
+        const float* out_grad,
+        const float* weight,
+        float* in_grad,
+        float* weight_diff,
+        int Ci,
+        int Ri,
+        int K,
+        int Ni,
+        int No,
+        int B,
+        int pad);
+
+
+
+void sw_conv_backward_pad_weight_diff_impl_d(
+        const double* in,
+        const double* out_grad,
+        const double* weight,
+        double* in_grad,
+        double* weight_diff,
+        int Ci,
+        int Ri,
+        int K,
+        int Ni,
+        int No,
+        int B,
+        int pad);
+
+void sw_conv_backward_pad_in_diff_impl_d(
+        const double* in,
+        const double* out_grad,
+        const double* weight,
+        double* in_grad,
+        double* weight_diff,
+        int Ci,
+        int Ri,
+        int K,
+        int Ni,
+        int No,
+        int B,
+        int pad);
+
+
+#endif
