@@ -38,4 +38,12 @@ void sw_batch_norm_use_forward_impl_f(
 void sw_batch_norm_nouse_forward_impl_f(
     float * bottom_data,
     float * top_data,
-    float * num_by_cha
+    float * num_by_chans_,
+    float * temp_mutable,
+    float * blobs_0,
+    float * blobs_1,
+    float * blobs_2,
+    float * moving_average_fraction_,
+    float * xnorm,
+    float eps,
+    int num,
