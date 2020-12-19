@@ -30,4 +30,12 @@ void sw_batch_norm_use_forward_impl_f(
     float * temp_mutable,
     float * xnorm,
     float eps,
-    int num,     
+    int num,            //batch_size
+    int channels,       //C
+    int spatial_dim     //H*W
+);
+
+void sw_batch_norm_nouse_forward_impl_f(
+    float * bottom_data,
+    float * top_data,
+    float * num_by_cha
