@@ -22,4 +22,12 @@ typedef struct BNData_st {
 void sw_batch_norm_use_forward_impl_f(
     float * bottom_data,
     float * top_data,
-    floa
+    float * blobs_0,
+    float * blobs_1,
+    float * blobs_2,
+    float * mean_by_channel,
+    float * variance_by_channel,
+    float * temp_mutable,
+    float * xnorm,
+    float eps,
+    int num,     
