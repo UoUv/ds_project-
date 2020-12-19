@@ -13,4 +13,13 @@ typedef struct BNData_st {
   void * top_diff;
   //void * xnorm,
   float eps;
-  int num;            //
+  int num;            //batch_size
+  int channels;      //C
+  int spatial_dim;     //H*W
+
+}BNData;
+
+void sw_batch_norm_use_forward_impl_f(
+    float * bottom_data,
+    float * top_data,
+    floa
