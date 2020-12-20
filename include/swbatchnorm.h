@@ -47,3 +47,13 @@ void sw_batch_norm_nouse_forward_impl_f(
     float * xnorm,
     float eps,
     int num,
+    int channels,
+    int spatial_dim
+);
+
+void sw_batch_norm_use_backward_impl_f(
+    int temp_count,
+    int num,
+    int channels,
+    int spatial_dim,
+    const float 
