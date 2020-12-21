@@ -74,4 +74,11 @@ void sw_batch_norm_nouse_backward_impl_f(
 
 
 void sw_batch_norm_use_forward_impl_d(
-    
+    double * bottom_data,
+    double * top_data,
+    double * blobs_0,
+    double * blobs_1,
+    double * blobs_2,
+    double * mean_by_channel,
+    double * variance_by_channel,
+    do
