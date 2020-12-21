@@ -64,4 +64,14 @@ void sw_batch_norm_use_backward_impl_f(
 void sw_batch_norm_nouse_backward_impl_f(
     const float * top_data,
     const float * top_diff,
-    float *
+    float * bottom_diff,
+    int num,
+    int channels,
+    int spatial_dim,
+    int temp_count,
+    const float * temp_cpu_data
+);
+
+
+void sw_batch_norm_use_forward_impl_d(
+    
