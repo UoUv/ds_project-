@@ -96,4 +96,14 @@ void sw_batch_norm_nouse_forward_impl_d(
     double * blobs_0,
     double * blobs_1,
     double * blobs_2,
-    double * moving_average_fractio
+    double * moving_average_fraction_,
+    double eps,
+    int num,
+    int channels,
+    int spatial_dim
+);
+
+void sw_batch_norm_use_backward_impl_d(
+    int temp_count,
+    const double * top_diff,
+    const double * temp_cpu_data,
