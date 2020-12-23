@@ -81,4 +81,12 @@ void sw_batch_norm_use_forward_impl_d(
     double * blobs_2,
     double * mean_by_channel,
     double * variance_by_channel,
-    do
+    double * temp_mutable,
+    double eps,
+    int num,            //batch_size
+    int channels,       //C
+    int spatial_dim     //H*W
+);
+
+void sw_batch_norm_nouse_forward_impl_d(
+    doub
