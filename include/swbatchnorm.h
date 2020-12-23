@@ -89,4 +89,11 @@ void sw_batch_norm_use_forward_impl_d(
 );
 
 void sw_batch_norm_nouse_forward_impl_d(
-    doub
+    double * bottom_data,
+    double * top_data,
+    double * num_by_chans_,
+    double * temp_mutable,
+    double * blobs_0,
+    double * blobs_1,
+    double * blobs_2,
+    double * moving_average_fractio
