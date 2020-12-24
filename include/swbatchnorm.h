@@ -107,3 +107,12 @@ void sw_batch_norm_use_backward_impl_d(
     int temp_count,
     const double * top_diff,
     const double * temp_cpu_data,
+    double * bottom_diff
+);
+
+void sw_batch_norm_nouse_backward_impl_d(
+    const double * top_data,
+    const double * top_diff,
+    double * bottom_diff,
+    int num,
+    int cha
