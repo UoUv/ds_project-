@@ -115,4 +115,11 @@ void sw_batch_norm_nouse_backward_impl_d(
     const double * top_diff,
     double * bottom_diff,
     int num,
-    int cha
+    int channels,
+    int spatial_dim,
+    int temp_count,
+    const double * temp_cpu_data
+);
+
+
+#endif
