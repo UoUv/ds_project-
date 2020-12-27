@@ -11,4 +11,11 @@
 typedef struct _tagSlaveParam
 {
 	int B,N,H,W,splitNB,splitHW;
-	int nCount,nBNThread
+	int nCount,nBNThreadsNum,nBNLeftThreadsNum,nNBHWThreadsNum,nNBHWLeftThreadsNum;
+	double *pIn,*pOut;
+}SlaveParam;
+
+typedef struct _tagSlaveParam_f
+{
+  int B,N,H,W,splitNB,splitHW;
+  int nCount,nBNThreadsNum,n
