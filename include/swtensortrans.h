@@ -18,4 +18,9 @@ typedef struct _tagSlaveParam
 typedef struct _tagSlaveParam_f
 {
   int B,N,H,W,splitNB,splitHW;
-  int nCount,nBNThreadsNum,n
+  int nCount,nBNThreadsNum,nBNLeftThreadsNum,nNBHWThreadsNum,nNBHWLeftThreadsNum;
+  float *pIn,*pOut;
+}SlaveParam_f;
+
+void weight_caffe_to_swdnn_back_d(double*in,double*out,int B,int N,int H,int W);
+void image_caffe_to_swdnn_d(doub
