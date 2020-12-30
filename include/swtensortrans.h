@@ -32,4 +32,7 @@ void weight_caffe_to_swdnn_back_f(float*in,float *out,int B,int N,int H,int W);
 void image_caffe_to_swdnn_f(float*in,float*out,int B,int N,int H,int W);
 void image_swdnn_to_caffe_f(float*in,float*out,int B,int N,int H,int W);
 void weight_swdnn_to_caffe_f(float* in, float* out, int B, int N, int H, int W);
-void image_caffe_to_swdnn_back_f(f
+void image_caffe_to_swdnn_back_f(float* in, float* out,int B, int N, int H, int W);
+void weight_caffe_to_swdnn_f(float* in, float* out, int B, int N, int H, int W);
+
+void swap_lowdim_f(float* in, float* out, int hi
