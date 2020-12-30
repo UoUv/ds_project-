@@ -27,4 +27,6 @@ void image_caffe_to_swdnn_d(double* in,double* out,int B,int N,int H,int W);
 void image_swdnn_to_caffe_d(double*in,double*out,int B,int N,int H,int W);
 void weight_swdnn_to_caffe_d(double* in, double* out, int B, int N, int H, int W);
 void image_caffe_to_swdnn_back_d(double* in, double* out,int B, int N, int H, int W);
-void weight_caffe_to_swdnn_d(double* in, double* o
+void weight_caffe_to_swdnn_d(double* in, double* out, int B, int N, int H, int W);
+void weight_caffe_to_swdnn_back_f(float*in,float *out,int B,int N,int H,int W);
+void image_caffe_to_swdnn_f(float*in,float*out,int B,int N,int H,i
