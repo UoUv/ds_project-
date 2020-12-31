@@ -15,4 +15,13 @@
 ////#define vB 4
 //#define B 32 
 
-typedef struct Inpu
+typedef struct InputData_st{
+  void* input; //0
+  void* transInput; //8
+  int Ni, B, Ri, Ci;
+} InputData;
+
+typedef struct OutputData_st{
+  void* output; //0
+  void* transOutput; //8
+  int No, B,
