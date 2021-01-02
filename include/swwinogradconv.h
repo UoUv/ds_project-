@@ -35,4 +35,13 @@ typedef struct FilterData_st{
 
 #define MAX_BATCH           64
 #define MAX_IMAGE_CHANNELS  64
-#define M
+#define MAX_IROWS           226
+#define MAX_FILTER_CHANNELS 512
+#define MAX_FILTERS         512
+
+
+//interface
+void sw_winograd_conv(
+	      const int M, 
+	      float* image, 
+	      const int irow
