@@ -24,4 +24,15 @@ typedef struct InputData_st{
 typedef struct OutputData_st{
   void* output; //0
   void* transOutput; //8
-  int No, B,
+  int No, B, Ro, Co;
+} OutputData;
+
+typedef struct FilterData_st{
+  void* filter;
+  void* transFilter;
+  int Ni, No;
+} FilterData;
+
+#define MAX_BATCH           64
+#define MAX_IMAGE_CHANNELS  64
+#define M
