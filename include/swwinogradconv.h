@@ -44,4 +44,12 @@ typedef struct FilterData_st{
 void sw_winograd_conv(
 	      const int M, 
 	      float* image, 
-	      const int irow
+	      const int irows, 
+	      const int C, 
+	      float* filter, 
+	      const int K, 
+	      const int N, 
+	      float* out,
+        int use_blas);
+void falcon_init_lib(int, int, int, int, int);
+void falcon_fre
