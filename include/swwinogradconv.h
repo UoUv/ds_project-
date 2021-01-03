@@ -52,4 +52,7 @@ void sw_winograd_conv(
 	      float* out,
         int use_blas);
 void falcon_init_lib(int, int, int, int, int);
-void falcon_fre
+void falcon_free_lib();
+
+
+#endif
