@@ -258,3 +258,20 @@ void sw_im2col_large_d(Im2colPara *para) {
         // output the (ic+k*kernel_w)-th data in each kernel
         output_row = ic+k*kernel_w;
         output_col = (input_row-k+pad_h)*output_w;
+        if(output_col<0) break; // out of range
+        if(output_col>=output_w*output_h) continue; // out of range
+        dma( dma_put_col,
+            (long)(output_ptr+output_row*(output_w*output_h)+output_col+outoff),
+            (long)(local_buffer_begin));
+        dma_wait(&replyput, 1); replyput = 0;
+      }
+    }
+
+  }
+
+  ldm_free(local_buffer,sizeof(Type)*local_buff_size);
+#undef Type
+#undef SIMDType
+#undef SIMDSIZE
+}
+
