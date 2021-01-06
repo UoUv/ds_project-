@@ -21,4 +21,8 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   int pad_w = para->pad_w;
   int height= para->height;
   int width = para->width;
-  int kernel_h = para-
+  int kernel_h = para->kernel_h;
+  int kernel_w = para->kernel_w;
+  int stride_h = para->stride_h;
+  int stride_w = para->stride_w;
+  int output_h = (height + 2 * pad_h - kernel_h)/stride_h + 1; // output height with s
