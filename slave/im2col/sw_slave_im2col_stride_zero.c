@@ -14,4 +14,11 @@
 void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   int i, j;
   dma_desc dma_get_im, dma_put_col;
-#define Type fl
+#define Type float
+#define SIMDType floatv4
+#define SIMDSIZE 4
+  int pad_h = para->pad_h;
+  int pad_w = para->pad_w;
+  int height= para->height;
+  int width = para->width;
+  int kernel_h = para-
