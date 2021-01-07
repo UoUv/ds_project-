@@ -33,4 +33,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   //int out_channel_size = output_w*output_h*kernel_w*kernel_h;
   //fjrbatch
   int zeropad_col_rowsize = para->zeropad_col_rowsize;
-  int zeropad_col_colsize = para->zeropad_col_colsi
+  int zeropad_col_colsize = para->zeropad_col_colsize;
+  int zeropad_col_size = zeropad_col_rowsize * zeropad_col_colsize;
+  int im_size = channel_size*channels;
+
+  int id = athread_get_id(-1);
+  // number of rows of <i
