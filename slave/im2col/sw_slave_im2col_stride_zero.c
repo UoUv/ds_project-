@@ -42,3 +42,6 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   int local_row_size = (2*para->pad_h + para->height) * para->channels / 64
                + (id< ((2*para->pad_h + para->height) * para->channels % 64));
   // start row index of <id> slave core.
+  int row_start= id*((2*para->pad_h+para->height)*para->channels/64)
+               + (id<((2*para->pad_h+para->height)*para->channels%64)?
+                  id:((2*para->pad_h+para->
