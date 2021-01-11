@@ -47,4 +47,8 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
                   id:((2*para->pad_h+para->height)*para->channels%64));
   int row_end = row_start+local_row_size; // row_start<= ir < row_end)
   // buffer size
-  int local_buff_size = (para->width + 2*para->pad_w)*batch_siz
+  int local_buff_size = (para->width + 2*para->pad_w)*batch_size;
+  SIMDType* local_vbuffer = (SIMDType*)ldm_malloc(sizeof(Type)*local_buff_size);
+  Type* local_buffer = (Type*)local_vbuffer;
+  Type* local_outbuff = (Type*)ldm_malloc(sizeof(Type)*output_w*batch_size);
+  
