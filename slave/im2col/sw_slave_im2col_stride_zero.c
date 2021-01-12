@@ -51,4 +51,10 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   SIMDType* local_vbuffer = (SIMDType*)ldm_malloc(sizeof(Type)*local_buff_size);
   Type* local_buffer = (Type*)local_vbuffer;
   Type* local_outbuff = (Type*)ldm_malloc(sizeof(Type)*output_w*batch_size);
-  
+  // begin ptr of dma_get
+  Type* input_ptr = (Type*)para->data_im;
+  Type* output_ptr= (Type*)para->data_col;
+
+  int input_row, ir, ic, channel, k, ik;
+  int output_row, output_col, outoff, inoff;
+  vol
