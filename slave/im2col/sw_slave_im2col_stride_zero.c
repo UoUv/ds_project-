@@ -57,4 +57,10 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 
   int input_row, ir, ic, channel, k, ik;
   int output_row, output_col, outoff, inoff;
-  vol
+  volatile int input_replyget=0, replyput=0;
+  // dma settings
+  dma_set_op(&dma_get_im, DMA_GET);
+  dma_set_mode(&dma_get_im, PE_MODE);
+  dma_set_reply(&dma_get_im, &input_replyget);
+
+  dma_set_op(&d
