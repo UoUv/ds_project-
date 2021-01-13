@@ -69,4 +69,7 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 
   //fjr batch
   dma_set_size(&dma_get_im,width*batch_size*sizeof(Type));
-  dma_set_size(&dma_put_c
+  dma_set_size(&dma_put_col,output_w*batch_size*sizeof(Type));
+  //dma_set_bsize(&dma_get_im, width*sizeof(Type));
+  //dma_set_stepsize(&dma_get_im, (im_size - width)*sizeof(Type));
+  //dma_set_bsize(&dma_put_col, outpu
