@@ -63,4 +63,10 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
   dma_set_mode(&dma_get_im, PE_MODE);
   dma_set_reply(&dma_get_im, &input_replyget);
 
-  dma_set_op(&d
+  dma_set_op(&dma_put_col, DMA_PUT);
+  dma_set_mode(&dma_put_col, PE_MODE);
+  dma_set_reply(&dma_put_col, &replyput);
+
+  //fjr batch
+  dma_set_size(&dma_get_im,width*batch_size*sizeof(Type));
+  dma_set_size(&dma_put_c
