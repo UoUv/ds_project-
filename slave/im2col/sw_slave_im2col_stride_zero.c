@@ -87,4 +87,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
     inoff = channel*width*height;
     // the row is pad
     if(!((unsigned)input_row<(unsigned)height)) {
-      for(ic = 0; ic < local_buff_
+      for(ic = 0; ic < local_buff_size; ++ic) local_buffer[ic] = 0.;
+      //for(ic=0;ic<local_buff_size/SIMDSIZE;++ic){
+      //  local_vbuffer[ic] = 0.0;
+      //}
+      //ic = ic*SIMDSIZE;
+      //// rest of the unalign
