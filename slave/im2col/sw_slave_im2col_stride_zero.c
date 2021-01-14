@@ -77,4 +77,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 
   //fjrbatch
 //  for(ic=0;ic<pad_w;++ic) local_buffer[ic] = 0.0;
-//  for(ic=pad_w+width;ic<local_buff_siz
+//  for(ic=pad_w+width;ic<local_buff_size;++ic) local_buffer[ic] = 0.0;
+  for(ic = 0; ic < local_buff_size; ++ic) local_buffer[ic] = 0.;
+
+  // begin im2col
+  for(ir=row_start;ir<row_end;++ir) {
+    input_row = (ir)%(heigh
