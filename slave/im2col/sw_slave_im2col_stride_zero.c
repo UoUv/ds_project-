@@ -82,4 +82,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 
   // begin im2col
   for(ir=row_start;ir<row_end;++ir) {
-    input_row = (ir)%(heigh
+    input_row = (ir)%(height+2*pad_h)-pad_h;
+    channel = (ir)/(height+2*pad_h);
+    inoff = channel*width*height;
+    // the row is pad
+    if(!((unsigned)input_row<(unsigned)height)) {
+      for(ic = 0; ic < local_buff_
