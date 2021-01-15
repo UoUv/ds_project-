@@ -100,3 +100,7 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
     } else {
 #ifdef PRINT_DEBUGINFO
       if(id==0) printf("before dma GET %d\n",input_row);
+#endif
+      // get data by dma
+      //dma(dma_get_im,(long)(input_ptr+input_row*width+inoff),(long)(local_buffer+pad_w));
+      dma(dma_get_im,(long)(input_ptr+input_row*width+inoff),(long)(loc
