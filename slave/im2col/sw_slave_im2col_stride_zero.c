@@ -92,4 +92,11 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
       //  local_vbuffer[ic] = 0.0;
       //}
       //ic = ic*SIMDSIZE;
-      //// rest of the unalign
+      //// rest of the unaligned
+      //while(ic<local_buff_size) {
+      //  local_buffer[ic] = 0.0;
+      //  ++ic;
+      //}
+    } else {
+#ifdef PRINT_DEBUGINFO
+      if(id==0) printf("before dma GET %d\n",input_row);
