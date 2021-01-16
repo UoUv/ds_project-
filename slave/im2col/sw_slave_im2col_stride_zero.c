@@ -110,4 +110,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 #endif
     }
 
-    // put data b
+    // put data by dma
+    int zeropad_out_channel_size = zeropad_col_rowsize*kernel_w*kernel_h;
+    outoff = zeropad_out_channel_size*channel;
+    for(ic=0;ic<kernel_w;++ic) {
+      //fjrbatch
+      for(j = 0; j < bat
