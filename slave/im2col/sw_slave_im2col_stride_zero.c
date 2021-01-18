@@ -120,4 +120,7 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
           local_outbuff[j*output_w + k] = local_buffer[j*(width+pad_w*2) + ik];
         }
 
-      for(k=0;k<k
+      for(k=0;k<kernel_h;++k) {
+        output_row = ic+((input_row+pad_h)%stride_h+k*stride_h)*kernel_w;
+        output_col = ((input_row+pad_h)/stride_h-k)*output_w;
+        if(output_col<0 || output_row>=kernel_h*kernel
