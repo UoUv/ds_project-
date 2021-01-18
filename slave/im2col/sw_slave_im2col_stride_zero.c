@@ -115,4 +115,9 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
     outoff = zeropad_out_channel_size*channel;
     for(ic=0;ic<kernel_w;++ic) {
       //fjrbatch
-      for(j = 0; j < bat
+      for(j = 0; j < batch_size; ++j)
+        for(k=0,ik=ic;k<output_w;++k,ik+=stride_w) {
+          local_outbuff[j*output_w + k] = local_buffer[j*(width+pad_w*2) + ik];
+        }
+
+      for(k=0;k<k
