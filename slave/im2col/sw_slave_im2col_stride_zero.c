@@ -126,4 +126,7 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
         if(output_col<0 || output_row>=kernel_h*kernel_w) break; // out of range
         if(output_row<0 || output_col>=output_w*output_h) continue; // out of range
         dma( dma_put_col,
-//(long)(output_ptr+output_row*(outp
+//(long)(output_ptr+output_row*(output_w*output_h)+output_col+outoff),
+//(Ni, K*K, Ro, Co) (channel, output_row, output_col)
+            (long)(output_ptr + output_col + output_row*zeropad_col_rowsize + outoff),
+       
