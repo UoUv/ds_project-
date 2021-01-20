@@ -123,4 +123,7 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
       for(k=0;k<kernel_h;++k) {
         output_row = ic+((input_row+pad_h)%stride_h+k*stride_h)*kernel_w;
         output_col = ((input_row+pad_h)/stride_h-k)*output_w;
-        if(output_col<0 || output_row>=kernel_h*kernel
+        if(output_col<0 || output_row>=kernel_h*kernel_w) break; // out of range
+        if(output_row<0 || output_col>=output_w*output_h) continue; // out of range
+        dma( dma_put_col,
+//(long)(output_ptr+output_row*(outp
