@@ -129,4 +129,11 @@ void sw_im2col_large_stride_zeropad_f(Im2colPara *para) {
 //(long)(output_ptr+output_row*(output_w*output_h)+output_col+outoff),
 //(Ni, K*K, Ro, Co) (channel, output_row, output_col)
             (long)(output_ptr + output_col + output_row*zeropad_col_rowsize + outoff),
-       
+            (long)(local_outbuff));
+        dma_wait(&replyput, 1); replyput = 0;
+      }
+    }
+  }
+
+  ldm_free(local_buffer,sizeof(Type)*local_buff_size);
+  ldm_free(local_outbuff,sizeof(Type)*output_w*
