@@ -12,4 +12,10 @@
  * Jerry Fang 
  * 2017 June 18
  *
- * input  i
+ * input  is of dim(B, Ni)
+ * weight is of dim(Ni, No)
+ * ouput  is of dim(B, No)
+ *
+ * No overlap input DMA and weight DMA
+ * for backward in_grad = conv(out_grad, weight, 'full');
+ * pad_inv(out) = co
