@@ -18,4 +18,12 @@
  *
  * No overlap input DMA and weight DMA
  * for backward in_grad = conv(out_grad, weight, 'full');
- * pad_inv(out) = co
+ * pad_inv(out) = conv(in, weight, 'full')
+ * ************/
+#define Type double
+#define SIMDSIZE 4
+#define SIMDType doublev4
+
+void conv_full_pad(ConvData* param)
+{
+  int cB, cNi, cRi, cCi, cKr, cKc, ccC
