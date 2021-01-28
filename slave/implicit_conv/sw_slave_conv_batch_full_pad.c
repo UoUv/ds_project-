@@ -26,4 +26,10 @@
 
 void conv_full_pad(ConvData* param)
 {
-  int cB, cNi, cRi, cCi, cKr, cKc, ccC
+  int cB, cNi, cRi, cCi, cKr, cKc, ccCore, crCore, cNo;
+  int ii, jj, cRo, cCo;
+  int CoStart;
+  int id = athread_get_id(-1);
+  int cid = id%8, rid = id/8;
+  int input_calc_index=1, input_load_index=0;
+  int weight_calc
