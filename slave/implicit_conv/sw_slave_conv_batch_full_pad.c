@@ -39,4 +39,12 @@ void conv_full_pad(ConvData* param)
   Ri = param->_Ri;
   Ci = param->_Ci;
   No = param->_No;
-  K  = param
+  K  = param->_K;
+  Ro = param->_Ro;
+  Co = param->_Co;
+  B  = param->_B;
+  pad  = param->_pad;
+  int CStride=param->_Costride;
+
+//B, Ni, Ci, Ri
+  SIMDType* local_input  = (SIMDType*)(long) ldm_malloc(sizeof(
