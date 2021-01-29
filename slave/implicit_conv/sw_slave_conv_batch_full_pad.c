@@ -47,4 +47,9 @@ void conv_full_pad(ConvData* param)
   int CStride=param->_Costride;
 
 //B, Ni, Ci, Ri
-  SIMDType* local_input  = (SIMDType*)(long) ldm_malloc(sizeof(
+  SIMDType* local_input  = (SIMDType*)(long) ldm_malloc(sizeof(Type)*Ni*B/8/8);
+  int local_input_size = Ni*B/8/8/SIMDSIZE;
+//No, Ni, K, K
+  Type* local_weight = (Type*)(long) ldm_malloc(sizeof(Type)*Ni*No/8/8);
+  int local_weight_size = Ni*No/64;
+//B, No, Co, Ro
