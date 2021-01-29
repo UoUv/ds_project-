@@ -57,4 +57,6 @@ void conv_full_pad(ConvData* param)
   int local_output_size = No*B/8/8*CStride;
 
 //  Type local_weight[K*K*Ni/64*No];
-/
+//initilize DMA variables
+  volatile int  input_replyget = 0, weight_replyget = 0,  replyput = 0;
+  dma_desc dma_get_input, dma_get_weight, dma_get_output, dma_put_output;
