@@ -84,4 +84,9 @@ void conv_full_pad(ConvData* param)
   dma_set_stepsize(&dma_get_weight, Ni/8*7*sizeof(Type));
 
   //DMA for local_output(B/8, No/8)
-  dma_set_size(&dma_get_output, B*No/8/8/SIMDSIZE*sizeof(SIMDType)
+  dma_set_size(&dma_get_output, B*No/8/8/SIMDSIZE*sizeof(SIMDType));
+  dma_set_bsize(&dma_get_output, B/SIMDSIZE/8*sizeof(SIMDType));
+  dma_set_stepsize(&dma_get_output, B/SIMDSIZE/8*7*sizeof(SIMDType));
+
+  //DMA for local_output(B/8, No/8)
+ 
