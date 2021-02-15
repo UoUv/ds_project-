@@ -102,4 +102,10 @@ void conv_full_pad(ConvData* param)
 
   //DMA for 1st input
   Type* input_start = (Type*)param->input+rid*B/8+cid*Ni/8*B;
-  dma(dma_get_input, (long)(input_start), (long)(loca
+  dma(dma_get_input, (long)(input_start), (long)(local_input));
+  dma_wait(&input_replyget, 1); input_replyget = 0;
+
+  //fjrpad
+  //orig for(CoStart=0; CoStart<Co; CoStart+=CStride){
+  for(CoStart=0; CoStart<Co; CoStart+=CStride){
+    int CoEnd = CoStart+CStri
