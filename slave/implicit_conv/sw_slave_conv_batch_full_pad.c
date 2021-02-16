@@ -118,4 +118,10 @@ void conv_full_pad(ConvData* param)
       CiEnd = Ci+2*pad;
 
     //fjrpad
-    //orig for(cR
+    //orig for(cRo=0; cRo<Ro; ++cRo){
+    for(cRo=0; cRo < Ro; ++cRo){
+/*
+      int cRo_map = cRo - pad;
+      if( !(cRo_map >= 0 && cRo_map < Ro) )
+        continue;
+      int cCoStart_map = Co
