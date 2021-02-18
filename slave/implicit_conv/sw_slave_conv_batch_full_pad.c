@@ -132,4 +132,13 @@ void conv_full_pad(ConvData* param)
      Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoStart);
      // Type* output_ptr = param->output + rid*B/8 + cid*No/8*B + B*No*(cRo_map*Co+cCoStart_map);
 	    //init local_output
-	    for(i = 0; i<local_output_size/SIMDSIZE; 
+	    for(i = 0; i<local_output_size/SIMDSIZE; ++i)
+		    local_output[i] = 0.0;
+
+      for(cKr=0; cKr<K; ++cKr){
+
+        cRi = cRo+cKr;
+        //fjrfull
+        int lr = cRi -pad;
+        if(!(lr >= 0 && lr < Ri))
+          continue;
