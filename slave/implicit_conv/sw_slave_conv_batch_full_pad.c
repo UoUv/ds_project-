@@ -142,3 +142,11 @@ void conv_full_pad(ConvData* param)
         int lr = cRi -pad;
         if(!(lr >= 0 && lr < Ri))
           continue;
+
+		    for(cCi=CoStart; cCi<CiEnd; ++cCi){
+          //fjrfull
+          int lc = cCi -pad;
+          if(!(lc >= 0 && lc < Ci))
+            continue;
+
+			    dma(dma_get_input, (long)(input_
