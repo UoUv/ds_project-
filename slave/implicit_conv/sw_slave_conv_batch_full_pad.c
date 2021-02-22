@@ -149,4 +149,10 @@ void conv_full_pad(ConvData* param)
           if(!(lc >= 0 && lc < Ci))
             continue;
 
-			    dma(dma_get_input, (long)(input_
+			    dma(dma_get_input, (long)(input_start + (lc+lr*Ci)*Ni*B), (long)(local_input));
+			    dma_wait(&input_replyget, 1); input_replyget = 0;
+
+          for(cKc=0; cKc<K; ++cKc){
+
+            cCo = cCi-cKc;
+        
