@@ -155,4 +155,6 @@ void conv_full_pad(ConvData* param)
           for(cKc=0; cKc<K; ++cKc){
 
             cCo = cCi-cKc;
-        
+            if(cCo >= CoStart && cCo < CoEnd){
+			        dma(dma_get_weight, (long)(weight_ptr + (K-1-cKc+(K-1-cKr)*K)*Ni*No), (long)(local_weight));
+			        dma_wait(&weight_replyget, 1); wei
