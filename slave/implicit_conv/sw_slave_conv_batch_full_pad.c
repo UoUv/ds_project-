@@ -191,4 +191,8 @@ void conv_full_pad(ConvData* param)
 
   ldm_free(local_input, sizeof(SIMDType)*local_input_size);
   ldm_free(local_weight, sizeof(Type)*local_weight_size);
-  ldm_free(local_output, sizeof(Type)
+  ldm_free(local_output, sizeof(Type)*local_output_size);
+
+}//main func
+#undef Type
+#undef SIMDType
