@@ -14,4 +14,11 @@
  *
  * input  is of dim(B, Ni)
  * weight is of dim(Ni, No)
- * ouput  is of d
+ * ouput  is of dim(B, No)
+ *
+ * No overlap input DMA and weight DMA
+ * for backward in_grad = conv(out_grad, weight, 'full');
+ * pad_inv(out) = conv(in, weight, 'full')
+ * ************/
+#define SIMDSIZE 4
+#
