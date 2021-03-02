@@ -21,4 +21,10 @@
  * pad_inv(out) = conv(in, weight, 'full')
  * ************/
 #define SIMDSIZE 4
-#
+#define SIMDType floatv4
+#define Type float
+
+void conv_full_pad_float(ConvData* param)
+{
+  int cB, cNi, cRi, cCi, cKr, cKc, ccCore, crCore, cNo;
+  int ii, jj, cRo, cCo
