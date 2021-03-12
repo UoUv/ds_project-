@@ -73,4 +73,7 @@ void conv_full_pad_float(ConvData* param)
   dma_set_mode(&dma_put_output, PE_MODE);
   dma_set_reply(&dma_put_output, &replyput);
 
-  //D
+  //DMA for local_input(B/8, Ni/8)
+  dma_set_size(&dma_get_input, B*Ni/8/8/SIMDSIZE*sizeof(SIMDType));
+  dma_set_bsize(&dma_get_input, B/SIMDSIZE/8*sizeof(SIMDType));
+  dma_set_stepsize(&dma_
