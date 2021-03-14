@@ -94,4 +94,8 @@ void conv_full_pad_float(ConvData* param)
   dma_set_stepsize(&dma_put_output, B/SIMDSIZE/8*7*sizeof(SIMDType));
 
 //1st weight_load
-  Type* weigh
+  Type* weight_start = (Type*)param->weight+(cid*No/8*Ni+rid*Ni/8);
+  Type* weight_ptr = weight_start;
+
+  dma(dma_get_weight, (long)(weight_ptr), (long)(local_weight));
+  dma_wait(&weight_replyget, 1); w
