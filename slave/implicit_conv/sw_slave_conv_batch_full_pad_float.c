@@ -98,4 +98,9 @@ void conv_full_pad_float(ConvData* param)
   Type* weight_ptr = weight_start;
 
   dma(dma_get_weight, (long)(weight_ptr), (long)(local_weight));
-  dma_wait(&weight_replyget, 1); w
+  dma_wait(&weight_replyget, 1); weight_replyget = 0;
+
+  //DMA for 1st input
+  Type* input_start = (Type*)param->input+rid*B/8+cid*Ni/8*B;
+  dma(dma_get_input, (long)(input_start), (long)(local_input));
+  dma_wait(&inp
