@@ -124,4 +124,9 @@ void conv_full_pad_float(ConvData* param)
       int cRo_map = cRo - pad;
       if( !(cRo_map >= 0 && cRo_map < Ro) )
         continue;
-      int cCoStart_map = CoStart - p
+      int cCoStart_map = CoStart - pad;
+      if( !(cCoStart_map >= 0 && cCoStart_map < Co) )
+        continue;
+*/
+      //fjrpad
+     Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoSta
