@@ -129,4 +129,7 @@ void conv_full_pad_float(ConvData* param)
         continue;
 */
       //fjrpad
-     Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoSta
+     Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoStart);
+     // Type* output_ptr = param->output + rid*B/8 + cid*No/8*B + B*No*(cRo_map*Co+cCoStart_map);
+	    //init local_output
+	    for(i = 0; i<local_output_size/SIMDSIZE; +
