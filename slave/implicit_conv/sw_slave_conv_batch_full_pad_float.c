@@ -149,4 +149,6 @@ void conv_full_pad_float(ConvData* param)
           if(!(lc >= 0 && lc < Ci))
             continue;
 
-			    //dma(dma
+			    //dma(dma_get_input, (long)(input_start + (lc+lr*Ci)*Ni*B), (long)(local_input));
+			    //dma_wait(&input_replyget, 1); input_replyget = 0;
+    		  dma(dma_get_input, (long)(input_start + (lc+lr*Ci
