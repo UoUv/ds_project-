@@ -162,4 +162,9 @@ void conv_full_pad_float(ConvData* param)
 			        dma(dma_get_weight, (long)(weight_ptr + (K-1-cKc+(K-1-cKr)*K)*Ni*No), (long)(local_weight));
 			        dma_wait(&weight_replyget, 1); weight_replyget = 0;
 
-				      g
+				      gemmfloat(
+                (Type*)(local_input),
+				        (Type*)(local_weight),
+				        (Type*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
+				        B/8/4,
+			
