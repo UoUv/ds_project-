@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -5,7 +6,7 @@
 #include <math.h>
 #include "simd.h"
 #include "dma.h"
-#include "../include/sw_conv_implicit.h"
+#include "./include/sw_conv_implicit.h"
 
 /***************
  * GEMM PLAN 
@@ -24,7 +25,7 @@
 #define SIMDType floatv4
 #define Type float
 
-void conv_full_pad_float(ConvData* param)
+void conv_full_pad_float_v2(ConvData* param)
 {
   int cB, cNi, cRi, cCi, cKr, cKc, ccCore, crCore, cNo;
   int ii, jj, cRo, cCo;
@@ -45,6 +46,7 @@ void conv_full_pad_float(ConvData* param)
   B  = param->_B;
   pad  = param->_pad;
   int CStride=param->_Costride;
+  int cCo_real, cRo_real, cCi_real, cRi_real;
 
 //B, Ni, Ci, Ri
   SIMDType* local_input  = (SIMDType*) (long)ldm_malloc(sizeof(Type)*Ni*B/8/8);
@@ -93,7 +95,7 @@ void conv_full_pad_float(ConvData* param)
   dma_set_bsize(&dma_put_output, B/SIMDSIZE/8*sizeof(SIMDType));
   dma_set_stepsize(&dma_put_output, B/SIMDSIZE/8*7*sizeof(SIMDType));
 
-//1st weight_load
+  //1st weight_load
   Type* weight_start = (Type*)param->weight+(cid*No/8*Ni+rid*Ni/8);
   Type* weight_ptr = weight_start;
 
@@ -107,95 +109,29 @@ void conv_full_pad_float(ConvData* param)
 
   //fjrpad
   //orig for(CoStart=0; CoStart<Co; CoStart+=CStride){
-  for(CoStart=0; CoStart<Co; CoStart+=CStride){
+  for(CoStart=0; CoStart<Co+2*pad; CoStart+=CStride){
     int CoEnd = CoStart+CStride;
     int CiEnd = CoStart+CStride+K;
     //fjrpad
-    if(CoEnd > Co)
-      CoEnd = Co;
+    if(CoEnd > Co+2*pad)
+      CoEnd = Co+2*pad;
     //fjrfull
-    if(CiEnd > Ci+2*pad)
-      CiEnd = Ci+2*pad;
+    if(CiEnd > Ci+2*(K-1))
+      CiEnd = Ci+2*(K-1);
 
     //fjrpad
     //orig for(cRo=0; cRo<Ro; ++cRo){
-    for(cRo=0; cRo < Ro; ++cRo){
-/*
-      int cRo_map = cRo - pad;
-      if( !(cRo_map >= 0 && cRo_map < Ro) )
-        continue;
-      int cCoStart_map = CoStart - pad;
-      if( !(cCoStart_map >= 0 && cCoStart_map < Co) )
-        continue;
-*/
-      //fjrpad
-     Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoStart);
-     // Type* output_ptr = param->output + rid*B/8 + cid*No/8*B + B*No*(cRo_map*Co+cCoStart_map);
+    for(cRo=0; cRo < Ro+2*pad; ++cRo){
 	    //init local_output
 	    for(i = 0; i<local_output_size/SIMDSIZE; ++i)
 		    local_output[i] = 0.0;
 
-      for(cKr=0; cKr<K; ++cKr){
+      cRo_real = cRo - pad;
+      if(cRo_real < 0 || cRo_real >= Ro) continue;
 
+      for(cKr=0; cKr<K; ++cKr){
         cRi = cRo+cKr;
-        //fjrfull
-        int lr = cRi -pad;
-        if(!(lr >= 0 && lr < Ri))
-          continue;
+        int cRi_real = cRi - (K-1);
+        if((cRi_real < 0 || cRi_real >= Ri)) continue;
 
 		    for(cCi=CoStart; cCi<CiEnd; ++cCi){
-          //fjrfull
-          int lc = cCi -pad;
-          if(!(lc >= 0 && lc < Ci))
-            continue;
-
-			    //dma(dma_get_input, (long)(input_start + (lc+lr*Ci)*Ni*B), (long)(local_input));
-			    //dma_wait(&input_replyget, 1); input_replyget = 0;
-    		  dma(dma_get_input, (long)(input_start + (lc+lr*Ci)*Ni*B), (long)(local_input));
-    		  dma_wait(&input_replyget, 1); input_replyget = 0;
-
-          for(cKc=0; cKc<K; ++cKc){
-
-
-            cCo = cCi-cKc;
-            if(cCo >= CoStart && cCo < CoEnd){
-			        dma(dma_get_weight, (long)(weight_ptr + (K-1-cKc+(K-1-cKr)*K)*Ni*No), (long)(local_weight));
-			        dma_wait(&weight_replyget, 1); weight_replyget = 0;
-
-				      gemmfloat(
-                (Type*)(local_input),
-				        (Type*)(local_weight),
-				        (Type*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
-				        B/8/4,
-				        B/8/4,
-				        No/8,
-				        Ni/8,
-				        rid,
-				        cid
-              );
-			      }//if
-          }//cKc
-      }//cCi
-
-    }//cKc
-
-    //input back outer
-    jj=0;
-    for(ii=CoStart; ii<CoEnd; ++ii){
-        dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
-        dma_wait(&replyput, 1); replyput = 0;
-		    output_ptr += B*No;
-        jj++;
-    }
-
-    }//cRo
-
-  }//CoStart
-
-  ldm_free(local_input, sizeof(SIMDType)*local_input_size);
-  ldm_free(local_weight, sizeof(Type)*local_weight_size);
-  ldm_free(local_output, sizeof(Type)*local_output_size);
-
-}//main func
-#undef Type
-#undef SIMDType
