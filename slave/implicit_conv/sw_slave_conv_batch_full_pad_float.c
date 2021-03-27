@@ -185,4 +185,13 @@ void conv_full_pad_float(ConvData* param)
         dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
         dma_wait(&replyput, 1); replyput = 0;
 		    output_ptr += B*No;
-        jj++
+        jj++;
+    }
+
+    }//cRo
+
+  }//CoStart
+
+  ldm_free(local_input, sizeof(SIMDType)*local_input_size);
+  ldm_free(local_weight, sizeof(Type)*local_weight_size);
+  ldm_free(local_output, sizeof(Type)*local_out
