@@ -181,4 +181,8 @@ void conv_full_pad_float(ConvData* param)
 
     //input back outer
     jj=0;
-    f
+    for(ii=CoStart; ii<CoEnd; ++ii){
+        dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
+        dma_wait(&replyput, 1); replyput = 0;
+		    output_ptr += B*No;
+        jj++
