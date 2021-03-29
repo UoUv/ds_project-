@@ -135,3 +135,58 @@ void conv_full_pad_float_v2(ConvData* param)
         if((cRi_real < 0 || cRi_real >= Ri)) continue;
 
 		    for(cCi=CoStart; cCi<CiEnd; ++cCi){
+          //fjrfull
+          int cCi_real = cCi - (K-1);
+          if(cCi_real < 0 || cCi_real >= Ci) continue;
+
+    		  dma(dma_get_input, (long)(input_start + (cCi_real + cRi_real*Ci)*Ni*B), (long)(local_input));
+    		  dma_wait(&input_replyget, 1); input_replyget = 0;
+
+          for(cKc=0; cKc<K; ++cKc){
+            cCo = cCi-cKc;
+            int cCo_real = cCo - pad;
+            if( cCo_real < 0 || cCo_real >= Co ) continue;
+
+            if(cCo >= CoStart && cCo < CoEnd) {
+			        //dma(dma_get_weight, (long)(weight_ptr + (K-1-cKc+(K-1-cKr)*K)*Ni*No), (long)(local_weight));
+			        dma(dma_get_weight, (long)(weight_ptr + (cKc+cKr*K)*Ni*No), (long)(local_weight));
+			        dma_wait(&weight_replyget, 1); weight_replyget = 0;
+
+				      gemmfloat(
+                (Type*)(local_input),
+				        (Type*)(local_weight),
+				        (Type*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
+				        B/8/4,
+				        B/8/4,
+				        No/8,
+				        Ni/8,
+				        rid,
+				        cid
+              );
+			      }//if
+          }//cKc
+        }//cCi
+
+      }//cKc
+
+      //input back outer
+      //fjrpad
+      for(cCo = CoStart; cCo < CoEnd; ++cCo){
+        int cCo_real = cCo - pad;
+        if( cCo_real < 0 || cCo_real >= Co ) continue;
+        //if(cid==0&&rid==0) printf("(R,C):(%d,%d)\n",cRo_real,cCo_real);
+        Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo_real*Co+cCo_real);
+        dma(dma_put_output, (long)(output_ptr), (long)(local_output+(cCo-CoStart)*B*No/64/SIMDSIZE));
+        dma_wait(&replyput, 1); replyput = 0;
+      }
+    }//cRo
+
+  }//CoStart
+
+  ldm_free(local_input, sizeof(SIMDType)*local_input_size);
+  ldm_free(local_weight, sizeof(Type)*local_weight_size);
+  ldm_free(local_output, sizeof(Type)*local_output_size);
+
+}//main func
+#undef Type
+#undef SIMDType
