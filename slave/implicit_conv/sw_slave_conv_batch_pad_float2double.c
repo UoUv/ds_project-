@@ -14,4 +14,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <slave.h>
-#i
+#include <math.h>
+#include "simd.h"
+#include "dma.h"
+#include "./include/sw_conv_implicit.h"
+
+#define SIMDSIZE  4
+#define SIMDType  floatv4
+#define Type      float
+#define SIMDType
