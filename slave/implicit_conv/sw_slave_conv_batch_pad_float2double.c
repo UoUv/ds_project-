@@ -22,4 +22,12 @@
 #define SIMDSIZE  4
 #define SIMDType  floatv4
 #define Type      float
-#define SIMDType
+#define SIMDTypeD doublev4
+#define TypeD     double
+
+void conv_pad_float__(ConvData* param)
+{
+  int cB, cNi, cRi, cCi, cKr, cKc, ccCore, crCore, cNo;
+  int ii, jj, cRo, cCo;
+  int CoStart;
+  int id = athread_get_id
