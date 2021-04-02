@@ -35,4 +35,12 @@ void conv_pad_float__(ConvData* param)
   int input_calc_index=1, input_load_index=0;
   int weight_calc_index=1, weight_load_index=0;
   int i, j;
-  int Ni, Ri, Ci, N
+  int Ni, Ri, Ci, No, K, Ro, Co, B, pad;
+  Ni = param->_Ni;
+  Ri = param->_Ri;
+  Ci = param->_Ci;
+  No = param->_No;
+  K  = param->_K;
+  Ro = param->_Ro;
+  Co = param->_Co;
+  B  = 
