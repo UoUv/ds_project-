@@ -56,4 +56,8 @@ void conv_pad_float__(ConvData* param)
   Type* local_weight = (Type*)(long) ldm_malloc(sizeof(TypeD)*Ni*No/8/8);
   int local_weight_size = Ni*No/64;
 //B, No, Co, Ro
-  SIMD
+  SIMDType* local_output = (SIMDType*)(long) ldm_malloc(sizeof(TypeD)*No*B/8/8*CStride);
+  int local_output_size = No*B/8/8*CStride;
+  SIMDTypeD vdbl;
+  SIMDType vflt;
+  Type*  fptr 
