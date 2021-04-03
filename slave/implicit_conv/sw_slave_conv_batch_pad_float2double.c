@@ -43,4 +43,11 @@ void conv_pad_float__(ConvData* param)
   K  = param->_K;
   Ro = param->_Ro;
   Co = param->_Co;
-  B  = 
+  B  = param->_B;
+  pad = param->_pad;
+  int CStride=param->_Costride;
+
+//B, Ni, Ci, Ri
+//fjr1buf
+  SIMDType* local_input  = (SIMDType*) (long)ldm_malloc(sizeof(TypeD)*Ni*B/8/8);
+  int local_
