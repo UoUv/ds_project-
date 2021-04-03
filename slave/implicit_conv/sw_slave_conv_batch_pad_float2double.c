@@ -60,4 +60,9 @@ void conv_pad_float__(ConvData* param)
   int local_output_size = No*B/8/8*CStride;
   SIMDTypeD vdbl;
   SIMDType vflt;
-  Type*  fptr 
+  Type*  fptr = (Type *)local_input;
+  TypeD* dptr = (TypeD*)local_input;
+  Type*  wfptr = (Type *)local_weight;
+  TypeD* wdptr = (TypeD*)local_weight;
+  Type*  ofptr = (Type *)local_output;
+  TypeD* odptr = (
