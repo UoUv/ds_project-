@@ -77,4 +77,9 @@ void conv_pad_float__(ConvData* param)
   dma_set_reply(&dma_get_input, &input_replyget);
 
   dma_set_op(&dma_get_weight, DMA_GET);
-  dma_set_
+  dma_set_mode(&dma_get_weight, PE_MODE);
+  dma_set_reply(&dma_get_weight, &weight_replyget);
+
+  dma_set_op(&dma_put_output, DMA_PUT);
+  dma_set_mode(&dma_put_output, PE_MODE);
+  dma_set_re
