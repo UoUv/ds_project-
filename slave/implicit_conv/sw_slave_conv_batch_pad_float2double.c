@@ -65,4 +65,9 @@ void conv_pad_float__(ConvData* param)
   Type*  wfptr = (Type *)local_weight;
   TypeD* wdptr = (TypeD*)local_weight;
   Type*  ofptr = (Type *)local_output;
-  TypeD* odptr = (
+  TypeD* odptr = (TypeD*)local_output;
+
+//  Type local_weight[K*K*Ni/64*No];
+//initilize DMA variables
+  volatile int  input_replyget = 0, weight_replyget = 0,  replyput = 0;
+  dma_desc dma_get_input, dma_get_we
