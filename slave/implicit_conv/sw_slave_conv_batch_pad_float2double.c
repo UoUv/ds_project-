@@ -91,4 +91,8 @@ void conv_pad_float__(ConvData* param)
 
   //DMA for local_weight(No/8, Ni/8)
   dma_set_size(&dma_get_weight, No*Ni/8/8*sizeof(Type));
-  dma_set_bsize(
+  dma_set_bsize(&dma_get_weight, Ni/8*sizeof(Type));
+  dma_set_stepsize(&dma_get_weight, Ni/8*7*sizeof(Type));
+
+  //DMA for local_output(B/8, No/8)
+  dma_set_size(&dma_get_output, B*No/8/8/SIMDSIZE
