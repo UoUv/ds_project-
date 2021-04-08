@@ -118,4 +118,13 @@ void conv_pad_float__(ConvData* param)
 
   for(CoStart=0; CoStart<Co; CoStart+=CStride){
     int CoEnd = CoStart+CStride;
-    int
+    int CiEnd = CoStart+CStride+K;
+    if(CoEnd > Co)
+      CoEnd = Co;
+    //fjrpad
+    if(CiEnd > Ci + 2*pad)
+      CiEnd = Ci + 2*pad;
+    //input init
+    for(cRo=0; cRo<Ro; ++cRo){
+
+      Type* out
