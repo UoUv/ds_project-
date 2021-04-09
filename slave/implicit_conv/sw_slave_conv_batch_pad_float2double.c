@@ -137,4 +137,11 @@ void conv_pad_float__(ConvData* param)
         cRi = cRo+cKr;
         //fjrpad
         int lr = cRi - pad;
-        if(!(lr >= 0 && lr < Ri)
+        if(!(lr >= 0 && lr < Ri))
+            continue;
+
+		    for(cCi=CoStart; cCi<CiEnd; ++cCi){
+            //fjrpad
+            int lc = cCi - pad;
+            if(!(lc >= 0 && lc < Ci))
+                cont
