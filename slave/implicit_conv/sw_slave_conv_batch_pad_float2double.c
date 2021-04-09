@@ -127,4 +127,6 @@ void conv_pad_float__(ConvData* param)
     //input init
     for(cRo=0; cRo<Ro; ++cRo){
 
-      Type* out
+      Type* output_ptr = (Type*)param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoStart);
+	    //init local_output
+	    for(i = 0; i<(sizeof(TypeD)/sizeof(Type))*local_output_size
