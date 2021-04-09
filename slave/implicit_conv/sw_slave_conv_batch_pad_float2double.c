@@ -144,4 +144,9 @@ void conv_pad_float__(ConvData* param)
             //fjrpad
             int lc = cCi - pad;
             if(!(lc >= 0 && lc < Ci))
-                cont
+                continue;
+
+    			  dma(dma_get_input, (long)(input_start + (lc+lr*Ci)*Ni*B), (long)(local_input));
+    			  dma_wait(&input_replyget, 1); input_replyget = 0;
+
+            for(i=local_input_size*SI
