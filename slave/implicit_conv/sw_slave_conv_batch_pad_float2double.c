@@ -153,4 +153,10 @@ void conv_pad_float__(ConvData* param)
               simd_load(vflt,&fptr[i]);
               vdbl = (SIMDTypeD)vflt;
               simd_store(vdbl,&dptr[i]);
-        
+            }
+
+            for(cKc=0; cKc<K; ++cKc){
+
+              cCo = cCi - cKc;
+              if(cCo >= CoStart && cCo < CoEnd){
+			          dma(dma_get_weight, (long)(weight_ptr + (cKc+cKr*K)*Ni*No)
