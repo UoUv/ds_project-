@@ -159,4 +159,8 @@ void conv_pad_float__(ConvData* param)
 
               cCo = cCi - cKc;
               if(cCo >= CoStart && cCo < CoEnd){
-			          dma(dma_get_weight, (long)(weight_ptr + (cKc+cKr*K)*Ni*No)
+			          dma(dma_get_weight, (long)(weight_ptr + (cKc+cKr*K)*Ni*No), (long)(local_weight));
+			          dma_wait(&weight_replyget, 1); weight_replyget = 0;
+
+                for(i=local_weight_size-SIMDSIZE;i>=0;i-=SIMDSIZE){
+                  si
