@@ -163,4 +163,10 @@ void conv_pad_float__(ConvData* param)
 			          dma_wait(&weight_replyget, 1); weight_replyget = 0;
 
                 for(i=local_weight_size-SIMDSIZE;i>=0;i-=SIMDSIZE){
-                  si
+                  simd_load(vflt,&wfptr[i]);
+                  vdbl = (SIMDTypeD)vflt;
+                  simd_store(vdbl,&wdptr[i]);
+                }
+
+    			  	  dgemmasm((TypeD*)(local_input),
+    			  
