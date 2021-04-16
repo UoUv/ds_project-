@@ -173,4 +173,17 @@ void conv_pad_float__(ConvData* param)
     			  	    //(TypeD*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
     			  	    (TypeD*)(odptr + (cCo-CoStart)*No*B/64),
     			  	    B/8/4,
-  
+    			  	    B/8/4,
+    			  	    No/8,
+    			  	    Ni/8,
+    			  	    rid,
+    			  	    cid);
+
+
+			        }//if
+            }//cKc
+          }//cCi
+
+      }//cKc
+
+      // convert o
