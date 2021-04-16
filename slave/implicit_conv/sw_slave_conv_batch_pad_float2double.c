@@ -169,4 +169,8 @@ void conv_pad_float__(ConvData* param)
                 }
 
     			  	  dgemmasm((TypeD*)(local_input),
-    			  
+    			  	    (TypeD*)(local_weight),
+    			  	    //(TypeD*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
+    			  	    (TypeD*)(odptr + (cCo-CoStart)*No*B/64),
+    			  	    B/8/4,
+  
