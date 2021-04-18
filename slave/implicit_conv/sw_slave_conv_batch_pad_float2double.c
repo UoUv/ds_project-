@@ -186,4 +186,8 @@ void conv_pad_float__(ConvData* param)
 
       }//cKc
 
-      // convert o
+      // convert output type back
+      for(i=0;i<local_output_size;i+=SIMDSIZE){
+        simd_load(vdbl,&odptr[i]);
+        vflt = (SIMDType)vdbl;
+        simd_store(vflt,&ofptr[
