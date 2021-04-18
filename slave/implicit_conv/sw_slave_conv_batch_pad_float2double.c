@@ -197,3 +197,10 @@ void conv_pad_float__(ConvData* param)
       jj=0;
       for(ii=CoStart; ii<CoEnd; ++ii){
           //dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
+          dma(dma_put_output, (long)(output_ptr), (long)(ofptr+jj*B*No/64));
+          dma_wait(&replyput, 1); replyput = 0;
+		      output_ptr += B*No;
+          jj++;
+      }
+
+    }//cRo
