@@ -190,4 +190,10 @@ void conv_pad_float__(ConvData* param)
       for(i=0;i<local_output_size;i+=SIMDSIZE){
         simd_load(vdbl,&odptr[i]);
         vflt = (SIMDType)vdbl;
-        simd_store(vflt,&ofptr[
+        simd_store(vflt,&ofptr[i]);
+      }
+
+      //input back outer
+      jj=0;
+      for(ii=CoStart; ii<CoEnd; ++ii){
+          //dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
