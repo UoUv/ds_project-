@@ -211,4 +211,8 @@ void conv_pad_float__(ConvData* param)
   ldm_free(local_input, sizeof(SIMDTypeD)*local_input_size);
   //fjr1buf
   ldm_free(local_weight, sizeof(TypeD)*local_weight_size);
-  ldm_free(local_output, sizeof(Typ
+  ldm_free(local_output, sizeof(TypeD)*local_output_size);
+
+}//main func
+#undef SIMDType
+#undef Type
