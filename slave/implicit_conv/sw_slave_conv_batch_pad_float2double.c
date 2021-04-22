@@ -204,3 +204,11 @@ void conv_pad_float__(ConvData* param)
       }
 
     }//cRo
+
+  }//CoStart
+
+  //fjr1buf
+  ldm_free(local_input, sizeof(SIMDTypeD)*local_input_size);
+  //fjr1buf
+  ldm_free(local_weight, sizeof(TypeD)*local_weight_size);
+  ldm_free(local_output, sizeof(Typ
