@@ -118,3 +118,97 @@ void conv_valid(ConvData* param)
     if(CiEnd > Ci)
       CiEnd = Ci;
 	
+    //input init
+    for(cRo=0; cRo<Ro; ++cRo){
+
+      Type* output_ptr = param->output + rid*B/8 + cid*No/8*B + B*No*(cRo*Co+CoStart);
+     
+	  //init local_output
+	  for(i = 0; i<local_output_size/SIMDSIZE; ++i)
+		local_output[i] = 0.0;
+
+
+      for(cKr=0; cKr<K; ++cKr){
+
+        cRi = cRo+cKr;
+
+		for(cCi=CoStart; cCi<CiEnd; ++cCi){
+
+		  if(cCi != CiEnd-1)
+			dma(dma_get_input, (long)(input_start + (cCi+1+cRi*Ci)*Ni*B), (long)(local_input+input_load_index*local_input_size));
+		  else{
+			  if(cKr != K-1){
+				dma(dma_get_input, (long)(input_start + (CoStart+(cRi+1)*Ci)*Ni*B), (long)(local_input+input_load_index*local_input_size));
+			  }
+			  else{
+				  if(cRo != Ro-1){
+					dma(dma_get_input, (long)(input_start + (CoStart+(cRo+1)*Ci)*Ni*B), (long)(local_input+input_load_index*local_input_size));
+				  }
+				  else{
+					dma(dma_get_input, (long)(input_start + (CoStart+CStride)*Ni*B), (long)(local_input+input_load_index*local_input_size));
+				  }
+			  }
+		  }
+      for(cKc=0; cKc<K; ++cKc){
+			  if(cKc+1 < K)
+			  	dma(dma_get_weight, (long)(weight_ptr + (cKc+1+cKr*K)*Ni*No), (long)(local_weight + weight_load_index*local_weight_size));
+			  else{
+			  	if(cCi+1 < CiEnd)
+			  		dma(dma_get_weight, (long)(weight_ptr + (cKr*K)*Ni*No), (long)(local_weight + weight_load_index*local_weight_size));
+			  	else{
+			  		if(cKr+1 < K)
+			  			dma(dma_get_weight, (long)(weight_ptr + (cKr+1)*K*Ni*No), (long)(local_weight + weight_load_index*local_weight_size));
+			  		else
+			  			dma(dma_get_weight, (long)(weight_ptr), (long)(local_weight + weight_load_index*local_weight_size));
+				}
+			}
+
+      cCo = cCi-cKc;
+      if(cCo >= CoStart && cCo < CoEnd){
+
+      dgemmasm((Type*)(local_input  + input_calc_index*local_input_size),
+				(Type*)(local_weight + weight_calc_index*local_weight_size),
+				(Type*)(local_output + (cCo-CoStart)*No*B/64/SIMDSIZE),
+				B/8/4, 
+				B/8/4, 
+				No/8, 
+				Ni/8, 
+				rid, 
+				cid);
+			}//if
+
+			dma_wait(&weight_replyget, 1); weight_replyget = 0;
+			weight_calc_index = 1 - weight_calc_index;
+			weight_load_index = 1 - weight_load_index;
+          }//cKc
+
+			dma_wait(&input_replyget, 1); input_replyget = 0;
+	    	input_calc_index = 1-input_calc_index;
+	    	input_load_index = 1-input_load_index;
+	    	//input back inner
+	   
+          }//cCi
+
+      }//cKc
+
+      //input back outer
+      
+      jj=0;
+      for(ii=CoStart; ii<CoEnd; ++ii){
+          dma(dma_put_output, (long)(output_ptr), (long)(local_output+jj*B*No/64/SIMDSIZE));
+          dma_wait(&replyput, 1); replyput = 0;
+		  output_ptr += B*No;
+          jj++;
+      }
+
+    }//cRo
+
+  }//CoStart
+
+  ldm_free(local_input, sizeof(SIMDType)*local_input_size*2);
+  ldm_free(local_weight, sizeof(Type)*local_weight_size*2);
+  ldm_free(local_output, sizeof(Type)*local_output_size);
+
+}//main func
+#undef Type
+#undef SIMDType
