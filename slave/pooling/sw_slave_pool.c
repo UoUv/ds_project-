@@ -14,4 +14,8 @@
 typedef double Type;
 typedef struct _tagSlavePoolingParam
 {
-	int pooled_hei
+	int pooled_height_,pooled_width_,stride_h_,stride_w_,pad_h_,pad_w_,kernel_h_,kernel_w_,height_,width_;
+	int nCount,nThreadsNum,nLeftThreadsNum;
+	int nBottomOffset,nTopOffset,use_top_mask;
+	int  *pMask;
+	double
