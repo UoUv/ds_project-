@@ -88,3 +88,76 @@ void conv_image_size_aware_opt(ConvData* param)
   dma_set_stepsize(&dma_put_output, 4*(Co-bCo)*sizeof(Type));
   
  
+  //Weight DMA 1st
+  Type* weight_base = param->weight + rid*Ni/8+cid*Ni*No/8;
+  dma(dma_get_weight, (long)(weight_base), (long)(local_weight + weight_calc_index*local_weight_size ));
+
+  Type* input_base = param->input + cid*Ni/8*Ci*4 + rid*Ci*4*Ni;
+  Type* output_base = param->output + cid*No/8*Co*4 + rid*Co*4*No;
+
+  dma_wait(&replyget_weight, 1); replyget_weight = 0;
+	
+
+  dma(dma_get_input, (long)(input_base), (long)(local_input + input_calc_index*local_input_size));
+  dma_wait(&replyget_input, 1); replyget_input = 0;
+
+  for(RoStart = 0; RoStart < Ro; RoStart++){
+    for(CoStart = 0; CoStart < Co; CoStart+=bCo){
+
+	  for(i = 0; i<local_output_size;++i)
+			local_output[i] = 0.0;
+
+	  int weight_offset = Ni*No;
+      for(cKr=0; cKr < K; ++cKr){
+//DMA the RoStart+cKr line of input
+		//dma(dma_get_input, (long)(input_base + ((RoStart+cKr)*Ni*8*Ci+CoStart)*4), (long)(local_input));
+		//dma_wait(&replyget_input, 1); replyget_input = 0;
+
+        if(cKr != K-1){
+			dma(dma_get_input, (long)(input_base + ((RoStart+cKr+1)*Ni*8*Ci+CoStart)*4), (long)(local_input + input_load_index*local_input_size));
+		}
+		else{
+			if(CoStart+bCo < Co){
+				dma(dma_get_input, (long)(input_base + ((RoStart)*Ni*8*Ci+CoStart+bCo)*4), (long)(local_input + input_load_index*local_input_size));
+			}
+			else{
+				dma(dma_get_input, (long)(input_base + ((RoStart+1)*Ni*8*Ci)*4), (long)(local_input + input_load_index*local_input_size));
+			}
+		}
+
+		for(cKc=0; cKc < K; ++cKc){
+			
+			if(cKr == K-1 && cKc == K-1 )
+				dma(dma_get_weight, (long)(weight_base), (long)(local_weight + weight_load_index*local_weight_size));
+			else
+				dma(dma_get_weight, (long)(weight_base + weight_offset), (long)(local_weight + weight_load_index*local_weight_size));
+				
+			weight_offset+=Ni*No;
+
+		  dgemmasm(local_input+4*cKc + input_calc_index*local_input_size, 
+					local_weight + weight_calc_index*local_weight_size, 
+					local_output, 
+					bCo, 
+					bCi,
+					No/8, 
+					Ni/8, 
+					rid, 
+					cid);
+
+			dma_wait(&replyget_weight, 1); replyget_weight = 0;
+			weight_load_index = 1 - weight_load_index;
+			weight_calc_index = 1 - weight_calc_index;
+		}//cKc
+		dma_wait(&replyget_input, 1); replyget_input = 0;
+		input_load_index = 1 - input_load_index;
+		input_calc_index = 1 - input_calc_index;
+      }//cKr
+      dma(dma_put_output, (long)(output_base + (RoStart*Co*No*8+CoStart)*4), (long)(local_output));
+      dma_wait(&replyput, 1); replyput = 0;
+    }//CoStart
+  }//RoStart
+
+  ldm_free(local_input, sizeof(Type)*Ni/8*bCi*4*2);
+  ldm_free(local_weight, sizeof(Type)*Ni/8*No/8*2);
+  ldm_free(local_output, sizeof(Type)*No/8*bCo*4);
+}//main func
