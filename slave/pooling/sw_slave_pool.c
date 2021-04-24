@@ -18,4 +18,12 @@ typedef struct _tagSlavePoolingParam
 	int nCount,nThreadsNum,nLeftThreadsNum;
 	int nBottomOffset,nTopOffset,use_top_mask;
 	int  *pMask;
-	double
+	double *pTopData,*pBottomData,*pTopMask;
+}SlavePoolingParam;
+
+
+
+__thread_local_fix  dma_desc pool_dmaget2,dmaputmask,pool_dmaput2;
+void poolingBackwardMax(SlavePoolingParam *pParam)
+{
+  const int n
