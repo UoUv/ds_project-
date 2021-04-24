@@ -26,4 +26,6 @@ typedef struct _tagSlavePoolingParam
 __thread_local_fix  dma_desc pool_dmaget2,dmaputmask,pool_dmaput2;
 void poolingBackwardMax(SlavePoolingParam *pParam)
 {
-  const int n
+  const int nMaxBuffSize = 49152;//58KB 
+	int pooled_height_,pooled_width_,stride_h_,stride_w_,pad_h_,pad_w_,kernel_h_,kernel_w_,height_,width_;
+	int nCount,nMaxThreadsNum,nLe
