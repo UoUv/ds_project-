@@ -31,4 +31,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 	int nCount,nMaxThreadsNum,nLeftMaxThreadsNum,nOffset,nOffset0,nOffset1;
 	int nBottomOffset,nTopOffset,use_top_mask;
 	int ph,pw,hstart,hend,wstart,wend,pool_index,h,w,index,bottom_index;
-	Type *pTopData,*pBottom
+	Type *pTopData,*pBottomData,*pTopMask;	
+	int  *pMask;	
+  //dma_desc pool_dmaget2,pool_dmaput2;	
+	volatile int getreply=0,putreply=0,putmaskreply=0;	
+	int myid = athread_get_id(-1);
+	
+	pooled_height_ = pParam->poole
