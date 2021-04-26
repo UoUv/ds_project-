@@ -37,4 +37,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 	volatile int getreply=0,putreply=0,putmaskreply=0;	
 	int myid = athread_get_id(-1);
 	
-	pooled_height_ = pParam->poole
+	pooled_height_ = pParam->pooled_height_;
+	pooled_width_  = pParam->pooled_width_;
+	stride_h_ = pParam->stride_h_;
+	stride_w_ = pParam->stride_w_;
+	pad_h_ = pParam->pad_h_;
+	pad_w_ = pParam->pad_w_;
+	kernel_h_ = pPara
