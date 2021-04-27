@@ -49,4 +49,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 	width_  = pParam->width_;	
 	nCount = pParam->nCount;
 	nMaxThreadsNum = pParam->nThreadsNum;
-	nLeftMaxThreadsNum = pPa
+	nLeftMaxThreadsNum = pParam->nLeftThreadsNum;
+	nBottomOffset = pParam->nBottomOffset;
+	nTopOffset = pParam->nTopOffset;
+	use_top_mask = pParam->use_top_mask;
+	
+	if(myid >= nMaxThreadsNum) return;	
+	
