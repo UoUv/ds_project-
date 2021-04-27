@@ -43,4 +43,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 	stride_w_ = pParam->stride_w_;
 	pad_h_ = pParam->pad_h_;
 	pad_w_ = pParam->pad_w_;
-	kernel_h_ = pPara
+	kernel_h_ = pParam->kernel_h_;
+	kernel_w_ = pParam->kernel_w_;
+	height_ = pParam->height_;
+	width_  = pParam->width_;	
+	nCount = pParam->nCount;
+	nMaxThreadsNum = pParam->nThreadsNum;
+	nLeftMaxThreadsNum = pPa
