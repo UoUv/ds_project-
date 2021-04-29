@@ -64,4 +64,13 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 	dma_set_reply(&pool_dmaput2, &putreply);	
 	
 	int nTopSize = pooled_height_ * pooled_width_*sizeof(Type),i=0,j=0;
-	int nBottomSize = height_ * width_*sizeof(Type),nMask
+	int nBottomSize = height_ * width_*sizeof(Type),nMaskSize=0;
+	if(use_top_mask>0)
+	  nMaskSize = nTopSize;
+  else
+	  nMaskSize = pooled_height_ * pooled_width_*sizeof(int);  	
+	int nMaxSize = height_*width_-1;
+
+	if((nTopSize+nBottomSize+nMaskSize) > nMaxBuffSize)
+	{
+	  
