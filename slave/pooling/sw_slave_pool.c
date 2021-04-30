@@ -73,4 +73,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 
 	if((nTopSize+nBottomSize+nMaskSize) > nMaxBuffSize)
 	{
-	  
+	    nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
+		int nSplitCount=0,nSplitRows =0,nLeftRows = 0;
+		int nTopSize1 = 0,nMaskSize1=0,nBottomIndex;
+		nSplitRows = pooled_height_;
+        int nKernelSize 
