@@ -90,4 +90,9 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		}
 		
 		if(nSplitCount <1){
-			nSplitRow
+			nSplitRows = 0;
+			nLeftRows = pooled_height_;
+			nTopSize1 = pooled_height_ * pooled_width_*sizeof(Type);
+			nMaskSize1 = pooled_height_ * pooled_width_*sizeof(int);
+		}
+	
