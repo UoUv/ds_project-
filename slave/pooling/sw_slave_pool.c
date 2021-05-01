@@ -107,4 +107,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			else
 			{
 				nMaskSize = nSplitRows*pooled_width_*sizeof(int);
-				nMaskSize1 = nLeftRows*pooled_wi
+				nMaskSize1 = nLeftRows*pooled_width_*sizeof(int);
+			}				
+			nTopSize1 = nLeftRows*pooled_width_*sizeof(Type);							
+		}
+		
+		nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
+		//if(myid<1)printf("nSplitCount=%d nSpl
