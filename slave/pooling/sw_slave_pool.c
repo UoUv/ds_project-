@@ -95,4 +95,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			nTopSize1 = pooled_height_ * pooled_width_*sizeof(Type);
 			nMaskSize1 = pooled_height_ * pooled_width_*sizeof(int);
 		}
-	
+		else{
+			nSplitCount = pooled_height_/nSplitRows;
+			nLeftRows = pooled_height_%nSplitRows;
+			nTopSize = nSplitRows*pooled_width_*sizeof(Type);
+			if(use_top_mask >0) 
+			{
+				nMask
