@@ -113,4 +113,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		}
 		
 		nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
-		//if(myid<1)printf("nSplitCount=%d nSpl
+		//if(myid<1)printf("nSplitCount=%d nSplitRows=%d nTopSize=%d nBottomSize=%d\n",nSplitCount,nSplitRows,nTopSize,nBottomSize);
+		if(use_top_mask>0)
+		{
+			nMaskSize = nTopSize;
+			pTopMask  = (Type*)(long)ldm_malloc(nMaskSize)
