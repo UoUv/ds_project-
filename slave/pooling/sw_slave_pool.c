@@ -125,4 +125,11 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
         }	
 		
 		pTopData  = (Type*)(long)ldm_malloc(nTopSize);
-		pBottomData = (Type*)(long)ldm_malloc(nB
+		pBottomData = (Type*)(long)ldm_malloc(nBottomSize);		
+		for(i=0;i<nCount;i++)
+		{   
+			nOffset = i*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;
+						
+			for(j=0;
