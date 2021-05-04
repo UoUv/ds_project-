@@ -117,4 +117,12 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		if(use_top_mask>0)
 		{
 			nMaskSize = nTopSize;
-			pTopMask  = (Type*)(long)ldm_malloc(nMaskSize)
+			pTopMask  = (Type*)(long)ldm_malloc(nMaskSize);
+		}
+		else
+		{
+			pMask  = (int*)(long)ldm_malloc(nMaskSize);	
+        }	
+		
+		pTopData  = (Type*)(long)ldm_malloc(nTopSize);
+		pBottomData = (Type*)(long)ldm_malloc(nB
