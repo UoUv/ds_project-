@@ -132,4 +132,9 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			nOffset0 = nOffset * nTopOffset;
 			nOffset1 = nOffset * nBottomOffset;
 						
-			for(j=0;
+			for(j=0;j<nSplitCount;j++)
+			{
+				if(use_top_mask>0) 
+				{
+					dma_set_size(&pool_dmaget2, nTopSize);  				
+					dma(pool_dmaget2,(long)(pParam->pTopMask+nOffset0+j*nSplitRows*pooled_width_),(lon
