@@ -154,4 +154,11 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 				for (ph = 0; ph < nSplitRows; ++ph) 
 				{
 					pool_index = ph*pooled_width_;
-					hstart = INT
+					hstart = INT_MAX,hend = 0;
+					if(use_top_mask>0)
+					{
+						for(pw=0;pw<pooled_width_;pw++)
+						{
+							index = pool_index+pw;
+							if(pTopMask[index] >=0 && pTopMask[index]<hstart)
+	
