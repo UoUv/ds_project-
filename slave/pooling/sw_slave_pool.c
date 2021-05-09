@@ -161,4 +161,13 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 						{
 							index = pool_index+pw;
 							if(pTopMask[index] >=0 && pTopMask[index]<hstart)
-	
+								hstart = pTopMask[index];
+							if(pTopMask[index]>hend)
+								hend = pTopMask[index];
+						}		
+					}
+					else	
+					{
+						for(pw=0;pw<pooled_width_;pw++)
+						{
+			
