@@ -185,4 +185,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 					nBottomIndex = nOffset1+nStartAddr;
 					dma_set_size(&pool_dmaget2, nKernelSize);  				
 					dma(pool_dmaget2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));
-					dma_w
+					dma_wait(&getreply,1);getreply=0;
+					for (pw = 0; pw < pooled_width_; ++pw) {
+						
+						index = pool_index+pw;
+						bottom_index =	(use_top_mask>0 ? pTopMask[index] : pMask[index]) - nSt
