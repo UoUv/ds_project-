@@ -181,4 +181,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		  			hend = hend %width_ >0 ? (hend /width_)+1 :hend /width_ ;
 					hstart = hstart /width_;
 					nKernelSize = (hend - hstart)*width_*sizeof(Type);
-					nStartAddr
+					nStartAddr = hstart*width_;
+					nBottomIndex = nOffset1+nStartAddr;
+					dma_set_size(&pool_dmaget2, nKernelSize);  				
+					dma(pool_dmaget2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));
+					dma_w
