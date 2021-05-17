@@ -200,4 +200,9 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			}
 			if(nLeftRows > 0)
 			{
-				nOffset = nSplitCount * nSplitRows*pooled_wi
+				nOffset = nSplitCount * nSplitRows*pooled_width_;
+			 	if(use_top_mask>0) 
+				{
+					dma_set_size(&pool_dmaget2, nTopSize1);  				
+					dma(pool_dmaget2,(long)(pParam->pTopMask+nOffset0+nOffset),(long)(pTopMask));
+					dma_wait(&getrep
