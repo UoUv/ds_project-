@@ -211,4 +211,9 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 				{
 					dma_set_size(&pool_dmaget2, nMaskSize1);  				
 					dma(pool_dmaget2,(long)(pParam->pMask+nOffset0+nOffset),(long)(pMask));
-					dma_wai
+					dma_wait(&getreply,1);getreply=0;
+				}
+				
+				dma_set_size(&pool_dmaget2, nTopSize1);  				
+				dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0+nOffset),(long)(pTopData));
+				d
