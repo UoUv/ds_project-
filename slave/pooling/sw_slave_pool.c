@@ -250,4 +250,7 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 					
 					nStartAddr = hstart*width_;
 					nBottomIndex = nOffset1+nStartAddr;
-			
+					
+					dma_set_size(&pool_dmaget2, nKernelSize);  				
+					dma(pool_dmaget2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));
+					dma_wait(&getreply,1);getreply
