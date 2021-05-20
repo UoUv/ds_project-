@@ -244,4 +244,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 								hend = pMask[index];
 						}
 					}					
-				    hend = hend %width_ >0 ? (hend /width_)+1 :hend /width
+				    hend = hend %width_ >0 ? (hend /width_)+1 :hend /width_ ;
+					hstart = hstart /width_;					
+        			nKernelSize = (hend - hstart)*width_*sizeof(Type);
+					
+					nStartAddr = hstart*width_;
+					nBottomIndex = nOffset1+nStartAddr;
+			
