@@ -291,4 +291,11 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 				}
 				
 				dma_set_size(&pool_dmaget2, nTopSize);  				
-				dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0+j*nSplitRows*pooled_width_),
+				dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0+j*nSplitRows*pooled_width_),(long)(pTopData));
+				dma_wait(&getreply,1);getreply=0;
+				
+				for (ph = 0; ph < nSplitRows; ++ph) 
+				{
+					pool_index = ph*pooled_width_;
+					hstart = INT_MAX,hend = 0;
+					if(use_top_
