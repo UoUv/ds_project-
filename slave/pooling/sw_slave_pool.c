@@ -313,4 +313,16 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 					{
 						for(pw=0;pw<pooled_width_;pw++)
 						{
-							index
+							index = pool_index+pw;
+							if(pMask[index]>=0 && pMask[index]<hstart)
+								hstart = pMask[index];
+							if(pMask[index]>hend)
+								hend = pMask[index];
+						}
+					}					
+          
+					hend = hend %width_ >0 ? (hend /width_)+1 :hend /width_ ;
+					hstart = hstart /width_;
+          
+					nKernelSize = (hend - hstart)*width_*sizeof(Type);
+		
