@@ -335,4 +335,6 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 					for (pw = 0; pw < pooled_width_; ++pw) {
 						
 						index = pool_index+pw;
-						bo
+						bottom_index =	(use_top_mask>0 ? pTopMask[index] : pMask[index]) - nStartAddr;
+						if(bottom_index<0 || bottom_index > nMaxSize)continue;
+						pBottomData[bottom_index] += pTopData[in
