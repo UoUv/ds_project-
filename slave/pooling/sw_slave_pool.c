@@ -337,4 +337,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 						index = pool_index+pw;
 						bottom_index =	(use_top_mask>0 ? pTopMask[index] : pMask[index]) - nStartAddr;
 						if(bottom_index<0 || bottom_index > nMaxSize)continue;
-						pBottomData[bottom_index] += pTopData[in
+						pBottomData[bottom_index] += pTopData[index];
+					}
+					dma_set_size(&pool_dmaput2, nKernelSize);				
+					dma(pool_dmaput2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));
+					dma_wait(&putreply,1);putreply=0;
