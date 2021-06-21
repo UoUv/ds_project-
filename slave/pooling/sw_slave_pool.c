@@ -446,4 +446,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			if(use_top_mask>0) 
 			{
 				dma_set_size(&pool_dmaget2, nMaskSize);
-				dma(po
+				dma(pool_dmaget2,(long)(pParam->pTopMask+nOffset0),(long)(pTopMask));
+				dma_wait(&getreply,1);getreply=0;	
+			}	
+			else
+			{
+				dma_set_size(&pool_dmaget2, nMaskSize);
+			dma(pool_dmaget2,(long)(
