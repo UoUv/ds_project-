@@ -435,4 +435,9 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		dma_set_size(&pool_dmaput2, nBottomSize);
 		for(i=0;i<nCount;i++)
 		{
+			nOffset = i*nMaxThreadsNum + myid;		
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;
 			
+			dma_set_size(&pool_dmaget2, nTopSize);
+			dma(pool_dmaget2,(long)(pParam->pTopData+nOffse
