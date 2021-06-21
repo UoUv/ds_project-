@@ -440,4 +440,10 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			nOffset1 = nOffset * nBottomOffset;
 			
 			dma_set_size(&pool_dmaget2, nTopSize);
-			dma(pool_dmaget2,(long)(pParam->pTopData+nOffse
+			dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0),(long)(pTopData));
+			memset(pBottomData,0,nBottomSize);
+			dma_wait(&getreply,1);getreply=0;				
+			if(use_top_mask>0) 
+			{
+				dma_set_size(&pool_dmaget2, nMaskSize);
+				dma(po
