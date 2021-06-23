@@ -465,4 +465,11 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			  }
 			}
 			dma(pool_dmaput2,(long)(pParam->pBottomData+nOffset1),(long)(pBottomData));
-			dma_wait
+			dma_wait(&putreply,1);putreply=0;				
+		}
+		//Left data process		
+		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
+		{
+			nOffset = nCount*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			n
