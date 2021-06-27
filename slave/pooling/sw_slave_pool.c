@@ -493,4 +493,8 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 			  pool_index = ph * pooled_width_;
 			  for (pw = 0; pw < pooled_width_; ++pw) {
 				  index = pool_index + pw;
-				  bottom_index =
+				  bottom_index =	use_top_mask >0? pTopMask[index] : pMask[index];
+				  if(bottom_index<0 || bottom_index > nMaxSize)continue;
+				  pBottomData[bottom_index] += pTopData[index];
+			  }
+			
