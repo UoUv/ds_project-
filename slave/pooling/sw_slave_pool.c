@@ -497,4 +497,12 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 				  if(bottom_index<0 || bottom_index > nMaxSize)continue;
 				  pBottomData[bottom_index] += pTopData[index];
 			  }
-			
+			}
+			dma(pool_dmaput2,(long)(pParam->pBottomData+nOffset1),(long)(pBottomData));
+			dma_wait(&putreply,1);putreply=0;		
+		}	
+		
+		ldm_free(pTopData,nTopSize);
+		ldm_free(pBottomData,nBottomSize);
+		if(use_top_mask>0)
+	
