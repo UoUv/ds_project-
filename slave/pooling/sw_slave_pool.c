@@ -505,4 +505,12 @@ void poolingBackwardMax(SlavePoolingParam *pParam)
 		ldm_free(pTopData,nTopSize);
 		ldm_free(pBottomData,nBottomSize);
 		if(use_top_mask>0)
+			ldm_free(pTopMask,nMaskSize);
+		else
+			ldm_free(pMask,nMaskSize);
+	}
+}
+void poolingBackwardAvg(SlavePoolingParam *pParam)
+{
+  const int nMaxBuffSize = 49152;//58KB 
 	
