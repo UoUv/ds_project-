@@ -525,4 +525,10 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 	
 	pooled_height_ = pParam->pooled_height_;
 	pooled_width_  = pParam->pooled_width_;
-	
+	stride_h_ = pParam->stride_h_;
+	stride_w_ = pParam->stride_w_;
+	pad_h_ = pParam->pad_h_;
+	pad_w_ = pParam->pad_w_;
+	kernel_h_ = pParam->kernel_h_;
+	kernel_w_ = pParam->kernel_w_;
+	height_ = pParam-
