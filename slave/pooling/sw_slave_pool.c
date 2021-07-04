@@ -548,4 +548,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 	
 	dma_set_op(&pool_dmaput2, DMA_PUT);
 	dma_set_mode(&pool_dmaput2, PE_MODE);
-	dma_set_r
+	dma_set_reply(&pool_dmaput2, &putreply);	
+	
+	int nTopSize = pooled_height_ * pooled_width_*sizeof(Type),i=0,j=0;
+	int nBottomSize = height_ * width_*sizeof(Type),nMaskSize=0;
+			
+	if((nTopSize+nBotto
