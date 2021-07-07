@@ -564,4 +564,13 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 		{
 			nSplitRows = nSplitRows>>1;			
 			nTopSize = nSplitRows*pooled_width_*sizeof(Type);
-			nBottomSize = nMaxB
+			nBottomSize = nMaxBuffSize - nTopSize;
+			nSplitCount++;
+		}
+		if(nSplitCount <1){
+			nSplitRows = 0;
+			nLeftRows = pooled_height_;
+			nTopSize1 = pooled_height_ * pooled_width_*sizeof(Type);
+		}
+	    else{
+			
