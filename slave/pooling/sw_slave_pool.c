@@ -590,4 +590,8 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 						
 			for(j=0;j<nSplitCount;j++)
 			{
-				dma_set_size(&pool_dmaget2, 
+				dma_set_size(&pool_dmaget2, nTopSize);  				
+				dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0+j*nSplitRows*pooled_width_),(long)(pTopData));
+				dma_wait(&getreply,1);getreply=0;
+				
+				for (
