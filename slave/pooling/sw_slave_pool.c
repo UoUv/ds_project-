@@ -594,4 +594,10 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 				dma(pool_dmaget2,(long)(pParam->pTopData+nOffset0+j*nSplitRows*pooled_width_),(long)(pTopData));
 				dma_wait(&getreply,1);getreply=0;
 				
-				for (
+				for (ph = 0; ph < nSplitRows; ++ph) 
+				{
+					hstart = (ph+j*nSplitRows) * stride_h_ - pad_h_;
+					hend = min(hstart + kernel_h_, height_);				
+					hstart = max(hstart, 0);				
+					nRows = hend - hstart;				
+					if(nRo
