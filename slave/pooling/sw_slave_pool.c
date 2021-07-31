@@ -610,4 +610,8 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 					dma_wait(&getreply,1);getreply=0;
 				
 					for (pw = 0; pw < pooled_width_; ++pw) {
-						wst
+						wstart = pw * stride_w_ - pad_w_;
+						wend = min(wstart + kernel_w_, width_ + pad_w_);
+						wstart = max(wstart, 0);
+						wend = min(wend, width_);
+						pool_size = (hend - hstar
