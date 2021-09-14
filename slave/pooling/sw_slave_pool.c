@@ -641,4 +641,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 					hend = min(hstart + kernel_h_, height_);				
 					hstart = max(hstart, 0);				
 					nRows = hend - hstart;				
-			
+					if(nRows<1)continue;
+          nPoolIndex = ph*pooled_width_;
+					nKernelSize = nRows*width_*sizeof(Type);
+					
+          nBottomIndex = nOffset1+hstart*width_;
+					dma_set_si
