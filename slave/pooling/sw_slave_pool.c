@@ -646,4 +646,8 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 					nKernelSize = nRows*width_*sizeof(Type);
 					
           nBottomIndex = nOffset1+hstart*width_;
-					dma_set_si
+					dma_set_size(&pool_dmaget2, nKernelSize);
+					dma(pool_dmaget2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));	
+					dma_wait(&getreply,1);getreply=0;
+				
+					for (pw = 0; pw < poole
