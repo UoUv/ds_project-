@@ -659,4 +659,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 						pool_index = nPoolIndex + pw;
 						for ( h = 0; h < nRows; ++h) {
 						  bottom_index = h * width_;
-	
+						  for ( w = wstart; w < wend; ++w) {
+							pBottomData[bottom_index + w] += pTopData[pool_index] / pool_size;
+						  }
+						}
+					}			  
+					dma_set_size(&pool_dmaput2, nKer
