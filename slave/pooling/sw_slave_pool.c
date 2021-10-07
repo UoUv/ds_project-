@@ -664,4 +664,12 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 						  }
 						}
 					}			  
-					dma_set_size(&pool_dmaput2, nKer
+					dma_set_size(&pool_dmaput2, nKernelSize);
+					dma(pool_dmaput2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));	
+					dma_wait(&putreply,1);putreply=0;
+				}
+			}			
+		}	  
+				
+		//Left data process		
+		if(nLeftMaxThread
