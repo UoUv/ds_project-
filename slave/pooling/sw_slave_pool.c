@@ -672,4 +672,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 		}	  
 				
 		//Left data process		
-		if(nLeftMaxThread
+		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
+		{
+			nOffset = nCount*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;			
+			for(
