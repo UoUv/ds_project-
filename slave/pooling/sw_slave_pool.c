@@ -686,4 +686,11 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 				for (ph = 0; ph < nSplitRows; ++ph) 
 				{
 					hstart = (ph+j*nSplitRows) * stride_h_ - pad_h_;
-					hend = min(hstart + kernel_h_, hei
+					hend = min(hstart + kernel_h_, height_);				
+					hstart = max(hstart, 0);				
+					nRows = hend - hstart;				
+					if(nRows<1) continue;
+          nPoolIndex = ph*pooled_width_;
+					nKernelSize = nRows*width_*sizeof(Type);
+					
+       
