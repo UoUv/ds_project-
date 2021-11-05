@@ -700,4 +700,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 				
 					for (pw = 0; pw < pooled_width_; ++pw) {
 						wstart = pw * stride_w_ - pad_w_;
-						wend = min(wstart + kern
+						wend = min(wstart + kernel_w_, width_ + pad_w_);
+						wstart = max(wstart, 0);
+						wend = min(wend, width_);
+						pool_size = (hend - hstart) * (wend - wstart);
+						pool_index = nPoolIndex + pw;
+						for ( h = 0; h < 
