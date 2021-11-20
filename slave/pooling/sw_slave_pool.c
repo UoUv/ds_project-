@@ -754,4 +754,14 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 					}			  
 					dma_set_size(&pool_dmaput2, nKernelSize);
 					dma(pool_dmaput2,(long)(pParam->pBottomData+nBottomIndex),(long)(pBottomData));	
-					dma_w
+					dma_wait(&putreply,1);putreply=0;
+				}
+			}	
+		}
+		ldm_free(pTopData,nTopSize);
+		ldm_free(pBottomData,nBottomSize);
+	}
+	else
+	{ 
+        pTopData  = (Type*)(long)ldm_malloc(nTopSize);
+		pBottomData = 
