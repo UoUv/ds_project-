@@ -771,4 +771,7 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 			
 		for(i=0;i<nCount;i++)
 		{
-			nOffset = i*nMaxThreadsNu
+			nOffset = i*nMaxThreadsNum + myid;		
+			dma(pool_dmaget2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));	
+			memset(pBottomData,0,nBottomSize);
+			dma_wait(&getreply,1);getreply=0;				
