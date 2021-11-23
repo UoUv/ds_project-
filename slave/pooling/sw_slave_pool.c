@@ -764,4 +764,11 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 	else
 	{ 
         pTopData  = (Type*)(long)ldm_malloc(nTopSize);
-		pBottomData = 
+		pBottomData = (Type*)(long)ldm_malloc(nBottomSize);
+		
+		dma_set_size(&pool_dmaget2, nTopSize);
+		dma_set_size(&pool_dmaput2, nBottomSize);
+			
+		for(i=0;i<nCount;i++)
+		{
+			nOffset = i*nMaxThreadsNu
