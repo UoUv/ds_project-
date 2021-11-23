@@ -775,3 +775,9 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 			dma(pool_dmaget2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));	
 			memset(pBottomData,0,nBottomSize);
 			dma_wait(&getreply,1);getreply=0;				
+			
+			for (ph = 0; ph < pooled_height_; ++ph) {
+			    hstart = ph * stride_h_ - pad_h_;
+				hend = min(hstart + kernel_h_, height_ + pad_h_);
+				hstart = max(hstart, 0);
+				hend = min(hend, hei
