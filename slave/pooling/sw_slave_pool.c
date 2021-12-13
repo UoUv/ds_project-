@@ -802,4 +802,8 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 			dma_wait(&putreply,1);putreply=0;				
 		}
 		//Left data process		
-		if(nLeftMa
+		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
+		{
+			nOffset = nCount*nMaxThreadsNum + myid;
+			dma(pool_dmaget2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));	
+			memset(pBottomData,0,nBottomSize)
