@@ -833,4 +833,10 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 			dma(pool_dmaput2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));			
 			dma_wait(&putreply,1);putreply=0;			
 		}
-		
+		ldm_free(pTopData,nTopSize);
+		ldm_free(pBottomData,nBottomSize);
+	}
+}
+void poolingForwardMax(SlavePoolingParam *pParam)
+{
+  const int nMaxBuffSize = 49152
