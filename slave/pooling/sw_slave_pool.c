@@ -824,4 +824,13 @@ void poolingBackwardAvg(SlavePoolingParam *pParam)
 					for ( h = hstart; h < hend; ++h) {
 					  bottom_index = h * width_;
 					  for ( w = wstart; w < wend; ++w) {
-						pBottomData[bottom_index + w] += pTopData[po
+						pBottomData[bottom_index + w] += pTopData[pool_index] / pool_size;
+					  }
+				    }
+				}
+			}
+			
+			dma(pool_dmaput2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));			
+			dma_wait(&putreply,1);putreply=0;			
+		}
+		
