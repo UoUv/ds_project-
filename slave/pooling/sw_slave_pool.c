@@ -870,3 +870,9 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 	if(myid >= nMaxThreadsNum) return;	
 	//dma_desc pool_dmaget2,dmaputmask,pool_dmaput2;
 	dma_set_op(&pool_dmaget2, DMA_GET);
+	dma_set_mode(&pool_dmaget2, PE_MODE);
+	dma_set_reply(&pool_dmaget2, &getreply);
+	
+	dma_set_op(&pool_dmaput2, DMA_PUT);
+	dma_set_mode(&pool_dmaput2, PE_MODE);
+	dma_set_rep
