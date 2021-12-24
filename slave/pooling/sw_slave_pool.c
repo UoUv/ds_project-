@@ -863,4 +863,10 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 	nCount = pParam->nCount;
 	nMaxThreadsNum = pParam->nThreadsNum;
 	nLeftMaxThreadsNum = pParam->nLeftThreadsNum;
-	nBottomOffset = pParam->nBottomOffs
+	nBottomOffset = pParam->nBottomOffset;
+	nTopOffset = pParam->nTopOffset;
+	use_top_mask = pParam->use_top_mask;
+	
+	if(myid >= nMaxThreadsNum) return;	
+	//dma_desc pool_dmaget2,dmaputmask,pool_dmaput2;
+	dma_set_op(&pool_dmaget2, DMA_GET);
