@@ -881,4 +881,9 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 	dma_set_mode(&dmaputmask, PE_MODE);
 	dma_set_reply(&dmaputmask, &putmaskreply);	
 	
-	int nTopSize = pooled_height_ * pooled_width
+	int nTopSize = pooled_height_ * pooled_width_*sizeof(Type),i=0,j=0;
+	int nBottomSize = height_ * width_*sizeof(Type),nMaskSize=0;
+	if(use_top_mask>0)
+	  nMaskSize = nTopSize;
+    else
+	  nMaskSize = pooled_height_ * pooled_width_*sizeof(int
