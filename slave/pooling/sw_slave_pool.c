@@ -891,4 +891,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 	if((nTopSize+nBottomSize+nMaskSize) > nMaxBuffSize)
 	{
 		nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
-		int nSplitCount=0,nSplitRows =0,nLeftRo
+		int nSplitCount=0,nSplitRows =0,nLeftRows = 0;
+		int nTopSize1 = 0,nMaskSize1=0;
+		nSplitRows = pooled_height_;
+		int nKernelSize = kernel_h_*width_*sizeof(Type);
+		while(nBottomSize < nKernelSize)
+		{
+			nSplitRows = nSplitRows>>1;			
+			n
