@@ -898,4 +898,7 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		while(nBottomSize < nKernelSize)
 		{
 			nSplitRows = nSplitRows>>1;			
-			n
+			nTopSize = nSplitRows*pooled_width_*sizeof(Type);
+			if(use_top_mask >0) nMaskSize = nTopSize;				
+			else nMaskSize = nSplitRows*pooled_width_*sizeof(int);
+			nBottomSize = nMax
