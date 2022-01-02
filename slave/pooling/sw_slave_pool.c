@@ -901,4 +901,10 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			nTopSize = nSplitRows*pooled_width_*sizeof(Type);
 			if(use_top_mask >0) nMaskSize = nTopSize;				
 			else nMaskSize = nSplitRows*pooled_width_*sizeof(int);
-			nBottomSize = nMax
+			nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
+			nSplitCount++;
+		}
+		if(nSplitCount <1){
+			nSplitRows = 0;
+			nLeftRows = pooled_height_;
+			nTopSize1 = pooled_height_ * pooled_width_*s
