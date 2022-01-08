@@ -926,4 +926,12 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			}				
 			nTopSize1 = nLeftRows*pooled_width_*sizeof(Type);							
 		}
-		nBottomSi
+		nBottomSize = nMaxBuffSize - nTopSize - nMaskSize;
+		if(use_top_mask>0)
+		{
+			nMaskSize = nTopSize;
+			pTopMask  = (Type*)(long)ldm_malloc(nMaskSize);
+		}
+		else
+		{
+			pMask  = (int
