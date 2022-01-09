@@ -934,4 +934,12 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		}
 		else
 		{
-			pMask  = (int
+			pMask  = (int*)(long)ldm_malloc(nMaskSize);	
+    }	
+		
+		pTopData  = (Type*)(long)ldm_malloc(nTopSize);
+		pBottomData = (Type*)(long)ldm_malloc(nBottomSize);		
+				
+		for(i=0;i<nCount;i++)
+		{   
+			
