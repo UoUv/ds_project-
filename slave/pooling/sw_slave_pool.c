@@ -942,4 +942,10 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				
 		for(i=0;i<nCount;i++)
 		{   
-			
+			nOffset = i*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;
+						
+			for(j=0;j<nSplitCount;j++)
+			{	
+				for (ph = 0; ph < nSpli
