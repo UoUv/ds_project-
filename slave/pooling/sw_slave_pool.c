@@ -962,4 +962,10 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 					dma_wait(&getreply,1);getreply=0;	
 					for (pw = 0; pw < pooled_width_; ++pw) 
 					{
-						wstart = pw
+						wstart = pw * stride_w_ - pad_w_;
+						wend = min(wstart + kernel_w_, width_);
+						wstart = max(wstart, 0);
+						pool_index = nPoolIndex+pw;
+						pTopData[pool_index] = -FLT_MAX;
+						
+						for (
