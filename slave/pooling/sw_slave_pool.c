@@ -985,4 +985,7 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				}
 				nOffset = j * nSplitRows*pooled_width_;
 				dma_set_size(&pool_dmaput2,nTopSize);				
-				dma(pool_dmaput2,(lon
+				dma(pool_dmaput2,(long)(pParam->pTopData+nOffset0+nOffset),(long)(pTopData));
+				dma_set_size(&dmaputmask,nMaskSize);				
+				if(use_top_mask>0) 
+					dma(dmaputmask,(long)(pParam->pTopMask+nOffset0+nOffset),(long
