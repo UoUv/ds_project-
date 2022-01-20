@@ -999,4 +999,9 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				for (ph = 0; ph < nLeftRows; ++ph) 
 				{
 					hstart = (ph+nSplitCount*nSplitRows)* stride_h_ - pad_h_;
-					hend = min(hstart + kernel_h_, heig
+					hend = min(hstart + kernel_h_, height_);	
+					hstart = max(hstart, 0);				
+					nRows = hend - hstart;				
+          if(nRows<1)continue;
+					dma_set_size(&pool_dmaget2,nRows*width_ *sizeof(Type));				
+					dma(pool_dmaget2,(long)(pParam-
