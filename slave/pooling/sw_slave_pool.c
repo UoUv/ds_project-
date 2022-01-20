@@ -992,4 +992,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				else
 					dma(dmaputmask,(long)(pParam->pMask+nOffset0+nOffset),(long)(pMask));
 				dma_wait(&putreply,1);putreply=0;				
-				dma_wait(&putmaskreply,1);putmas
+				dma_wait(&putmaskreply,1);putmaskreply=0;
+			}
+			if(nLeftRows > 0)
+		    {				
+				for (ph = 0; ph < nLeftRows; ++ph) 
+				{
+					hstart = (ph+nSplitCount*nSplitRows)* stride_h_ - pad_h_;
+					hend = min(hstart + kernel_h_, heig
