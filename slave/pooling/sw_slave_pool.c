@@ -1008,4 +1008,9 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 					nPoolIndex = ph*pooled_width_;
 					nOffset = hstart*width_;  
 					dma_wait(&getreply,1);getreply=0;	
-					
+					for (pw = 0; pw < pooled_width_; ++pw) 
+					{
+						wstart = pw * stride_w_ - pad_w_;
+						wend = min(wstart + kernel_w_, width_);
+						wstart = max(wstart, 0);
+						pool_index = nPoolI
