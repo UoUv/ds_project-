@@ -1023,4 +1023,12 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 							if (pBottomData[index] > pTopData[pool_index]) {
 							  pTopData[pool_index] = pBottomData[index];						  
 							  if(use_top_mask>0) 
-								pTopMa
+								pTopMask[pool_index] = index+nOffset;  
+							  else
+								pMask[pool_index] = index+nOffset;  
+							}
+						  }
+					}					
+					}					
+				}
+				nOffset = nSplitCount * nSplitRows*pooled_width
