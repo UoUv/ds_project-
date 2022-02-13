@@ -1050,4 +1050,10 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			nOffset = nCount*nMaxThreadsNum + myid;
 			nOffset0 = nOffset * nTopOffset;
 			nOffset1 = nOffset * nBottomOffset;			
-			for(j
+			for(j=0;j<nSplitCount;j++)
+			{	
+				for (ph = 0; ph < nSplitRows; ++ph) 
+				{
+					hstart = (ph+j*nSplitRows)* stride_h_ - pad_h_;
+					hend = min(hstart + kernel_h_, height_);	
+					hstart 
