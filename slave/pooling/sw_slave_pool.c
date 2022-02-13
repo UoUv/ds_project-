@@ -1038,4 +1038,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				if(use_top_mask>0) 
 					dma(dmaputmask,(long)(pParam->pTopMask+nOffset0+nOffset),(long)(pTopMask));
 				else
-					dma(dmaputmask,(long)(pParam->pMask+nOffset0+nOffset),
+					dma(dmaputmask,(long)(pParam->pMask+nOffset0+nOffset),(long)(pMask));
+				dma_wait(&putreply,1);putreply=0;				
+				dma_wait(&putmaskreply,1);putmaskreply=0;
+			}
+		}	  
+				
+		//Left data process		
+		if(nLeftMaxTh
