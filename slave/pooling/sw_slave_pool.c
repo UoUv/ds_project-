@@ -1060,4 +1060,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 					nRows = hend - hstart;				
           if(nRows<1)continue;
 					dma_set_size(&pool_dmaget2,nRows*width_ *sizeof(Type));				
-					dma(pool_dmaget2,(long)(pParam->pBo
+					dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset1+hstart*width_),(long)(pBottomData));
+					nPoolIndex = ph*pooled_width_;
+					nOffset = hstart*width_;  
+					dma_wait(&getreply,1);getreply=0;	
+					for (p
