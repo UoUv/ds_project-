@@ -1095,4 +1095,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 					dma(dmaputmask,(long)(pParam->pTopMask+nOffset0+nOffset),(long)(pTopMask));
 				else
 					dma(dmaputmask,(long)(pParam->pMask+nOffset0+nOffset),(long)(pMask));
-				d
+				dma_wait(&putreply,1);putreply=0;				
+				dma_wait(&putmaskreply,1);putmaskreply=0;
+			}
+			if(nLeftRows > 0)
+		    {				
+				for (ph = 0; ph < nLeftRows; ++ph) 
+				{
+					hstart = (ph+nSplitCount
