@@ -1091,4 +1091,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				dma_set_size(&pool_dmaput2,nTopSize);				
 				dma(pool_dmaput2,(long)(pParam->pTopData+nOffset0+nOffset),(long)(pTopData));
 				dma_set_size(&dmaputmask,nMaskSize);				
-				if(u
+				if(use_top_mask>0) 
+					dma(dmaputmask,(long)(pParam->pTopMask+nOffset0+nOffset),(long)(pTopMask));
+				else
+					dma(dmaputmask,(long)(pParam->pMask+nOffset0+nOffset),(long)(pMask));
+				d
