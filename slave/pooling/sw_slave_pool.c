@@ -1148,4 +1148,13 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			}
 		}
 		ldm_free(pTopData,nTopSize);
-		l
+		ldm_free(pBottomData,nBottomSize);
+		if(use_top_mask>0)
+			ldm_free(pTopMask,nMaskSize);
+		else
+			ldm_free(pMask,nMaskSize);
+	}
+	else
+	{ 
+    pTopData  = (Type*)(long)ldm_malloc(nTopSize);
+		pBottomData = (Type*)(lon
