@@ -1171,4 +1171,7 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		for(i=0;i<nCount;i++)
 		{
 			nOffset = i*nMaxThreadsNum + myid;		
-			dma(pool_
+			dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));
+			dma_wait(&getreply,1);getreply=0;				
+			for (ph = 0; ph < pooled_height_; ++ph) {
+			  hsta
