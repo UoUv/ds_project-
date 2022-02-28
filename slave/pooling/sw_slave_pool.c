@@ -1164,4 +1164,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		else
 		  pMask  = (int*)(long)ldm_malloc(nMaskSize); 
 		
-		dma_set_size(&pool_dmaput2, n
+		dma_set_size(&pool_dmaput2, nTopSize);
+		dma_set_size(&pool_dmaget2, nBottomSize);
+	  dma_set_size(&dmaputmask, nMaskSize);
+			
+		for(i=0;i<nCount;i++)
+		{
+			nOffset = i*nMaxThreadsNum + myid;		
+			dma(pool_
