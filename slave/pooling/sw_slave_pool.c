@@ -1202,4 +1202,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			}
 			dma(pool_dmaput2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));
 			if(use_top_mask>0) 
-				dma(dmaputmas
+				dma(dmaputmask,(long)(pParam->pTopMask+nOffset*nTopOffset),(long)(pTopMask));
+			else
+				dma(dmaputmask,(long)(pParam->pMask+nOffset*nTopOffset),(long)(pMask));
+			
+			dma_wait(&putreply,1);putrepl
