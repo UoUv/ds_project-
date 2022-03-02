@@ -1178,4 +1178,9 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			  hend = min(hstart + kernel_h_, height_);
 			  hstart = max(hstart, 0);
 		    nPoolIndex = ph*pooled_width_;				
-			  for (pw = 0; pw < pooled_wi
+			  for (pw = 0; pw < pooled_width_; ++pw) {
+				wstart = pw * stride_w_ - pad_w_;
+				wend = min(wstart + kernel_w_, width_);
+				wstart = max(wstart, 0);
+				pool_index = nPoolIndex + pw;
+				pTop
