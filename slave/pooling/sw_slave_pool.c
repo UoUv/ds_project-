@@ -1212,4 +1212,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		//Left data process		
 		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
 		{
-			nOffset = nCount*nMaxThreadsNum + my
+			nOffset = nCount*nMaxThreadsNum + myid;
+			dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));
+			dma_wait(&getreply,1);getreply=0;				
+			for (ph = 0; ph < pooled_height_; ++ph) {
+			
