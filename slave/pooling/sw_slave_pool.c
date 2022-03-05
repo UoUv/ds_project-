@@ -1216,4 +1216,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 			dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));
 			dma_wait(&getreply,1);getreply=0;				
 			for (ph = 0; ph < pooled_height_; ++ph) {
-			
+			  hstart = ph * stride_h_ - pad_h_;
+			  hend = min(hstart + kernel_h_, height_);
+			  hstart = max(hstart, 0);
+		    nPoolIndex = ph*pooled_width_;				
+			  for (pw = 0; p
