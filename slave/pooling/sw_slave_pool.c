@@ -1231,4 +1231,8 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 				  nBottomIndex = h * width_;
 				  for (w = wstart; w < wend; ++w) {
 					index = nBottomIndex + w;
-					if (pBotto
+					if (pBottomData[index] > pTopData[pool_index]) {
+					  pTopData[pool_index] = pBottomData[index];						  
+					  if(use_top_mask>0) 
+						pTopMask[pool_index] = index;  
+					  el
