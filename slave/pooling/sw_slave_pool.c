@@ -1235,4 +1235,12 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 					  pTopData[pool_index] = pBottomData[index];						  
 					  if(use_top_mask>0) 
 						pTopMask[pool_index] = index;  
-					  el
+					  else
+						pMask[pool_index] = index;
+					}
+				  }
+				}
+			  }
+			}
+			dma(pool_dmaput2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));
+			if(use_top_mask>0
