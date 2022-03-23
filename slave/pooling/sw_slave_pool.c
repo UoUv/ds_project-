@@ -1263,4 +1263,6 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 void poolingForwardAvg(SlavePoolingParam *pParam)
 {
     const int nMaxBuffSize = 49152;//58KB 
-	int pooled_height_,pooled_w
+	int pooled_height_,pooled_width_,stride_h_,stride_w_,pad_h_,pad_w_,kernel_h_,kernel_w_,height_,width_;
+	int nCount,nMaxThreadsNum,nLeftMaxThreadsNum,nOffset,nOffset0,nOffset1;
+	int nBottomOffset,nTopOffset,use_
