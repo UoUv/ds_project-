@@ -1256,3 +1256,11 @@ void poolingForwardMax(SlavePoolingParam *pParam)
 		ldm_free(pBottomData,nBottomSize);
 		if(use_top_mask>0)
 			ldm_free(pTopMask,nMaskSize);
+		else
+			ldm_free(pMask,nMaskSize);
+	}
+}
+void poolingForwardAvg(SlavePoolingParam *pParam)
+{
+    const int nMaxBuffSize = 49152;//58KB 
+	int pooled_height_,pooled_w
