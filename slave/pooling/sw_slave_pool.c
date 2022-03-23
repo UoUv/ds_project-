@@ -1281,4 +1281,10 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 	pad_w_ = pParam->pad_w_;
 	kernel_h_ = pParam->kernel_h_;
 	kernel_w_ = pParam->kernel_w_;
-	height_ = pParam->height_
+	height_ = pParam->height_;
+	width_  = pParam->width_;	
+	nCount = pParam->nCount;
+	nMaxThreadsNum = pParam->nThreadsNum;
+	nLeftMaxThreadsNum = pParam->nLeftThreadsNum;
+	nBottomOffset = pParam->nBottomOffset;
+	nT
