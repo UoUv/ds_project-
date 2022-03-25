@@ -1313,4 +1313,11 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 		while(nBottomSize < nKernelSize)
 		{
 			nSplitRows = nSplitRows>>1;			
-			nTopSize = nSplitRows*pooled_width_*si
+			nTopSize = nSplitRows*pooled_width_*sizeof(Type);
+			nBottomSize = nMaxBuffSize - nTopSize;
+			nSplitCount++;
+		}
+		if(nSplitCount <1){
+			nSplitRows = 0;
+			nLeftRows = pooled_height_;
+			nTopSize1 = pooled_height_ * pooled_width_*
