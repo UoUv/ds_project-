@@ -1303,4 +1303,9 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 	int nTopSize = pooled_height_ * pooled_width_*sizeof(Type),i=0,j=0;
 	int nBottomSize = height_ * width_*sizeof(Type),nMaskSize=0;
 			
-	if((nTopSize+nBotto
+	if((nTopSize+nBottomSize) > nMaxBuffSize)
+	{
+		nBottomSize = nMaxBuffSize - nTopSize;
+		int nSplitCount=0,nSplitRows =0,nLeftRows = 0;
+		int nTopSize1 = 0,nBottomIndex;
+		nSplitRows = pool
