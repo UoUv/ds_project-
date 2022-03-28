@@ -1330,4 +1330,12 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 		}
 		nBottomSize = nMaxBuffSize - nTopSize;		
 		pTopData  = (Type*)(long)ldm_malloc(nTopSize);
-		pBottomData = (Type*)(long)ldm_malloc(nBot
+		pBottomData = (Type*)(long)ldm_malloc(nBottomSize);		
+		
+		for(i=0;i<nCount;i++)
+		{   
+			nOffset = i*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;
+						
+			for(j=0;j<nS
