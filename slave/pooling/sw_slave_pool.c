@@ -1374,4 +1374,8 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 			}
 			if(nLeftRows > 0)
 		    {
-				nOffset = 
+				nOffset = nSplitCount * nSplitRows*pooled_width_;
+				memset(pTopData,0,nTopSize);
+				for (ph = 0; ph < nLeftRows; ++ph) 
+				{
+					hstart = (ph+nSplitCount*nSplitRows)* stride_h_ - pad_h_
