@@ -1378,4 +1378,9 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 				memset(pTopData,0,nTopSize);
 				for (ph = 0; ph < nLeftRows; ++ph) 
 				{
-					hstart = (ph+nSplitCount*nSplitRows)* stride_h_ - pad_h_
+					hstart = (ph+nSplitCount*nSplitRows)* stride_h_ - pad_h_;
+					hend = min(hstart + kernel_h_, height_);				
+					hstart = max(hstart, 0);				
+					nRows = hend - hstart;				
+					if(nRows<1)continue;
+					dma_set_size(&pool_dm
