@@ -1410,4 +1410,10 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 		}	  
 				
 		//Left data process		
-		if
+		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
+		{
+			nOffset = nCount*nMaxThreadsNum + myid;
+			nOffset0 = nOffset * nTopOffset;
+			nOffset1 = nOffset * nBottomOffset;			
+			for(j=0;j<nSplitCount;j++)
+			{
