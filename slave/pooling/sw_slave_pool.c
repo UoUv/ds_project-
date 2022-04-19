@@ -1396,4 +1396,12 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 						pool_size = (hend - hstart) * (wend - wstart);
 						dSum = 0;
 						for (h = 0; h < nRows; ++h) {
-						  for ( w = wstart; w < 
+						  for ( w = wstart; w < wend; ++w) {
+							dSum +=	pBottomData[h * width_ + w];
+						  }
+						}
+						pTopData[nPoolIndex + pw] = dSum/pool_size;				
+					}					
+				}
+				dma_set_size(&pool_dmaput2, nTopSize1);  				
+				dma(pool_dmapu
