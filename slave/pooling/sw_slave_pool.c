@@ -1435,4 +1435,11 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 						wend = min(wstart + kernel_w_, width_ + pad_w_);
 						wstart = max(wstart, 0);
 						wend = min(wend, width_);
-						pool_size = (hend - hstart) * (we
+						pool_size = (hend - hstart) * (wend - wstart);
+						dSum = 0;
+						for (h = 0; h < nRows; ++h) {
+						  for ( w = wstart; w < wend; ++w) {
+							dSum +=	pBottomData[h * width_ + w];
+						  }
+						}
+						pTopData[nPool
