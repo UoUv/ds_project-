@@ -1505,4 +1505,9 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 			
 			for (ph = 0; ph < pooled_height_; ++ph) {
 			    hstart = ph * stride_h_ - pad_h_;
-				hend = min(hstart + kernel
+				hend = min(hstart + kernel_h_, height_ + pad_h_);
+				hstart = max(hstart, 0);
+				hend = min(hend, height_);
+				nPoolIndex = ph*pooled_width_;
+				for (pw = 0; pw < pooled_width_; ++pw) {
+					wstart = pw * str
