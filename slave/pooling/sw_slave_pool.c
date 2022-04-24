@@ -1490,4 +1490,10 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 	}
 	else
 	{ 
-       
+        pTopData  = (Type*)(long)ldm_malloc(nTopSize);
+		pBottomData = (Type*)(long)ldm_malloc(nBottomSize);
+		
+		dma_set_size(&pool_dmaget2, nBottomSize);
+		dma_set_size(&pool_dmaput2, nTopSize);
+		
+		for(i=0;i<n
