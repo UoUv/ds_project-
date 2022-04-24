@@ -1481,4 +1481,13 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 					}					
 				}
 				dma_set_size(&pool_dmaput2, nTopSize1);  				
-				dma(pool_dmaput2,(long)(pParam->pTopData
+				dma(pool_dmaput2,(long)(pParam->pTopData+nOffset0+nOffset),(long)(pTopData));
+				dma_wait(&putreply,1);putreply=0;
+			}
+		}
+		ldm_free(pTopData,nTopSize);
+		ldm_free(pBottomData,nBottomSize);
+	}
+	else
+	{ 
+       
