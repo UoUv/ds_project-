@@ -1496,4 +1496,9 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 		dma_set_size(&pool_dmaget2, nBottomSize);
 		dma_set_size(&pool_dmaput2, nTopSize);
 		
-		for(i=0;i<n
+		for(i=0;i<nCount;i++)
+		{
+			nOffset = i*nMaxThreadsNum + myid;		
+			dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));
+			memset(pTopData,0,nTopSize);
+			
