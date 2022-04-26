@@ -1521,4 +1521,8 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 						dSum +=	pBottomData[h * width_ + w];
 					  }
 				    }
-				    p
+				    pTopData[nPoolIndex + pw] = dSum/pool_size;				
+			  }
+			}
+			dma(pool_dmaput2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));			
+			dma_wa
