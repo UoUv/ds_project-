@@ -1525,4 +1525,10 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 			  }
 			}
 			dma(pool_dmaput2,(long)(pParam->pTopData+nOffset*nTopOffset),(long)(pTopData));			
-			dma_wa
+			dma_wait(&putreply,1);putreply=0;				
+		}
+		//Left data process		
+		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
+		{
+			nOffset = nCount*nMaxThreadsNum + myid;
+	
