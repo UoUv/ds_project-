@@ -1531,4 +1531,8 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 		if(nLeftMaxThreadsNum >0 && myid < nLeftMaxThreadsNum)
 		{
 			nOffset = nCount*nMaxThreadsNum + myid;
-	
+			dma(pool_dmaget2,(long)(pParam->pBottomData+nOffset*nBottomOffset),(long)(pBottomData));
+			memset(pTopData,0,nTopSize);
+			dma_wait(&getreply,1);getreply=0;				
+			
+			for (ph = 0; ph < p
