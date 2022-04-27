@@ -1535,4 +1535,9 @@ void poolingForwardAvg(SlavePoolingParam *pParam)
 			memset(pTopData,0,nTopSize);
 			dma_wait(&getreply,1);getreply=0;				
 			
-			for (ph = 0; ph < p
+			for (ph = 0; ph < pooled_height_; ++ph) {
+			    hstart = ph * stride_h_ - pad_h_;
+				hend = min(hstart + kernel_h_, height_ + pad_h_);
+				hstart = max(hstart, 0);
+				hend = min(hend, height_);
+				n
