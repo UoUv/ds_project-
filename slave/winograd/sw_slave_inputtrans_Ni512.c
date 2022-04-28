@@ -19,4 +19,14 @@ void FJR_input_trans_Ni512(InputData* param)
 {
   int id = athread_get_id(-1);
   int cid = id%8, rid = id/8;
-  int Ni = 
+  int Ni = param->Ni;
+  int B = param->B;
+  int Ri = param->Ri;
+  int Ci = param->Ci;
+  int NR = (Ri-2)/2;
+  int NC = (Ci-2)/2;
+  int T = NR*NC;
+
+  int NumNi = 1;
+  if(Ni > 500) {
+    NumNi =
