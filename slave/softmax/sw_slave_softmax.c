@@ -157,3 +157,162 @@ void swsofmax_f(SoftmaxData *param) {
       for(k=0;k<channels;++k) {
         local_top_data[j*channels+k] = exp(local_bottom_data[j*channels+k] -
                 local_sum_multiplier_[k]*local_scale);
+        stemp += local_top_data[j*channels+k]*local_sum_multiplier_[k];
+      }
+      for(k=0;k<channels;++k) {
+        local_top_data[j*channels+k] = local_top_data[j*channels+k]/stemp;
+      }
+    }
+    dma(dma_put_top,(long)(top_data_ptr+i*imgSize),(long)local_top_data);
+    dma_wait(&top_replyput, 1); top_replyput = 0;
+  }
+
+  ldm_free(local_bottom_data,sizeof(Type)*local_inner_num*channels);
+  ldm_free(local_top_data, sizeof(Type)*local_inner_num*channels);
+  ldm_free(local_sum_multiplier_, sizeof(Type)*channels);
+}
+/////////////////////////////////
+///////////////////////////////////
+// old version without transpose
+// void softmaxBackward(SlaveSoftmaxParam *pParam)
+// {
+//   int my_id;
+//   volatile unsigned long get_reply,put_reply;
+//   int i,j,k,my_col;
+//   int outer_num_, channels, inner_num_, dim;
+//   float inner_product;
+//   float * top_diff;
+//   float * top_data;
+//   float * bottom_diff;
+//   float * scale_data;
+// 
+//   my_id = athread_get_id(-1);
+//   outer_num_ = pParam->outer_num_;
+//   channels   = pParam->channels;
+//   inner_num_ = pParam->inner_num_;
+//   dim        = pParam->dim;
+//   top_diff   = pParam->top_diff;
+//   top_data   = pParam->top_data;
+//   bottom_diff= pParam->bottom_diff;
+//   scale_data = pParam->scale_data;
+// 
+//   float * ldm_top_diff = (float*)(long)ldm_malloc(channels * 4);
+//   float * ldm_top_data = (float*)(long)ldm_malloc(channels * 4);
+//   float * ldm_bottom_diff = (float*)(long)ldm_malloc(channels * 4);
+//   
+//   for(k=0; k<outer_num_; ++k)
+//   {
+//     for(i=0; i<inner_num_; i+=64)
+//     {
+//       my_col = i+my_id;
+//       if(my_col>=inner_num_) break;
+//       inner_product=0.0;
+//       get_reply = 0;
+//       athread_get(PE_MODE, &top_diff[k*dim + my_col],ldm_top_diff,channels*4,&get_reply,0,(inner_num_-1)*sizeof(float),sizeof(float));
+//       while(get_reply!=1);
+//       get_reply = 0;
+//       athread_get(PE_MODE, &top_data[k*dim + my_col],ldm_top_data,channels*4,&get_reply,0,(inner_num_-1)*sizeof(float),sizeof(float));
+//       while(get_reply!=1);
+//       for(j=0; j<channels; ++j)
+//       {
+//         inner_product += ldm_top_diff[j] * ldm_top_data[j];
+//       }
+//       for(j=0; j<channels; ++j)
+//       {
+//         ldm_bottom_diff[j]=(ldm_top_diff[j]-inner_product)*ldm_top_data[j];
+//       }
+//       put_reply=0;
+//       athread_put(PE_MODE, ldm_bottom_diff, &bottom_diff[k*dim + my_col], channels*4, &put_reply,(inner_num_-1)*sizeof(float),sizeof(float));
+//       while(put_reply!=1);
+// 
+//     }
+//   }
+// 
+//   ldm_free(ldm_top_diff, channels*4);
+//   ldm_free(ldm_top_data, channels*4);
+//   ldm_free(ldm_bottom_diff, channels * 4);
+// }
+
+
+
+
+void softmaxBackward(SlaveSoftmaxParam *pParam)
+{
+  int my_id;
+  volatile unsigned long get_reply,put_reply;
+  int i,j,k;
+  int outer_num_, channels, inner_num_, dim;
+  int buffsize = 16 * 1024;  //16KB
+  float inner_product;
+  float * top_diff;
+  float * top_data;
+  float * bottom_diff;
+  float * scale_data;
+  int numOfGroup, myGroup, myStart, myEnd, groupEachTime, groupSize;
+
+  my_id = athread_get_id(-1);
+  outer_num_ = pParam->outer_num_;
+  channels   = pParam->channels;
+  inner_num_ = pParam->inner_num_;
+  dim        = pParam->dim;
+  top_diff   = pParam->top_diff;
+  top_data   = pParam->top_data;
+  bottom_diff= pParam->bottom_diff;
+  scale_data = pParam->scale_data;
+
+  numOfGroup = outer_num_ * inner_num_;
+  myGroup = numOfGroup>=64?numOfGroup/64:1;
+  myStart = my_id * myGroup;
+  myEnd = myStart + myGroup;
+  groupEachTime = buffsize/(channels * sizeof(float));
+  groupSize = groupEachTime;
+
+  // [myStart, myEnd)
+
+  float * ldm_top_diff = (float*)(long)ldm_malloc(buffsize);
+  float * ldm_top_data = (float*)(long)ldm_malloc(buffsize);
+  float * ldm_bottom_diff = (float*)(long)ldm_malloc(buffsize);
+
+  if(myStart<numOfGroup)
+  {
+    if(my_id == 63) myEnd = numOfGroup;
+    for(i=myStart; i<myEnd; i+= groupEachTime)
+    {
+      if(i + groupEachTime - 1 >=myEnd) groupSize = myEnd - i;
+      get_reply = 0;
+      athread_get(PE_MODE, &top_diff[channels * i], ldm_top_diff, groupSize*channels*sizeof(float),&get_reply,0,0,0);
+      while(get_reply!=1);
+      get_reply = 0;
+      athread_get(PE_MODE, &top_data[channels * i], ldm_top_data, groupSize*channels*sizeof(float),&get_reply,0,0,0);
+      while(get_reply!=1);
+//       for(j=0; j<channels; ++j)
+//       {
+//         inner_product += ldm_top_diff[j] * ldm_top_data[j];
+//       }
+//       for(j=0; j<channels; ++j)
+//       {
+//         ldm_bottom_diff[j]=(ldm_top_diff[j]-inner_product)*ldm_top_data[j];
+//       }
+      for(j=0;j<groupSize;++j)
+      {
+        inner_product = 0.0;
+        for(k=0;k<channels;++k)
+        {
+          inner_product += ldm_top_diff[j*channels+k] * ldm_top_data[j*channels+k];
+        }
+        for(k=0;k<channels;++k)
+        {
+          ldm_bottom_diff[j*channels+k]=(ldm_top_diff[j*channels+k]-inner_product)*ldm_top_data[j*channels+k];
+        }
+      }
+      put_reply=0;
+      athread_put(PE_MODE, ldm_bottom_diff, &bottom_diff[channels * i], groupSize*channels*sizeof(float),&put_reply,0,0);
+      while(put_reply!=1);
+    }
+  }
+
+  ldm_free(ldm_top_diff, buffsize);
+  ldm_free(ldm_top_data, buffsize);
+  ldm_free(ldm_bottom_diff, buffsize);
+}
+#undef Type
