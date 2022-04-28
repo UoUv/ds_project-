@@ -11,4 +11,12 @@
  * Jerry Fang 
  * 2018.Sep.19th
  *
- 
+ * winograd input transformation
+ *
+ * ************/
+#define SIMDSIZE 4
+void FJR_input_trans_Ni512(InputData* param)
+{
+  int id = athread_get_id(-1);
+  int cid = id%8, rid = id/8;
+  int Ni = 
