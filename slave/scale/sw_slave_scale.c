@@ -261,3 +261,27 @@ void sw_slave_scale_f(ScalePra *para) {
     {
       get_reply=0;
       athread_get(PE_MODE, scale_ptr+i, local_scale, lineSize*sizeof(float),&get_reply,0,0,0);
+      while(get_reply!=1);
+      for(j=0;j<lineSize;++j)
+      {
+        scale_ele = local_scale[j];
+        for(k=0;k<inner_dim;++k)
+        {
+          local_dst[j*inner_dim+k] = local_src[j*inner_dim+k] * scale_ele;
+        }
+      }
+
+    }
+    put_reply=0;
+    athread_put(PE_MODE, local_dst, dst_ptr+i*inner_dim, inner_dim*lineSize*sizeof(float),&put_reply,0,0);
+    while(put_reply!=1);
+
+  }
+ 
+
+
+  }//myStart
+  ldm_free(local_src, BUFFSIZE);
+  ldm_free(local_scale, BUFFSIZE);
+  ldm_free(local_dst, BUFFSIZE);
+}
