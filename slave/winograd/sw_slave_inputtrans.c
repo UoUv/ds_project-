@@ -124,3 +124,9 @@ void FJR_input_trans(InputData* param)
       simd_store(s[14], local_input + 14*Ni + cNi);
     }
     dma(dma_put_output, (long)((float*)param->transInput + cB*Ni*T + cT*Ni), (long)(local_input));
+    dma_wait(&replyput, 1); replyput = 0;
+  }
+
+  ldm_free(local_input, sizeof(float)*local_input_size);
+
+}//main func
