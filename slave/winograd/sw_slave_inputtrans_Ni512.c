@@ -36,4 +36,13 @@ void FJR_input_trans_Ni512(InputData* param)
   float* local_input  = (float*) ldm_malloc(sizeof(float)*Ni*16);
   int local_input_size = Ni*16;
 
-  float* local_output = (float*) ldm_malloc(sizeof(float)*
+  float* local_output = (float*) ldm_malloc(sizeof(float)*Ni*16);
+  int local_output_size = Ni*16;
+
+  if(Ni > 512) {
+    if(id == 0)
+      printf("input trans LDM is overflow\n");
+  }
+
+  volatile int  input_replyget = 0, replyput = 0;
+  dma_desc 
