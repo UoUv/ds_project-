@@ -29,4 +29,11 @@ void FJR_input_trans_Ni512(InputData* param)
 
   int NumNi = 1;
   if(Ni > 500) {
-    NumNi =
+    NumNi = 2;
+    Ni = Ni/2;
+  }
+
+  float* local_input  = (float*) ldm_malloc(sizeof(float)*Ni*16);
+  int local_input_size = Ni*16;
+
+  float* local_output = (float*) ldm_malloc(sizeof(float)*
