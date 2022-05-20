@@ -56,4 +56,8 @@ void FJR_input_trans_Ni512(InputData* param)
   dma_set_reply(&dma_put_output, &replyput);
 
   dma_set_size(&dma_get_input, Ni*4*sizeof(float));
-  dma_set_b
+  dma_set_bsize(&dma_get_input, Ni*sizeof(float));
+  dma_set_stepsize(&dma_get_input, (Ni*(NumNi-1))*sizeof(float));
+
+  dma_set_size(&dma_put_output, Ni*16*sizeof(float));
+  dma_set_bsize(&dma_pu
