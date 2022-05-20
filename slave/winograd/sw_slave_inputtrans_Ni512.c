@@ -45,4 +45,10 @@ void FJR_input_trans_Ni512(InputData* param)
   }
 
   volatile int  input_replyget = 0, replyput = 0;
-  dma_desc 
+  dma_desc dma_get_input, dma_put_output;
+
+  dma_set_op(&dma_get_input, DMA_GET);
+  dma_set_mode(&dma_get_input, PE_MODE);
+  dma_set_reply(&dma_get_input, &input_replyget);
+
+  dma_set_op(&
