@@ -60,4 +60,10 @@ void FJR_input_trans_Ni512(InputData* param)
   dma_set_stepsize(&dma_get_input, (Ni*(NumNi-1))*sizeof(float));
 
   dma_set_size(&dma_put_output, Ni*16*sizeof(float));
-  dma_set_bsize(&dma_pu
+  dma_set_bsize(&dma_put_output, Ni*sizeof(float));
+  dma_set_stepsize(&dma_put_output, (B*T*Ni*NumNi - Ni)*sizeof(float));
+
+
+  //(B, NR, NC, Ni)
+  int cBlk, blkNi, ii, cNi;
+  for(cBlk = id; cBlk < B*T; cBlk += 
