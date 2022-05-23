@@ -66,4 +66,12 @@ void FJR_input_trans_Ni512(InputData* param)
 
   //(B, NR, NC, Ni)
   int cBlk, blkNi, ii, cNi;
-  for(cBlk = id; cBlk < B*T; cBlk += 
+  for(cBlk = id; cBlk < B*T; cBlk += 64) {
+    int cB = cBlk/T;
+    int cRi = cBlk%T/NC*2;
+    int cCi = cBlk%NR*2;
+    int cT = cBlk%T;
+
+  //for(int cB = id; cB < B; cB+=64) {
+  //  int cT = 0;
+  //  for(int cRi = 0; cRi
