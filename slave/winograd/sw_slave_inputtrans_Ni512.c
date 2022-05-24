@@ -79,4 +79,6 @@ void FJR_input_trans_Ni512(InputData* param)
     //DMA get a (4,4,Ni) -> put(16,Ni)
     for(blkNi = 0; blkNi < NumNi; ++blkNi) {
       for(ii = 0; ii < 4; ++ii) {
-        float* input_offs
+        float* input_offset = (float*)param->input + cB*Ri*Ci*(Ni*NumNi) + ((cRi+ii)*Ci + cCi)*(Ni*NumNi) + blkNi*Ni;
+        dma(dma_get_input, (long)(input_offset), (long)(local_input + 4*Ni*ii));
+ 
