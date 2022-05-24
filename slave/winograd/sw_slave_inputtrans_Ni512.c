@@ -94,4 +94,8 @@ void FJR_input_trans_Ni512(InputData* param)
         simd_load(tmp[5], local_input + 5*Ni + cNi);
         simd_load(tmp[6], local_input + 6*Ni + cNi);
         simd_load(tmp[7], local_input + 7*Ni + cNi);
-        simd_load(tmp[8], local_input
+        simd_load(tmp[8], local_input + 8*Ni + cNi);
+        simd_load(tmp[9], local_input + 9*Ni + cNi);
+        simd_load(tmp[10], local_input + 10*Ni + cNi);
+        simd_load(tmp[11], local_input + 11*Ni + cNi);
+ 
