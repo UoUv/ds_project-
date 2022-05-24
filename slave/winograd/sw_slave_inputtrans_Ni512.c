@@ -81,4 +81,9 @@ void FJR_input_trans_Ni512(InputData* param)
       for(ii = 0; ii < 4; ++ii) {
         float* input_offset = (float*)param->input + cB*Ri*Ci*(Ni*NumNi) + ((cRi+ii)*Ci + cCi)*(Ni*NumNi) + blkNi*Ni;
         dma(dma_get_input, (long)(input_offset), (long)(local_input + 4*Ni*ii));
- 
+        dma_wait(&input_replyget, 1); input_replyget = 0;
+      }
+      for(cNi = 0; cNi < Ni; cNi+=4) {
+        floatv4 tmp[16];
+        floatv4 s[16];
+        simd_load(tmp[0], local_input + 0*N
