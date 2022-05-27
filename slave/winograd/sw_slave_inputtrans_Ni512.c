@@ -106,4 +106,6 @@ void FJR_input_trans_Ni512(InputData* param)
         // The tranformation manually simplified
         s[0 ] =(tmp[0] - tmp[8 ]) - (tmp[2 ]- tmp[10]);   
         s[1 ] =(tmp[1] - tmp[9 ]) + (tmp[2 ]- tmp[10]); 
-   
+        s[2 ] =(tmp[2] - tmp[10]) - (tmp[1 ]- tmp[9 ]); 
+        s[3 ] =(tmp[1] - tmp[9 ]) - (tmp[3 ]- tmp[11]); 
+        s[4 ] =(tmp[4] + tmp[8 ]) - (tmp[6 ]+ tmp[10]
