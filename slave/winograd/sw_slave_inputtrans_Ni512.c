@@ -115,4 +115,7 @@ void FJR_input_trans_Ni512(InputData* param)
         s[8 ] =(tmp[8] - tmp[4 ]) - (tmp[10]- tmp[6 ]); 
         s[9 ] =(tmp[9] - tmp[5 ]) + (tmp[10]- tmp[6 ]); 
         s[10] =(tmp[10]- tmp[6 ]) - (tmp[9 ]- tmp[5 ]); 
-        s[11] =(tmp[9] 
+        s[11] =(tmp[9] - tmp[5 ]) - (tmp[11]- tmp[7 ]); 
+        s[12] =(tmp[4] - tmp[12]) - (tmp[6 ]- tmp[14]); 
+        s[13] =(tmp[5] - tmp[13]) + (tmp[6 ]- tmp[14]); 
+        s[14] =(tmp[6] - tmp[14]) - (tmp[5
