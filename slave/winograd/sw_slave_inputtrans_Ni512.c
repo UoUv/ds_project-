@@ -129,4 +129,7 @@ void FJR_input_trans_Ni512(InputData* param)
         simd_store(s[5],  local_output + 5*Ni + cNi);
         simd_store(s[6],  local_output + 6*Ni + cNi);
         simd_store(s[7],  local_output + 7*Ni + cNi);
-        simd_
+        simd_store(s[8],  local_output + 8*Ni + cNi);
+        simd_store(s[9],  local_output + 9*Ni + cNi);
+        simd_store(s[10], local_output + 10*Ni + cNi);
+        
