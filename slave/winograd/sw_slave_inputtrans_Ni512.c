@@ -140,4 +140,12 @@ void FJR_input_trans_Ni512(InputData* param)
       }
 
       dma(dma_put_output, (long)((float*)param->transInput + cB*(Ni*NumNi)*T + cT*(Ni*NumNi) + blkNi*Ni), (long)(local_output));
- 
+      dma_wait(&replyput, 1); replyput = 0;
+    }
+  }
+
+  ldm_free(local_input, sizeof(float)*local_input_size);
+  ldm_free(local_output, sizeof(float)*local_output_size);
+
+}//main func
+
