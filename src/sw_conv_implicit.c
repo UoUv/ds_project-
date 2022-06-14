@@ -841,3 +841,169 @@ void sw_conv_backward_pad_impl_f(
     //memset(my_in_grad, 0, sizeof(float)*Ni*B*Ci*Ri);
     // pad_inv(in_grad) = conv(out_grad, rot180(weight), 'full')
 	  //  athread_spawn(conv_full_pad, param);
+
+#ifdef DEBUG_VERBOSE_SWDNN
+    gettimeofday(&ts, NULL);
+#endif
+	  //athread_spawn(conv_full_pad_float,param);
+	  athread_spawn(conv_full_pad_float_v2,param);
+    athread_join();
+#ifdef DEBUG_VERBOSE_SWDNN
+    gettimeofday(&te, NULL);
+    time = (te.tv_sec - ts.tv_sec) + (te.tv_usec - ts.tv_usec) / 1000000.0;
+    printf("Backward swDNN in_diff float athread time %lf s\n", time);
+#endif
+
+#ifdef MPE_TRANS
+    for(cRi = 0; cRi < Ri; ++cRi)
+        for(cCi = 0; cCi < Ci; ++cCi)
+            for(cNi = 0; cNi < Ni; ++cNi)
+                for(cB = 0; cB < B; ++cB)
+                  in_grad[image_caffe_offset(cB, cNi, cRi, cCi, B, Ni, Ri, Ci)] =
+                    //my_in_grad[image_swdnn_offset_back(cB, cNi, cRi, cCi, B, Ni, Ri, Ci)];
+                    my_in_grad[image_swdnn_offset(cB, cNi, cRi, cCi, B, Ni, Ri, Ci)];
+#elif SW_TRANS
+	  image_swdnn_to_caffe_f(my_in_grad,in_grad,B, Ni, Ri, Ci);
+#else
+#endif
+
+    free(my_in_grad);
+    free(my_weight);
+    free(my_out_grad);
+    free(param);
+
+#ifdef DEBUG_VERBOSE_SWDNN
+	  printf("backward : end sw_conv_backward_pad_impl_f\n");
+#endif
+}
+
+
+void sw_conv_backward_pad_impl_d(
+        const double* in,
+        const double* out_grad,
+        const double* weight,
+        double* in_grad,
+        double* weight_diff,
+        //double* bias_grad,
+        int Ci,
+        int Ri,
+        int K,
+        int Ni,
+        int No,
+        int B,
+        int pad)
+{
+#ifdef DEBUG_VERBOSE_SWDNN
+	  printf("begin Backward Pad Impl\n");
+#endif
+
+    int cKr, cKc, cNo;
+    int cRo, cCo, cB;
+    int cRi, cCi, cNi;
+    int Ro = Ri+2*pad-K+1 , Co = Ci+2*pad-K+1;
+
+    //weight_diff
+    ConvData* param = (ConvData*)malloc(sizeof(ConvData));
+    double* my_in = (double*)malloc(sizeof(double)*Ri*Ci*Ni*B);
+    double* my_out_grad = (double*)malloc(sizeof(double)*Ro*Co*No*B);
+    double* my_weight_diff = (double*)malloc(sizeof(double)*Ni*No*K*K);
+
+    //Transformation and rot180: in (B, N, R, C) -> (R, C, N, B)
+#ifdef MPE_TRANS
+    for(cRi = 0; cRi < Ri; ++cRi)
+        for(cCi = 0; cCi < Ci; ++cCi)
+            for(cNi = 0; cNi < Ni; ++cNi)
+                for(cB = 0; cB < B; ++cB)
+                  my_in[image_swdnn_offset_back(cB, cNi, cRi, cCi, B, Ni, Ri, Ci)] = 
+                    in[image_caffe_offset(cB, cNi, cRi, cCi, B, Ni, Ri, Ci)];
+#elif SW_TRANS
+	  image_caffe_to_swdnn_back_d((double*)in,my_in,B, Ni, Ri, Ci);
+#else
+#endif
+
+
+#ifdef MPE_TRANS
+    for(cRo = 0; cRo < Ro; ++cRo)
+        for(cCo = 0; cCo < Co; ++cCo)
+            for(cNo = 0; cNo < No; ++cNo)
+                for(cB = 0; cB < B; ++cB)
+                  my_out_grad[image_swdnn_offset(cB, cNo, cRo, cCo, B, No, Ro, Co)] = 
+                    out_grad[image_caffe_offset(cB, cNo, cRo, cCo, B, No, Ro, Co)];
+#elif SW_TRANS
+	  image_caffe_to_swdnn_d((double*)out_grad,my_out_grad,B, No, Ro, Co);
+#else
+#endif
+
+    //memset(my_weight_diff, 0, sizeof(double)*Ni*No*K*K);
+
+    param->input  = my_in;
+    param->weight = my_out_grad;
+    param->output = my_weight_diff;
+	  param->_Ni  = B;
+	  param->_Ri  = Ro;//+2*pad-K+1;
+	  param->_Ci  = Co;//+2*pad-K+1;
+	  param->_No  = No;
+	  param->_K   = Ci+2*pad-K+1;
+	  param->_Ro  = K;
+	  param->_Co  = K;
+	  param->_B   = Ni;
+    param->_pad = pad;
+
+    assert(param->_B >= 128 && param->_B%128 == 0);
+    assert(param->_Ni >= 64 && param->_Ni%32 == 0);
+    assert(param->_No >= 64 && param->_No%32 == 0);
+
+    //fjr1buff 7.13
+	  int Costride = (64*55*1024/8-param->_Ni*param->_B-
+            param->_Ni*param->_No)/
+        (param->_No*param->_B);
+	  //int Costride = (64*60*1024/8 - param->_Ni*param->_B*2-param->_Ni*param->_No*2)/(param->_No*param->_B);
+    //printf("Costride is %d\n", Costride);
+    //int ldm_consume = 8*(param->_Ni*param->_No*2+param->_No*param->_B*Costride+param->_Ni*param->_B*2);
+    //assert(ldm_consume < 64*1024*64);
+	  param->_Costride = Costride;
+    assert(Costride > 0);
+
+
+    // weight_diff = conv(pad(in), out_grad, 'valid')
+#ifdef DEBUG_VERBOSE_3
+    struct timeval ts, te;
+    gettimeofday(&ts, NULL);
+#endif
+	  athread_spawn(conv_pad, param);
+	  athread_join();
+#ifdef DEBUG_VERBOSE_3
+    gettimeofday(&te, NULL);
+    double time = (te.tv_sec - ts.tv_sec) + (te.tv_usec - ts.tv_usec) / 1000000.0;
+    double gflop = 2.0*B*Ni*No*K*K*(Ci+2*pad-K+1)*(Co+2*pad-K+1)/1e9;
+#ifdef DEBUG_VERBOSE_SWDNN
+    printf("Backward swDNN weight_diff float athread time %lf s, gflops %lf GFLOSP, Costride %d \n",
+        time, gflop/time, Costride);
+#endif
+#endif
+
+#ifdef MPE_TRANS
+    for(cKr = 0; cKr < K; ++cKr)
+        for(cKc = 0; cKc < K; ++cKc)
+            for(cNo = 0; cNo < No; ++cNo)
+                for(cNi = 0; cNi < Ni; ++cNi){
+              weight_diff[weight_caffe_offset(cNo, cNi, cKr, cKc, No, Ni, K)]
+              = my_weight_diff[weight_swdnn_offset(cNo, cNi, cKr, cKc, No, Ni, K)];
+                }
+#elif SW_TRANS
+	  weight_swdnn_to_caffe_d(my_weight_diff, weight_diff,No, Ni, K, K);
+#else
+#endif
+#ifdef DEBUG_VERBOSE_SWDNN
+	  printf("Backward weight_diff OK\n");
+#endif
+
+    free(my_weight_diff);
+    free(my_in);
+
+    //Transforamation and rot180 for Weight
+    double* my_weight   = (double*)malloc(sizeof(double)*No*Ni*K*K);
+    double* my_in_grad = (double*)malloc(sizeof(double)*Ri*Ci*Ni*B);
+
+#ifdef MPE_TRANS
+    for(cKr = 0; cKr < K; ++cKr)
