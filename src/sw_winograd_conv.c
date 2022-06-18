@@ -216,3 +216,178 @@ static void get_tiles(const float* image, const int ldi, const int irows, const 
                 otile[tile_count+13*STRIDE] = s[13];
                 otile[tile_count+14*STRIDE] = s[14];
                 otile[tile_count+15*STRIDE] = s[15];
+
+
+                tile_count++; 
+            }
+        }
+    }
+}
+
+// INTERNAL FUNCTION: FORM MATRIX B, also includes filter transform
+// filter (3, 3, K, C)
+// ofilter (16, C, K)
+static void fjr_filter_transform(const float* weight, const int C, const int K, float* oweight){
+  //filter trans
+  float c1[16];
+  float F[9];
+  int cNo, cNi;
+  for(cNo = 0; cNo < K; ++cNo)
+    //DMA
+    for(cNi = 0; cNi < C; ++cNi){
+      F[0] = weight[0*K*C + cNi*K + cNo];
+      F[1] = weight[1*K*C + cNi*K + cNo];
+      F[2] = weight[2*K*C + cNi*K + cNo];
+      F[3] = weight[3*K*C + cNi*K + cNo];
+      F[4] = weight[4*K*C + cNi*K + cNo];
+      F[5] = weight[5*K*C + cNi*K + cNo];
+      F[6] = weight[6*K*C + cNi*K + cNo];
+      F[7] = weight[7*K*C + cNi*K + cNo];
+      F[8] = weight[8*K*C + cNi*K + cNo];
+
+      c1[0]  = F[0];
+      c1[1]  = (F[0]+F[2]+F[1])*0.5f;
+      c1[2]  = (F[0]+F[2]-F[1])*0.5f;
+      c1[3]  = F[2];
+      c1[4]  = (F[0]+F[6]+F[3])*0.5f;
+      c1[5]  = ((F[0]+F[6]+F[3])+(F[2]+F[8]+F[5])+(F[1]+F[7]+F[4]))*0.25f; 
+      c1[6]  = ((F[0]+F[6]+F[3])+(F[2]+F[8]+F[5])-(F[1]+F[7]+F[4]))*0.25f; 
+      c1[7]  = (F[2]+F[8]+F[5])*0.5f;
+      c1[8]  = (F[0]+F[6]-F[3])*0.5f; 
+      c1[9]  = ((F[0]+F[6]-F[3])+(F[2]+F[8]-F[5])+(F[1]+F[7]-F[4]))*0.25f; 
+      c1[10] = ((F[0]+F[6]-F[3])+(F[2]+F[8]-F[5])-(F[1]+F[7]-F[4]))*0.25f; 
+      c1[11] = (F[2]+F[8]-F[5])*0.5f; 
+      c1[12] = F[6]; 
+      c1[13] = (F[6]+F[8]+F[7])*0.5f; 
+      c1[14] = (F[6]+F[8]-F[7])*0.5f; 
+      c1[15] = F[8]; 
+
+      int stride = C*K;
+      int x;
+      for(x = 0; x < 16; x++){
+        oweight[x*stride + cNi*K+ cNo] = c1[x];
+      }
+    }
+}
+
+// INTERNAL FUNCTION: FORM MATRIX B, also includes filter transform
+// filter (K, C, 3, 3)
+// ofilter (16, K, C)
+static void filter_transform(const float* filter, const int C, const int K, float* out){
+    int m, n, x; 
+    const float *F; 
+
+    #pragma omp parallel for collapse(2) private(m, n, x, F)
+    for(m = 0; m < K; m++){
+        for(n = 0; n < C; n++){
+            float c1[16] __attribute__((aligned(64))); 
+            F = filter+n*3*3 + m*3*3*C; 
+
+            // work on in 3x3 plane at a time
+            // The tranformation manually simplified
+            c1[0]  = F[0]; 
+            c1[1]  = (F[0]+F[2]+F[1])*0.5f; 
+            c1[2]  = (F[0]+F[2]-F[1])*0.5f; 
+            c1[3]  = F[2]; 
+            c1[4]  = (F[0]+F[6]+F[3])*0.5f; 
+            c1[5]  = ((F[0]+F[6]+F[3])+(F[2]+F[8]+F[5])+(F[1]+F[7]+F[4]))*0.25f; 
+            c1[6]  = ((F[0]+F[6]+F[3])+(F[2]+F[8]+F[5])-(F[1]+F[7]+F[4]))*0.25f; 
+            c1[7]  = (F[2]+F[8]+F[5])*0.5f; 
+            c1[8]  = (F[0]+F[6]-F[3])*0.5f; 
+            c1[9]  = ((F[0]+F[6]-F[3])+(F[2]+F[8]-F[5])+(F[1]+F[7]-F[4]))*0.25f; 
+            c1[10] = ((F[0]+F[6]-F[3])+(F[2]+F[8]-F[5])-(F[1]+F[7]-F[4]))*0.25f; 
+            c1[11] = (F[2]+F[8]-F[5])*0.5f; 
+            c1[12] = F[6]; 
+            c1[13] = (F[6]+F[8]+F[7])*0.5f; 
+            c1[14] = (F[6]+F[8]-F[7])*0.5f; 
+            c1[15] = F[8]; 
+
+            // scatter
+            #pragma unroll(16)
+            for(x = 0; x < 16; x++){
+                out[x*FSTRIDE+m*C+n] = c1[x]; 
+            }
+        }
+    }
+}
+
+// INTERNAL FUNCTION
+// GEMM specific to Ist layer of VGG with (M, N, K) = (12544, 64, 3)
+// MKL performs bad
+static void gemm_ker(int m, int n, int k, const float* a, const int lda, const float* b, const int ldb, float* c, const int ldc){
+
+    const int BLK = 16; 
+    int x, xx, y, z, i; 
+
+    for(z = 0; z < n; z++){
+        for(x = 0; x < m; x += BLK){
+            float p[BLK] __attribute__((aligned(64))); 
+            //p[0:BLK] = 0.0f; 
+            for(i = 0; i < BLK; ++i)
+              p[i] = 0.0f;
+            #pragma unroll(3)
+            for(y = 0; y < 3; y++){
+                #pragma vector aligned
+                for(i = 0; i < BLK; i++){
+                    p[i] += a[x+i+y*lda]*b[y+z*ldb]; 
+                }
+            }
+            //c[x+z*ldc:BLK] = p[0:BLK]; 
+            for(i = 0; i < BLK; ++i)
+              c[x + z*ldc + i] = p[i];
+        }
+    }
+
+}
+
+
+// INTERNAL FUNCTION
+// C = A*B with beta = 0.0f and alpha = 1.0f
+// Number of gemm calls is 16*BATCH 
+//static void batched_gemm(const float* image, const int irows, const int icols, const float* filter, const int frows, const int fcols, float* out, const int batch){
+static void batched_gemm(const float* image, const float* filter, float* out, int No, int Ni, int B, int T, int use_blas){
+    int t, i; 
+    const char trans ='n'; 
+    const float alpha = 1.0; 
+    const float beta =  0.0; 
+    int blkM = 0;
+    for(i = 32; i < 1024; i += 32) {
+      if((Ni*i*2 + Ni*No + No*i*2)*sizeof(double) < 64*56*1024 && B*T%i == 0)
+        blkM = i;
+    }
+    if(blkM == 0)
+      return;
+
+    //ConvData* params = (ConvData*)malloc(sizeof(ConvData));
+    //params->Ni = Ni;
+    //params->No = No;
+    //params->B = 128;
+    //params->T = T*B/128;
+    //printf("M %d K %d N %d blkM %d: ", T*B, Ni, No, blkM);
+    struct timeval t1, t2;
+    gettimeofday(&t1, NULL);
+    for(i = 0; i < 16; i++){
+        if(1) {
+          //const float* im = image+i*irows*batch;
+          const float* im = image + i*T*B*Ni;
+          const float* fi = filter + i*Ni*No;
+          float* ot       = out + i*T*B*No;
+
+          if(!use_blas && Ni == 3) {
+            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, B*T, No, Ni, alpha, im, Ni, fi, No, beta, ot, No);
+          } else if(!use_blas && No%128 == 0 && Ni%32 == 0) {
+            sw_sgemm(im, fi, ot, B*T, No, Ni, blkM);
+            //sw_cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, B*T, No, Ni, alpha, im, Ni, fi, No, beta, ot, No);
+          }
+          else {
+            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, B*T, No, Ni, alpha, im, Ni, fi, No, beta, ot, No);
+          }
+        }
+        else {
+          for(t = 0; t < B; t++){
+              const float* im = image + i*T*B*Ni + t*T*Ni;
+              const float* fi = filter + i*Ni*No;
+              float* ot       = out + i*T*B*No + t*T*No;
+              cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, T, No, Ni, alpha, im, Ni, fi, No, beta, ot, No);
+          }
+        }
