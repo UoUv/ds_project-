@@ -391,3 +391,197 @@ static void batched_gemm(const float* image, const float* filter, float* out, in
               cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, T, No, Ni, alpha, im, Ni, fi, No, beta, ot, No);
           }
         }
+    }
+    gettimeofday(&t2, NULL);
+    float tt = TIME(t1,t2);
+    float nflops = (float)B*16*T/1000*Ni/1000*No/1000*2;
+    double gflops = (double)nflops/tt;
+
+    if(!use_blas && No%128 == 0 && Ni%32 == 0)
+      printf("m: %d, n: %d, k: %d; fjrgemm is %lf GFlops, time is %f\n", T, No, Ni, gflops, tt);
+    else
+      printf("m: %d, n: %d, k: %d; cblas is %lf GFlops, time is %f\n", T, No, Ni, gflops, tt);
+
+    //free(params);
+}
+
+
+//(B, N, H, W)
+static void out_transform(const float* d, const int K, const int ntiles, float* out, const int ldo, const int oH, const  int oW, const int N){
+    int t; 
+    int sizeO = oH*oW; 
+    #pragma omp parallel for 
+    for(t = 0; t < N*K; t++){
+        float c1[16] __attribute__((aligned(64))); 
+        float temp[8] __attribute__((aligned(64))); 
+        float c2[4] __attribute__((aligned(64))); 
+        int tile_offset = t*ntiles; 
+        float* data = out +t*sizeO; 
+        int i, j;    
+        // work on one output plane at a time, irrespective of the order
+        for(i = 0; i < oH; i += 2){
+            for(j = 0; j < oW; j += 2){
+                // gather the 16 elements form C to form a tile
+                c1[0 ] = d[tile_offset+0 *STRIDE]; 
+                c1[1 ] = d[tile_offset+1 *STRIDE]; 
+                c1[2 ] = d[tile_offset+2 *STRIDE]; 
+                c1[3 ] = d[tile_offset+3 *STRIDE]; 
+                c1[4 ] = d[tile_offset+4 *STRIDE]; 
+                c1[5 ] = d[tile_offset+5 *STRIDE]; 
+                c1[6 ] = d[tile_offset+6 *STRIDE]; 
+                c1[7 ] = d[tile_offset+7 *STRIDE]; 
+                c1[8 ] = d[tile_offset+8 *STRIDE]; 
+                c1[9 ] = d[tile_offset+9 *STRIDE]; 
+                c1[10] = d[tile_offset+10*STRIDE]; 
+                c1[11] = d[tile_offset+11*STRIDE]; 
+                c1[12] = d[tile_offset+12*STRIDE]; 
+                c1[13] = d[tile_offset+13*STRIDE]; 
+                c1[14] = d[tile_offset+14*STRIDE]; 
+                c1[15] = d[tile_offset+15*STRIDE]; 
+
+                // The tranformation manually simplified
+                temp[0] = c1[0]+c1[1]+ c1[2]; 
+                temp[1] = c1[1]-c1[2]- c1[3]; 
+                temp[2] = c1[4]+c1[5]+ c1[6]; 
+                temp[3] = c1[5]-c1[6]- c1[7]; 
+                temp[4] = c1[8]+c1[9]+ c1[10]; 
+                temp[5] = c1[9]-c1[10]- c1[11]; 
+                temp[6] = c1[12]+c1[13]+ c1[14]; 
+                temp[7] = c1[13]-c1[14]- c1[15]; 
+
+                c2[0] = temp[0]+temp[2]+temp[4]; 
+                c2[1] = temp[1]+temp[3]+temp[5]; 
+                c2[2] = temp[2]-temp[4]-temp[6]; 
+                c2[3] = temp[3]-temp[5]-temp[7]; 
+
+                data[i*ldo+j]  =c2[0];     
+                data[i*ldo+j+1]  =c2[1]; 
+                data[(i+1)*ldo+j] = c2[2]; 
+                data[(i+1)*ldo+j+1] = c2[3];     
+                tile_offset++; 
+            }
+        }
+    }
+}
+
+//(16, B, T, No)
+//(B, H, W, No)
+//
+static void fjr_out_transform(const float* d, float* out, int T, int No, int B, int oW, int oH){
+//static void fjr_out_transform(const float* d, const int K, const int ntiles, float* out, const int ldo, const int oH, const  int oW, const int N){
+    int t;
+    int sizeO = oH*oW;
+    #pragma omp parallel for
+    int cB, cNo;
+    for(cB = 0; cB < B; ++cB)
+      for(cNo = 0; cNo < No; ++cNo) {
+        float c1[16] __attribute__((aligned(64)));
+        float temp[8] __attribute__((aligned(64)));
+        float c2[4] __attribute__((aligned(64)));
+        int i, j;
+        int stride = No*B*T;
+        int cT = 0;
+        // work on one output plane at a time, irrespective of the order
+        for(i = 0; i < oH; i += 2){
+            for(j = 0; j < oW; j += 2){
+                int tile_offset = cB*T*No + cT*No + cNo;
+                // gather the 16 elements form C to form a tile
+                c1[0 ] = d[tile_offset+0 *stride];
+                c1[1 ] = d[tile_offset+1 *stride];
+                c1[2 ] = d[tile_offset+2 *stride];
+                c1[3 ] = d[tile_offset+3 *stride];
+                c1[4 ] = d[tile_offset+4 *stride];
+                c1[5 ] = d[tile_offset+5 *stride];
+                c1[6 ] = d[tile_offset+6 *stride];
+                c1[7 ] = d[tile_offset+7 *stride];
+                c1[8 ] = d[tile_offset+8 *stride];
+                c1[9 ] = d[tile_offset+9 *stride];
+                c1[10] = d[tile_offset+10*stride];
+                c1[11] = d[tile_offset+11*stride];
+                c1[12] = d[tile_offset+12*stride];
+                c1[13] = d[tile_offset+13*stride];
+                c1[14] = d[tile_offset+14*stride];
+                c1[15] = d[tile_offset+15*stride];
+
+                // The tranformation manuamplified
+                temp[0] = c1[0]+c1[1]+ c1[2]; 
+                temp[1] = c1[1]-c1[2]- c1[3]; 
+                temp[2] = c1[4]+c1[5]+ c1[6]; 
+                temp[3] = c1[5]-c1[6]- c1[7]; 
+                temp[4] = c1[8]+c1[9]+ c1[10]; 
+                temp[5] = c1[9]-c1[10]- c1[11]; 
+                temp[6] = c1[12]+c1[13]+ c1[14]; 
+                temp[7] = c1[13]-c1[14]- c1[15]; 
+
+                c2[0] = temp[0]+temp[2]+temp[4]; 
+                c2[1] = temp[1]+temp[3]+temp[5]; 
+                c2[2] = temp[2]-temp[4]-temp[6]; 
+                c2[3] = temp[3]-temp[5]-temp[7]; 
+
+                out[cB*No*oH*oW + i*oW*No + j*No + cNo]          = c2[0];
+                out[cB*No*oH*oW + (i)*oW*No + (j+1)*No + cNo]    = c2[1];
+                out[cB*No*oH*oW + (i+1)*oW*No + j*No + cNo]      = c2[2];
+                out[cB*No*oH*oW + (i+1)*oW*No + (j+1)*No + cNo]  = c2[3];
+
+                //data[i*ldo+j]  =c2[0];
+                //data[i*ldo+j+1]  =c2[1];
+                //data[(i+1)*ldo+j] = c2[2];
+                //data[(i+1)*ldo+j+1] = c2[3];
+
+                cT++;
+            }
+        }
+    }
+}
+
+
+
+//Routine usage interface
+void sw_winograd_conv(const int M, float* image, const int irows, const int C, float* filter, const int K, const int batch, float* out, int use_blas){
+  float* t_filter;
+  float* t_image;
+  float* c_out;
+
+  int T = (irows-2)*(irows-2)/4;
+  t_filter = (float*)_aligned_malloc(16*C*K*sizeof(float), 128);    
+  assert(t_filter != NULL);
+  t_image = (float*)_aligned_malloc(16*C*T*batch*sizeof(float), 128);    
+  assert(t_image != NULL);
+  c_out = (float*)_aligned_malloc(16*K*T*batch*sizeof(float), 128);
+  assert(c_out != NULL);
+
+  const int outHeight = irows-2;
+  const int outWidth = irows-2;
+  const int sizeI = irows*irows;
+  const int tiles = (outHeight)*0.5*(outWidth)*0.5;
+
+  struct timeval t1, t2;
+  float tt;
+
+  gettimeofday(&t1, NULL);
+  FilterData* filterParams = (FilterData*)malloc(sizeof(FilterData));
+  filterParams->filter = filter;
+  filterParams->transFilter = t_filter;
+  filterParams->Ni = C;
+  filterParams->No = K;
+  athread_spawn(FJR_filter_trans, filterParams);
+  athread_join();
+  free(filterParams);
+  gettimeofday(&t2, NULL);
+  tt = TIME(t1,t2);
+  float MBW = (float)4*(9+16)*K*C*1e-9/tt;
+  //printf("filter trans time is %lf s, Measured Bandwith %lf Bps\n", tt, MBW);
+  //printf("CPE filter trans OK!\n");
+
+  int cnt = 0;
+  float sum1 = 0., sum2 = 0.;
+//#define CHECK_FILTER_TRANS
+#ifdef CHECK_FILTER_TRANS
+  float* t_filter_host = (float*)malloc(16*sizeof(float)*C*K);
+  memset(t_filter_host, 0.0, 16*sizeof(float)*C*K);
+  fjr_filter_transform(filter, C, K, t_filter_host);
+  cnt = 0;
+  sum1 = 0., sum2 = 0.;
+  for(int i = 0; i < 16*C*K; ++i) {
+    if(fabs(t_filter[i] - t_filter_host[i]) > 1e-3 && cnt < 10) {
+      printf("error @ %d, slave %f vs host %f\n", i, t_filter[i], t_filter_host[i]);
