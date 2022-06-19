@@ -585,3 +585,92 @@ void sw_winograd_conv(const int M, float* image, const int irows, const int C, f
   for(int i = 0; i < 16*C*K; ++i) {
     if(fabs(t_filter[i] - t_filter_host[i]) > 1e-3 && cnt < 10) {
       printf("error @ %d, slave %f vs host %f\n", i, t_filter[i], t_filter_host[i]);
+      cnt++;
+    }
+    sum1 += t_filter_host[i];
+    sum2 += t_filter[i];
+  }
+  printf("sum1 %f, sum2 %f\n", sum1, sum2);
+  free(t_filter_host);
+#endif
+
+  //printf("begin input trans, Ni %d, B %d, Ci %d, Ri %d\n", C, batch, irows, irows);
+  InputData* inputParams = (InputData*)malloc(sizeof(InputData));
+  inputParams->input = image;
+  inputParams->transInput = t_image;
+  inputParams->Ni = C;
+  inputParams->B = batch;
+  inputParams->Ci = irows;
+  inputParams->Ri = irows;
+  //athread_spawn(FJR_input_trans_Ni512, inputParams);
+  gettimeofday(&t1, NULL);
+  athread_spawn(FJR_input_trans, inputParams);
+  athread_join();
+  gettimeofday(&t2, NULL);
+  free(inputParams);
+
+//#define CHECK_INPUT_TRANS
+#ifdef CHECK_INPUT_TRANS
+  float* t_image_host = (float*)malloc(16*sizeof(float)*tiles*C*batch);
+  memset(t_image_host, 0.0, 16*sizeof(float)*tiles*C*batch);
+  fjr_get_tiles(image, t_image_host, batch, C, tiles, irows, irows); 
+  cnt = 0;
+  sum1 = 0., sum2 = 0.;
+  for(int i = 0; i < 16*tiles*C*batch; ++i) {
+    if(fabs(t_image[i] - t_image_host[i]) > 1e-3 && cnt < 10) {
+      printf("error @ %d, slave %f vs host %f\n", i, t_image_host[i], t_image[i]);
+      cnt++;
+    }
+    sum1 += t_image_host[i];
+    sum2 += t_image[i];
+  }
+  printf("input trans sum1 %f, sum2 %f\n", sum1, sum2);
+  free(t_image_host);
+#endif
+  tt = TIME(t1,t2);
+  MBW = (float)2*16*tiles*C*batch*4*1e-9/tt;
+  printf("input trans time is %lf s, Measured Bandwith %lf Bps\n", tt, MBW);
+
+  batched_gemm(t_image, t_filter, c_out, K, C, batch/M, tiles, use_blas);
+
+  gettimeofday(&t1, NULL);
+  OutputData* outputParams = (OutputData*)malloc(sizeof(OutputData));
+  outputParams->output = c_out;
+  outputParams->transOutput = out;
+  outputParams->No = K;
+  outputParams->B = batch;
+  outputParams->Co = outWidth;
+  outputParams->Ro = outHeight;
+  athread_spawn(FJR_output_trans, outputParams);
+  athread_join();
+  free(outputParams);
+  gettimeofday(&t2, NULL);
+  tt = TIME(t1,t2);
+  MBW = (float)(4+16)*K*tiles*batch*4*1e-9/tt;
+  printf("output trans time is %lf s, Measured Bandwith %lf Bps\n", tt, MBW);
+
+
+
+//#define CHECK_OUTPUT_TRANS
+#ifdef CHECK_OUTPUT_TRANS
+  float* out_host = (float*)malloc(sizeof(float)*K*batch*outHeight*outWidth);
+  memset(out_host, 0.0, sizeof(float)*K*batch*outHeight*outWidth);
+  fjr_out_transform(c_out, out_host, tiles, K, batch, outHeight, outWidth);
+  cnt = 0;
+  sum1 = 0., sum2 = 0.;
+  for(int i = 0; i < K*batch*outHeight*outWidth; ++i) {
+    if(fabs(out_host[i] - out[i]) > 1e-3 && cnt < 10) {
+      printf("error @ %d, slave %f vs host %f\n", i, out_host[i], out[i]);
+      cnt++;
+    }
+    sum1 += out[i];
+    sum2 += out_host[i];
+  }
+  printf("sum1 %f, sum2 %f\n", sum1, sum2);
+  free(out_host);
+#endif
+
+  _aligned_free(t_filter);
+  _aligned_free(t_image);
+  _aligned_free(c_out);
+}
