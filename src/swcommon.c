@@ -3,4 +3,8 @@ void start_use_slave() {
   athread_init();
 }
 
-voi
+void end_use_slave() {
+  athread_halt();
+}
+
+
