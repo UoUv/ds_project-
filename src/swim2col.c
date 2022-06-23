@@ -12,4 +12,11 @@ extern void SLAVE_FUN(sw_im2col_large_stride_d)();
 extern void SLAVE_FUN(sw_im2col_large_stride_d)();
 extern void SLAVE_FUN(sw_col2im_large_stride_f)();
 extern void SLAVE_FUN(sw_im2col_large_d)();
-extern voi
+extern void SLAVE_FUN(sw_im2col_large_f)();
+extern void SLAVE_FUN(sw_col2im_large_d)();
+extern void SLAVE_FUN(sw_col2im_large_f)();
+
+
+// float version
+// TODO
+void swim2col_zeropad_batch_tra
