@@ -8,4 +8,8 @@ extern void SLAVE_FUN(sw_im2col_large_stride_f)();
 extern void SLAVE_FUN(sw_im2col_large_stride_zeropad_f)();
 extern void SLAVE_FUN(sw_im2col_large_stride_zeropad_batch_f)();
 extern void SLAVE_FUN(sw_im2col_large_stride_zeropad_batch_trans_f)();
-extern void SLAVE_FUN(sw_im2
+extern void SLAVE_FUN(sw_im2col_large_stride_d)();
+extern void SLAVE_FUN(sw_im2col_large_stride_d)();
+extern void SLAVE_FUN(sw_col2im_large_stride_f)();
+extern void SLAVE_FUN(sw_im2col_large_d)();
+extern voi
