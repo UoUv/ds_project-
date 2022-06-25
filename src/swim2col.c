@@ -22,4 +22,8 @@ extern void SLAVE_FUN(sw_col2im_large_f)();
 void swim2col_zeropad_batch_trans_f(const float* data_im, const int channels,
     const int height, const int width, const int kernel_h, const int kernel_w,
     const int pad_h, const int pad_w,
-    const int stride_h, c
+    const int stride_h, const int stride_w,
+    const int dilation_h, const int dilation_w,
+    float* data_col, int batch_size) {
+  Im2colPara* para = (Im2colPara*)malloc(sizeof(Im2colPara));
+  para->data_im = data_i
