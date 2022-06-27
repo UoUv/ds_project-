@@ -34,4 +34,9 @@ void swim2col_zeropad_batch_trans_f(const float* data_im, const int channels,
   para->kernel_h= kernel_h;
   para->kernel_w= kernel_w;
   para->pad_h   = pad_h;
-  para->pad_w 
+  para->pad_w   = pad_w;
+  para->stride_h= stride_h;
+  para->stride_w= stride_w;
+  para->dilation_h = dilation_h;
+  para->dilation_w = dilation_w;
+  int output_h = (height + 2 * pad_h 
