@@ -87,4 +87,9 @@ void swim2col_zeropad_batch_f(const float* data_im, const int channels,
   assert(dilation_h==1);
   assert(dilation_w==1);
   if(stride_h==1 && stride_w==1) {
-    assert((width+2*pad_w)*sizeof(float)*batch_size<LDM_MAX
+    assert((width+2*pad_w)*sizeof(float)*batch_size<LDM_MAX);
+    athread_spawn(sw_im2col_large_stride_zeropad_batch_f,para);
+    athread_join();
+  } else {
+    assert((width+2*pad_w + output_w)*sizeof(float)*batch_size<LDM_MAX);
+    athread_spawn(sw_im
