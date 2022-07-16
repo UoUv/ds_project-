@@ -104,3 +104,9 @@ void swim2col_zeropad_f(const float* data_im, const int channels,
     const int pad_h, const int pad_w,
     const int stride_h, const int stride_w,
     const int dilation_h, const int dilation_w,
+    float* data_col) {
+  Im2colPara* para = (Im2colPara*)malloc(sizeof(Im2colPara));
+  para->data_im = data_im;
+  para->data_col= data_col;
+  para->channels= channels;
+  
