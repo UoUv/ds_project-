@@ -128,4 +128,8 @@ void swim2col_zeropad_f(const float* data_im, const int channels,
   assert(dilation_w==1);
   if(stride_h==1 && stride_w==1) {
     assert((width+2*pad_w)*sizeof(float)<LDM_MAX);
-    //
+    // spawn
+    //printf("SPAWN sw_im2col_large_f\n");
+    //athread_spawn(sw_im2col_large_f,para);
+    athread_spawn(sw_im2col_large_stride_zeropad_f,para);
+    athread_j
