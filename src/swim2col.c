@@ -142,4 +142,14 @@ void swim2col_zeropad_f(const float* data_im, const int channels,
     athread_spawn(sw_im2col_large_stride_zeropad_f,para);
     athread_join();
 #ifdef PRINT_DEBUGINFO
-    printf("sw_im2c
+    printf("sw_im2col_large_stride_f end\n");
+#endif
+  }
+
+  free(para);
+}
+
+
+// float version
+void swim2col_f(const float* data_im, const int channels,
+    const int height, const int width, const int 
