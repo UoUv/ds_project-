@@ -162,4 +162,10 @@ void swim2col_f(const float* data_im, const int channels,
   para->data_col= data_col;
   para->channels= channels;
   para->height  = height;
-  par
+  para->width   = width;
+  para->kernel_h= kernel_h;
+  para->kernel_w= kernel_w;
+  para->pad_h   = pad_h;
+  para->pad_w   = pad_w;
+  para->stride_h= stride_h;
+  para->stride_w= strid
