@@ -168,4 +168,9 @@ void swim2col_f(const float* data_im, const int channels,
   para->pad_h   = pad_h;
   para->pad_w   = pad_w;
   para->stride_h= stride_h;
-  para->stride_w= strid
+  para->stride_w= stride_w;
+  para->dilation_h = dilation_h;
+  para->dilation_w = dilation_w;
+  // check parameter Precondition of sw_im2col_large_d
+  assert(dilation_h==1);
+  assert(dilation_w==1
