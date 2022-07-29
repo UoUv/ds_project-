@@ -173,4 +173,10 @@ void swim2col_f(const float* data_im, const int channels,
   para->dilation_w = dilation_w;
   // check parameter Precondition of sw_im2col_large_d
   assert(dilation_h==1);
-  assert(dilation_w==1
+  assert(dilation_w==1);
+  if(stride_h==1 && stride_w==1) {
+    assert((width+2*pad_w)*sizeof(float)<LDM_MAX);
+    athread_spawn(sw_im2col_large_f,para);
+    athread_join();
+  } else {
+    assert(((
