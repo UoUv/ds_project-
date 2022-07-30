@@ -179,4 +179,11 @@ void swim2col_f(const float* data_im, const int channels,
     athread_spawn(sw_im2col_large_f,para);
     athread_join();
   } else {
-    assert(((
+    assert(((width+2*pad_w)+(width+2*pad_w-kernel_w)/stride_w+1)*sizeof(float)<LDM_MAX);
+    athread_spawn(sw_im2col_large_stride_f,para);
+    athread_join();
+  }
+
+  free(para);
+}
+
