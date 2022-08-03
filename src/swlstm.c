@@ -30,4 +30,13 @@ void sw_lstm_clip_forward_impl_f(
   param->c_t = c_t;
   param->N_ = N_;
   param->H_ = H_;
-  athread_spawn(lstm_slave_clip_forward_f,pa
+  athread_spawn(lstm_slave_clip_forward_f,param);
+  athread_join();
+  free(param);
+}
+
+void sw_lstm_noclip_forward_impl_f(
+        int t,
+        float * pre_gate_t,
+        float * h_to_gate,
+        float * gate_
