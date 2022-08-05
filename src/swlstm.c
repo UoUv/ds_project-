@@ -39,4 +39,14 @@ void sw_lstm_noclip_forward_impl_f(
         int t,
         float * pre_gate_t,
         float * h_to_gate,
-        float * gate_
+        float * gate_t,
+        float * h_t,
+        float * c_t_1,
+        float * c_t,
+        int N_,
+        int H_
+)
+{
+  LSTMData * param = (LSTMData*)malloc(sizeof(LSTMData));
+  param->t = t;
+  param->p
