@@ -49,4 +49,11 @@ void sw_lstm_noclip_forward_impl_f(
 {
   LSTMData * param = (LSTMData*)malloc(sizeof(LSTMData));
   param->t = t;
-  param->p
+  param->pre_gate_t = pre_gate_t;
+  param->h_to_gate = h_to_gate;
+  param->gate_t = gate_t;
+  param->h_t = h_t;
+  param->c_t_1 = c_t_1;
+  param->c_t = c_t;
+  param->N_ = N_;
+  param->H_ = H_;
