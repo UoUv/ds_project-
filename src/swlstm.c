@@ -57,3 +57,13 @@ void sw_lstm_noclip_forward_impl_f(
   param->c_t = c_t;
   param->N_ = N_;
   param->H_ = H_;
+  athread_spawn(lstm_slave_clip_forward_f,param);
+  athread_join();
+  free(param);
+}
+/////////////////////
+/*
+void sw_std_lstm_forward_impl_f(
+        float * X,
+        float * C_prev,
+        float 
