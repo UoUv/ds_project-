@@ -74,4 +74,11 @@ void sw_std_lstm_forward_impl_f(
 )
 {
     STDLSTMData * param = (STDLSTMData*)malloc(sizeof(STDLSTMData));
-    param->X = X
+    param->X = X;
+    param->C_prev = C_prev;
+    param->cont = cont;
+    param->C = C;
+    param->H = H;
+    param->num = num;
+    param->hidden_dim_ = hidden_dim_;
+    athread_spawn(lstm_std_slave_fo
