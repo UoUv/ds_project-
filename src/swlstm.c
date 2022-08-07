@@ -66,4 +66,12 @@ void sw_lstm_noclip_forward_impl_f(
 void sw_std_lstm_forward_impl_f(
         float * X,
         float * C_prev,
-        float 
+        float * cont,
+        float * C,
+        float * H,
+        int num,
+        int hidden_dim_
+)
+{
+    STDLSTMData * param = (STDLSTMData*)malloc(sizeof(STDLSTMData));
+    param->X = X
