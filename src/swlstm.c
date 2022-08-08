@@ -81,4 +81,8 @@ void sw_std_lstm_forward_impl_f(
     param->H = H;
     param->num = num;
     param->hidden_dim_ = hidden_dim_;
-    athread_spawn(lstm_std_slave_fo
+    athread_spawn(lstm_std_slave_forward_f,param);
+    athread_join();
+    free(param);
+}
+*/
