@@ -10,4 +10,11 @@
 
 extern SLAVE_FUN(sw_slave_scale_d)();
 extern SLAVE_FUN(sw_slave_scale_f)();
-typ
+typedef struct ScaleTransPara_st {
+  void *src;
+  void *scale;
+  void *dst;
+  int outer_dim,inner_dim,scale_dim;
+}ScalePara;
+// Precondition: already athread_init()
+void sw_scale_layer_d(
