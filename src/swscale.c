@@ -17,4 +17,6 @@ typedef struct ScaleTransPara_st {
   int outer_dim,inner_dim,scale_dim;
 }ScalePara;
 // Precondition: already athread_init()
-void sw_scale_layer_d(
+void sw_scale_layer_d(const double* src,const double *scale, double* dst, const int outer_dim,const int inner_dim,const int scale_dim) {
+  ScalePara *para = (ScalePara*)malloc(sizeof(ScalePara));
+  para->src = s
