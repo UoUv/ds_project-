@@ -19,4 +19,10 @@ typedef struct ScaleTransPara_st {
 // Precondition: already athread_init()
 void sw_scale_layer_d(const double* src,const double *scale, double* dst, const int outer_dim,const int inner_dim,const int scale_dim) {
   ScalePara *para = (ScalePara*)malloc(sizeof(ScalePara));
-  para->src = s
+  para->src = src;
+  para->scale = scale;
+  para->dst = dst;
+  para->outer_dim = outer_dim;
+  para->inner_dim = inner_dim;
+  para->scale_dim = scale_dim;
+  athread_spawn(sw_slave_scale_d,para
