@@ -25,4 +25,9 @@ void sw_scale_layer_d(const double* src,const double *scale, double* dst, const 
   para->outer_dim = outer_dim;
   para->inner_dim = inner_dim;
   para->scale_dim = scale_dim;
-  athread_spawn(sw_slave_scale_d,para
+  athread_spawn(sw_slave_scale_d,para);
+  athread_join();
+  free(para);
+}
+void sw_scale_layer_f(const float* src,const float *scale, float* dst,const int outer_dim,const int inner_dim,const int scale_dim) {
+  Scale
