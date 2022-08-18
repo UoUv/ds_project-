@@ -14,4 +14,17 @@
 
 extern SLAVE_FUN(swsoftmax_trans_f)();
 extern SLAVE_FUN(swsofmax_f)();
-extern SLAVE_FUN(softmaxBackward
+extern SLAVE_FUN(softmaxBackward)();
+//extern SLAVE_FUN(swsofmax_d)();
+
+typedef struct TransData_st {
+  void* in;
+  void* out;
+  int tZ;
+  int tX;
+  int tY;
+}TransData;
+
+typedef struct SoftmaxData_st{
+  void* bottom_data;
+  void* sum_multip
