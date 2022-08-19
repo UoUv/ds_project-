@@ -27,4 +27,14 @@ typedef struct TransData_st {
 
 typedef struct SoftmaxData_st{
   void* bottom_data;
-  void* sum_multip
+  void* sum_multiplier_;
+  void* scale_data;
+  void* top_data;
+  int channels;
+  int dim;
+  int outer_num_;
+  int inner_num_;
+}SoftmaxData;
+
+void sw_softmax_forward_impl_f(
+    const float* bot
