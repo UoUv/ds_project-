@@ -37,4 +37,12 @@ typedef struct SoftmaxData_st{
 }SoftmaxData;
 
 void sw_softmax_forward_impl_f(
-    const float* bot
+    const float* bottom_data,
+    const float* sum_multiplier_,
+    float* scale_data,
+    float* top_data,
+    int channels,
+    int dim,
+    int outer_num_,
+    int inner_num_) {
+#if
