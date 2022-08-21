@@ -49,4 +49,12 @@ void sw_softmax_forward_impl_f(
   printf("channels = %d, dim = %d, outer_num_ = %d, inner_num_ = %d\n",channels,dim,outer_num_,inner_num_);
   /*int testArr[80];
   int testArr__[80];
-  int tt, ii,ij,
+  int tt, ii,ij,ik;
+  for(tt = 0;tt<80;tt++) testArr[tt] = tt;
+  TransData tdata;
+  tdata.in=testArr;
+  tdata.out=testArr__;
+  tdata.tX = 4;
+  tdata.tY = 5;
+  tdata.tZ = 4;
+  athread_spawn
