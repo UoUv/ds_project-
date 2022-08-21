@@ -45,4 +45,8 @@ void sw_softmax_forward_impl_f(
     int dim,
     int outer_num_,
     int inner_num_) {
-#if
+#ifdef DEBUG_INFO
+  printf("channels = %d, dim = %d, outer_num_ = %d, inner_num_ = %d\n",channels,dim,outer_num_,inner_num_);
+  /*int testArr[80];
+  int testArr__[80];
+  int tt, ii,ij,
