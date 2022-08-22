@@ -65,4 +65,11 @@ void sw_softmax_forward_impl_f(
       printf("%d ",testArr__[ik*16+ii*4+ij]);
     }
     printf("\n\t");
-  
+  }
+  printf("\n");
+  }*/
+#endif
+  assert(dim==channels*inner_num_);
+  int i,j,k;
+  float* bottom_data_T = (float*)malloc(sizeof(float)*outer_num_*dim);
+  float* top_data_T = (float*)
