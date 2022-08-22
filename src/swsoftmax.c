@@ -57,4 +57,12 @@ void sw_softmax_forward_impl_f(
   tdata.tX = 4;
   tdata.tY = 5;
   tdata.tZ = 4;
-  athread_spawn
+  athread_spawn(swsoftmax_trans_f,&tdata);
+  athread_join();
+  for(ik=0;ik<4;++ik) {
+  for(ii=0;ii<4;++ii){
+    for(ij=0;ij<5;++ij) {
+      printf("%d ",testArr__[ik*16+ii*4+ij]);
+    }
+    printf("\n\t");
+  
