@@ -72,4 +72,10 @@ void sw_softmax_forward_impl_f(
   assert(dim==channels*inner_num_);
   int i,j,k;
   float* bottom_data_T = (float*)malloc(sizeof(float)*outer_num_*dim);
-  float* top_data_T = (float*)
+  float* top_data_T = (float*)malloc(sizeof(float)*outer_num_*dim);
+  // matrix trans
+#ifdef USE_SWSOFTMAX
+  for(i=0; i < outer_num_;++i) {
+    for(j=0;j < channels;++j) {
+      for(k=0;k < inner_num_;++k) {
+   
