@@ -78,4 +78,9 @@ void sw_softmax_forward_impl_f(
   for(i=0; i < outer_num_;++i) {
     for(j=0;j < channels;++j) {
       for(k=0;k < inner_num_;++k) {
-   
+        bottom_data_T[i*dim+k*channels+j] = bottom_data[i*dim+j*inner_num_+k];
+      }
+    }
+  }
+#else
+  TransData* tpara = (TransData*)malloc(sizeof(TransD
