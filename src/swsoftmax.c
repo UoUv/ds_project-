@@ -83,4 +83,10 @@ void sw_softmax_forward_impl_f(
     }
   }
 #else
-  TransData* tpara = (TransData*)malloc(sizeof(TransD
+  TransData* tpara = (TransData*)malloc(sizeof(TransData));
+  tpara->in = bottom_data;
+  tpara->out= bottom_data_T;
+  tpara->tZ = outer_num_;
+  tpara->tY = channels;
+  tpara->tX = inner_num_;
+  athread_spawn(swsoftmax_trans_f,tpa
