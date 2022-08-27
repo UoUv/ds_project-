@@ -95,4 +95,10 @@ void sw_softmax_forward_impl_f(
 #endif
   SoftmaxData* param = (SoftmaxData*)malloc(sizeof(SoftmaxData));
   param->bottom_data = bottom_data_T;
-  param->sum_multiplier_ = s
+  param->sum_multiplier_ = sum_multiplier_;
+  param->scale_data = scale_data;
+  param->top_data = top_data_T;
+  param->channels = channels;
+  param->dim = dim;
+  param->outer_num_ = outer_num_;
+  param->inner_num_ 
