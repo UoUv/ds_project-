@@ -89,4 +89,10 @@ void sw_softmax_forward_impl_f(
   tpara->tZ = outer_num_;
   tpara->tY = channels;
   tpara->tX = inner_num_;
-  athread_spawn(swsoftmax_trans_f,tpa
+  athread_spawn(swsoftmax_trans_f,tpara);
+  athread_join();
+  free(tpara);
+#endif
+  SoftmaxData* param = (SoftmaxData*)malloc(sizeof(SoftmaxData));
+  param->bottom_data = bottom_data_T;
+  param->sum_multiplier_ = s
