@@ -107,4 +107,10 @@ void sw_softmax_forward_impl_f(
   athread_join();
   free(param);
   free(bottom_data_T);
- // printf("matrix trans b
+ // printf("matrix trans back\n");
+  // matrix trans back
+#ifdef USE_SWSOFTMAX
+  for(i=0; i < outer_num_;++i) {
+    for(j=0;j < channels;++j) {
+      for(k=0;k < inner_num_;++k) {
+        top_data[i*dim+j*inner_num_+k] =
