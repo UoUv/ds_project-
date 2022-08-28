@@ -101,4 +101,10 @@ void sw_softmax_forward_impl_f(
   param->channels = channels;
   param->dim = dim;
   param->outer_num_ = outer_num_;
-  param->inner_num_ 
+  param->inner_num_ = inner_num_;
+  assert(channels+2*channels*(inner_num_/64+1)<64*1024/sizeof(float));
+  athread_spawn(swsofmax_f,param);
+  athread_join();
+  free(param);
+  free(bottom_data_T);
+ // printf("matrix trans b
