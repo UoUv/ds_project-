@@ -113,4 +113,12 @@ void sw_softmax_forward_impl_f(
   for(i=0; i < outer_num_;++i) {
     for(j=0;j < channels;++j) {
       for(k=0;k < inner_num_;++k) {
-        top_data[i*dim+j*inner_num_+k] =
+        top_data[i*dim+j*inner_num_+k] = top_data_T[i*dim+k*channels+j];
+      }
+    }
+  }
+#else
+  tpara = (TransData*)malloc(sizeof(TransData));
+  tpara->in = top_data_T;
+  tpara->out= top_data;
+  tpara->tZ = o
