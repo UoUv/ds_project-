@@ -121,4 +121,12 @@ void sw_softmax_forward_impl_f(
   tpara = (TransData*)malloc(sizeof(TransData));
   tpara->in = top_data_T;
   tpara->out= top_data;
-  tpara->tZ = o
+  tpara->tZ = outer_num_;
+  tpara->tY = inner_num_;
+  tpara->tX = channels;
+  athread_spawn(swsoftmax_trans_f,tpara);
+  athread_join();
+  free(tpara);
+#endif
+  free(top_data_T);
+  //printf("fin\n");
