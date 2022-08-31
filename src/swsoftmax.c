@@ -130,3 +130,12 @@ void sw_softmax_forward_impl_f(
 #endif
   free(top_data_T);
   //printf("fin\n");
+}
+void sw_softmax_backward_impl_f(
+    float * top_diff,
+    float * top_data,
+    float * bottom_diff,
+    float * scale_data,
+    int outer_num_,
+    int channels,
+    int i
