@@ -138,4 +138,9 @@ void sw_softmax_backward_impl_f(
     float * scale_data,
     int outer_num_,
     int channels,
-    int i
+    int inner_num_,
+    int dim
+    )
+{
+  float * trans_top_diff = (float *)malloc(outer_num_ * channels * inner_num_ * sizeof(float));
+  float * trans_top_data = (float *)malloc(outer_num_ 
