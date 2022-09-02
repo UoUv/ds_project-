@@ -145,4 +145,6 @@ void sw_softmax_backward_impl_f(
   float * trans_top_diff = (float *)malloc(outer_num_ * channels * inner_num_ * sizeof(float));
   float * trans_top_data = (float *)malloc(outer_num_ * channels * inner_num_ * sizeof(float));
   float * trans_bottom_diff = (float *)malloc(outer_num_ * channels * inner_num_ * sizeof(float));
-  swap_lowdim_f(top_diff, trans_top_diff, outer_nu
+  swap_lowdim_f(top_diff, trans_top_diff, outer_num_ * channels, inner_num_);
+  swap_lowdim_f(top_data, trans_top_data, outer_num_ * channels, inner_num_);
+  SlaveSoftmaxParam * param = (SlaveSoftmaxParam*)malloc(sizeof(SlaveSoftmax
