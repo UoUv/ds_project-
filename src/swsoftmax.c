@@ -152,4 +152,10 @@ void sw_softmax_backward_impl_f(
   param->top_data = trans_top_data;
   param->bottom_diff = trans_bottom_diff;
   param->scale_data = scale_data;
-  param->outer_num_ 
+  param->outer_num_ = outer_num_;
+  param->channels = channels;
+  param->inner_num_ = inner_num_;
+  param->dim = dim;
+  athread_spawn(softmaxBackward,param);
+  athread_join();
+  swap_lowdim_f(tr
