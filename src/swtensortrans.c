@@ -229,3 +229,181 @@ inline void swapBN_HW_f(float*in,float*out,int B,int N,int H, int W)
 	//printf("N=%d B=%d H=%d W=%d splitNB=%d splitHW=%d\n",N,B,H,W,param.splitNB,param.splitHW);
 	param.nCount = nNB/nTmp;
 	nTmp = (nNB/param.splitNB)%NUM_THREADS;
+	param.nNBHWThreadsNum = param.nCount >0 ? NUM_THREADS:nTmp;
+	param.nNBHWLeftThreadsNum = param.nCount >0 ? nTmp:0;
+	
+	athread_spawn(swapNBHW_f,(void *)&param);
+	//process the slave core left data
+	int nHWLeft = nHW%(param.splitHW);	
+	int nBNLeft = nNB%(param.splitNB);	
+	if(nHWLeft >0 || nBNLeft >0)
+	{
+		int nC = nHW - nHWLeft;
+		int nR = nNB - nBNLeft;
+		
+		for(cCi = nC; cCi < nHW; ++cCi)
+			for(cRi = 0; cRi < nNB; ++cRi)
+				out[cCi*nNB+cRi] = in[cRi*nHW+cCi]; 
+    
+		for(cRi = nR; cRi < nNB; ++cRi)
+			for(cCi = 0; cCi < nC; ++cCi)
+				out[cCi*nNB+cRi] = in[cRi*nHW+cCi]; 
+    }	
+    athread_join();			
+}
+void weight_caffe_to_swdnn_back_d(double*in,double*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nHW = H*W;
+	int nNB = N*B;
+	int nTmp = 0;
+	if(nHW < 4)
+	{
+		nTmp = nHW-1;
+	    for(cCi = 0; cCi <nHW; ++cCi)
+			for(cRi = 0; cRi < nNB; ++cRi)
+				out[(nTmp-cCi)*nNB+cRi] = in[cRi*nHW+cCi]; 
+        return;
+	}
+	
+	double* sout   = (double*)malloc(sizeof(double)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("weight_caffe_to_swdnn_back malloc failure!\n");
+		return;
+	}
+	swapBN_d(in,sout,B,N,H,W);
+	
+	SlaveParam param;
+	
+	param.B = B;
+	param.N = N;
+	param.H = H;
+	param.W = W;
+	param.pIn = sout;
+	param.pOut = out;	
+	
+	param.splitHW = get_split_size(nHW,HWSIZE);		
+	param.splitNB = get_split_size(nNB,BSIZE);		
+	nTmp = NUM_THREADS*param.splitNB;	
+	//printf("splitHW=%d splitNB=%d\n",param.splitHW,param.splitNB);
+	
+	param.nCount = nNB/nTmp;
+	nTmp = (nNB/param.splitNB)%NUM_THREADS;
+	param.nNBHWThreadsNum = param.nCount >0 ? NUM_THREADS:nTmp;
+	param.nNBHWLeftThreadsNum = param.nCount >0 ? nTmp:0;
+	
+	athread_spawn(swapNBHW_ROLL,(void *)&param);
+	//process the slave core left data
+	int nHWLeft = nHW%(param.splitHW);	
+	int nBNLeft = nNB%(param.splitNB);	
+	if(nHWLeft >0 || nBNLeft >0)
+	{
+		int nC = nHW - nHWLeft;
+		int nR = nNB - nBNLeft;
+		nTmp = nHW-1;
+	    for(cCi = nC; cCi < nHW; ++cCi)
+			for(cRi = 0; cRi < nNB; ++cRi)
+				out[(nTmp-cCi)*nNB+cRi] = sout[cRi*nHW+cCi]; 
+    
+		for(cRi = nR; cRi < nNB; ++cRi)
+			for(cCi = 0; cCi < nC; ++cCi)
+				out[(nTmp-cCi)*nNB+cRi] = sout[cRi*nHW+cCi]; 
+    }	
+    athread_join();
+	
+	free(sout);
+}
+void weight_caffe_to_swdnn_back_f(float*in,float*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nHW = H*W;
+	int nNB = N*B;
+	int nTmp = 0;
+	if(nHW < 4)
+	{
+		nTmp = nHW-1;
+	    for(cCi = 0; cCi <nHW; ++cCi)
+			for(cRi = 0; cRi < nNB; ++cRi)
+				out[(nTmp-cCi)*nNB+cRi] = in[cRi*nHW+cCi]; 
+        return;
+	}
+	
+	float* sout   = (float*)malloc(sizeof(float)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("weight_caffe_to_swdnn_back malloc failure!\n");
+		return;
+	}
+	swapBN_f(in,sout,B,N,H,W);
+	
+	SlaveParam_f param;
+	
+	param.B = B;
+	param.N = N;
+	param.H = H;
+	param.W = W;
+	param.pIn = sout;
+	param.pOut = out;	
+	
+	param.splitHW = get_split_size(nHW,HWSIZE);		
+	param.splitNB = get_split_size(nNB,BSIZE);		
+	nTmp = NUM_THREADS*param.splitNB;	
+	//printf("splitHW=%d splitNB=%d\n",param.splitHW,param.splitNB);
+	
+	param.nCount = nNB/nTmp;
+	nTmp = (nNB/param.splitNB)%NUM_THREADS;
+	param.nNBHWThreadsNum = param.nCount >0 ? NUM_THREADS:nTmp;
+	param.nNBHWLeftThreadsNum = param.nCount >0 ? nTmp:0;
+	
+	athread_spawn(swapNBHW_ROLL_f,(void *)&param);
+	//process the slave core left data
+	int nHWLeft = nHW%(param.splitHW);	
+	int nBNLeft = nNB%(param.splitNB);	
+	if(nHWLeft >0 || nBNLeft >0)
+	{
+		int nC = nHW - nHWLeft;
+		int nR = nNB - nBNLeft;
+		nTmp = nHW-1;
+	    for(cCi = nC; cCi < nHW; ++cCi)
+			for(cRi = 0; cRi < nNB; ++cRi)
+				out[(nTmp-cCi)*nNB+cRi] = sout[cRi*nHW+cCi]; 
+    
+		for(cRi = nR; cRi < nNB; ++cRi)
+			for(cCi = 0; cCi < nC; ++cCi)
+				out[(nTmp-cCi)*nNB+cRi] = sout[cRi*nHW+cCi]; 
+    }	
+    athread_join();
+	
+	free(sout);
+}
+void image_caffe_to_swdnn_d(double*in,double*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nHW = H*W;
+	if(nHW < 4)
+	{
+	   for(cB = 0; cB < B; ++cB)
+		  for(cNi = 0; cNi < N; ++cNi)
+			  for(cRi = 0; cRi < H; ++cRi)
+				  for(cCi = 0; cCi < W; ++cCi)
+					   out[image_swdnn_offset(cB, cNi, cRi, cCi, B, N, H, W)] = in[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+	   return;
+	}
+	double* sout   = (double*)malloc(sizeof(double)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("image_caffe_to_swdnn malloc failure!\n");
+		return;
+	}
+	swapBN_d(in,sout,B,N,H,W);
+	swapBN_HW_d(sout,out,B,N,H,W);
+	
+	free(sout);
+}
+
+/*******
+ * swap tensor of shape (B, N, H, W) to (H, W, N, B)
