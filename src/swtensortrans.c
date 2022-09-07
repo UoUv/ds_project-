@@ -407,3 +407,104 @@ void image_caffe_to_swdnn_d(double*in,double*out,int B,int N,int H,int W)
 
 /*******
  * swap tensor of shape (B, N, H, W) to (H, W, N, B)
+ * through two data traverse
+ * ****/
+void image_caffe_to_swdnn_f(float*in,float*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nHW = H*W;
+	if(nHW < 4)
+	{
+	   for(cB = 0; cB < B; ++cB)
+		  for(cNi = 0; cNi < N; ++cNi)
+			  for(cRi = 0; cRi < H; ++cRi)
+				  for(cCi = 0; cCi < W; ++cCi)
+					   out[image_swdnn_offset(cB, cNi, cRi, cCi, B, N, H, W)] = in[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+	   return;
+	}
+	float* sout   = (float*)malloc(sizeof(float)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("image_caffe_to_swdnn malloc failure!\n");
+		return;
+	}
+	swapBN_f(in,sout,B,N,H,W);
+	swapBN_HW_f(sout,out,B,N,H,W);
+	
+	free(sout);
+}
+void image_swdnn_to_caffe_d(double*in,double*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nBN = B*N;
+	if(nBN < 4)
+	{
+	   for(cB = 0; cB < B; ++cB)
+		  for(cNi = 0; cNi < N; ++cNi)
+			  for(cRi = 0; cRi < H; ++cRi)
+				  for(cCi = 0; cCi < W; ++cCi)
+					   out[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)] = in[image_swdnn_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+	   return;
+	}
+	double* sout   = (double*)malloc(sizeof(double)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("image_swdnn_to_caffe malloc failure!\n");
+		return;
+	}
+	swapBN_HW_d(in,sout,H,W,N,B);
+	swapBN_d(sout,out,N,B,H,W);
+	
+	free(sout);
+}
+void weight_caffe_to_swdnn_d(double*in,double*out,int B,int N,int H,int W)
+{
+	swapBN_HW_d(in,out,B,N,H,W);
+}
+void weight_swdnn_to_caffe_d(double*in,double*out,int B,int N,int H,int W)
+{
+	swapBN_HW_d(in,out,H,W,B,N);
+}
+void image_caffe_to_swdnn_back_d(double*in,double*out,int B,int N,int H,int W)
+{
+	swapBN_HW_d(in,out,B,N,H,W);
+}
+void image_swdnn_to_caffe_f(float*in,float*out,int B,int N,int H,int W)
+{
+	int cRi, cCi, cNi, cB;
+	//process the problem of the (H,W) very small
+	int nBN = B*N;
+	if(nBN < 4)
+	{
+	   for(cB = 0; cB < B; ++cB)
+		  for(cNi = 0; cNi < N; ++cNi)
+			  for(cRi = 0; cRi < H; ++cRi)
+				  for(cCi = 0; cCi < W; ++cCi)
+					   out[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)] = in[image_swdnn_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+	   return;
+	}
+	float* sout   = (float*)malloc(sizeof(float)*B*N*H*W);
+	if(sout == NULL)
+	{
+		printf("image_swdnn_to_caffe malloc failure!\n");
+		return;
+	}
+	swapBN_HW_f(in,sout,H,W,N,B);
+	swapBN_f(sout,out,N,B,H,W);
+	
+	free(sout);
+}
+void weight_caffe_to_swdnn_f(float*in,float*out,int B,int N,int H,int W)
+{
+	swapBN_HW_f(in,out,B,N,H,W);
+}
+void weight_swdnn_to_caffe_f(float*in,float*out,int B,int N,int H,int W)
+{
+	swapBN_HW_f(in,out,H,W,B,N);
+}
+void image_caffe_to_swdnn_back_f(float*in,float*out,int B,int N,int H,int W)
+{
+	swapBN_HW_f(in,out,B,N,H,W);
+}
