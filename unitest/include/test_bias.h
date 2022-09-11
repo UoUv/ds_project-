@@ -1,2 +1,4 @@
 #ifndef TEST_BIAS_
-#define TEST_BI
+#define TEST_BIAS_
+int test_bias(); 
+#endif
