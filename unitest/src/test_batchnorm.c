@@ -74,3 +74,105 @@ int test_batchnorm()
         gettimeofday(&t1, NULL);
           if(use_global_stats_)
     {
+
+
+        if(sizeof(Dtype)==sizeof(float)){
+          sw_batch_norm_use_forward_impl_f(
+              (float*)bottom_data,
+              (float*)top_data,
+              (float*)blob_0,
+              (float*)blob_1,
+              (float*)blob_2,
+              (float*)mean_origin,
+              (float*)variance_origin,
+              (float*)temp,
+              (float*)xnorm,
+              eps_,
+              num,         //batch_size
+              channels,   //C
+              spatial_dim  //H*W
+          );
+        }else{
+          // sw_batch_norm_use_forward_impl_d(
+          //     (double*)bottom_data,
+          //     (double*)top_data,
+          //     (double*)this->blobs_[0]->mutable_cpu_data(),
+          //     (double*)this->blobs_[1]->mutable_cpu_data(),
+          //     (double*)this->blobs_[2]->mutable_cpu_data(),
+          //     (double*)mean_.mutable_cpu_data(),
+          //     (double*)variance_.mutable_cpu_data(),
+          //     (double*)temp_.mutable_cpu_data(),
+          //     eps_,
+          //     num,         //batch_size
+          //     channels_,   //C
+          //     spatial_dim  //H*W
+          // );
+        }
+    }
+    else
+    {
+        if(sizeof(Dtype)==sizeof(float)){
+        sw_batch_norm_nouse_forward_impl_f(
+            (float*)bottom_data,
+            (float*)top_data,
+            (float*)num_by_chans,
+            (float*)temp,
+            (float*)blob_0,
+            (float*)blob_1,
+            (float*)blob_2,
+            (float*)(&moving_average_fraction_),
+            (float*)xnorm,
+            eps_,
+            num,
+            channels,
+            spatial_dim
+        );
+        }
+        else{
+        // sw_batch_norm_nouse_forward_impl_d(
+        //     (double*)bottom_data,
+        //     (double*)top_data,
+        //     (double*)num_by_chans_.mutable_cpu_data(),
+        //     (double*)temp_.mutable_cpu_data(),
+        //     (double*)this->blobs_[0]->mutable_cpu_data(),
+        //     (double*)this->blobs_[1]->mutable_cpu_data(),
+        //     (double*)this->blobs_[2]->mutable_cpu_data(),
+        //     (double*)(&moving_average_fraction_),
+        //     eps_,
+        //     num,
+        //     channels_,
+        //     spatial_dim
+        // );
+        }
+
+    }
+
+      gettimeofday(&t2, NULL);
+      bn_time = TIME(t1,t2);
+      double total_data_size=num*channels*w*h*5*sizeof(float);
+      printf("bn_layer %dx%dx%dx%d : Bandwidth : %f GB/s, time : %f sec\n", num, channels, w, h, total_data_size/1e9/bn_time, bn_time);
+
+      }
+    }
+  }
+
+  free(bottom_data);
+        free(top_data);
+        free(blob_0);
+        free(blob_1);
+        free(blob_2);
+        free(mean_origin);
+        free(variance_origin);
+        free(spatial_sum_multiplier);
+        free(num_by_chans);
+        free(batch_sum_multiplier);
+        free(xnorm);
+        free(temp);
+
+  //athread_init();
+
+
+  //athread_halt();
+
+  return 0;
+}
