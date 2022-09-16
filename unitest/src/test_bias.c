@@ -83,3 +83,83 @@ int test_bias()
             int stride_h_=2;
             int stride_w_=2;
             int pad_h_=0;
+            int pad_w_=0;
+
+           
+
+
+
+#ifdef USE_BLAS 
+
+
+  float * out_data=my_top_data;
+  
+  // We'll output the mask to top[1] if it's of size >1.
+  //const bool use_top_mask = top.size() > 1;
+
+  //caffe_copy(blob_size, bbottom_data, my_top_data);
+  memcpy(my_top_data,bbottom_data,blob_size*sizeof(float));
+  for (n = 0; n < num; ++n) {
+    /*
+    caffe_cpu_gemm(CblasNoTrans, CblasNoTrans, channels_,
+        spatial_dim, 1, 1.0, bbias_data,
+        multi, 1.0, my_top_data);
+    */
+    for(i=0;i<channels_;++i)
+    {
+      for(j=0;j<spatial_dim;++j)
+      {
+        my_top_data[i*spatial_dim+j]+=bbias_data[i];
+      }
+    }
+    my_top_data += channels_*spatial_dim;
+  }
+
+#endif
+
+
+#ifdef USE_SWDNN
+  
+  sw_bias_impl_f((float *)bbottom_data,
+                   (float *)top_data,
+                   (float *)bbias_data,
+                   channels_*spatial_dim,
+                   channels_,
+                   spatial_dim,
+                   num);
+
+
+  
+#endif
+
+
+#ifdef USE_ALL 
+   int flag=1;
+   for(i=0;i<100;++i)
+   {
+     if(top_data[i]-out_data[i]>0.0001||
+        top_data[i]-out_data[i]<-0.0001)
+     {
+       flag=0;
+       printf("error n=%d c=%d top_data[%d]=%f my_top_data[%d]=%f\n",num,channels_,i,top_data[i],i,out_data[i]);
+     }
+   }
+   if(flag) printf("ok\n");
+   else exit(0);
+
+#endif
+        }
+      }
+    }
+
+
+     athread_halt();
+
+        free(bbottom_data);
+        free(bbias_data);
+        free(top_data);
+        free(multi);
+        free(my_top_data);
+
+  return 0;
+}
