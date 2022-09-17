@@ -108,3 +108,25 @@ void test_col2im_swblas_float(int channels, int filters, int height, int width, 
   gettimeofday(&t2, NULL);
   gemm_tt = TIME(t1,t2);
   printf("weight GEMM M %d N %d K %d : %lf Gflops %lf sec\n", M, N, K, total_flops/gemm_tt, gemm_tt);
+
+ gettimeofday(&t1, NULL);
+  //N 128x, M 8x, K 32x
+  for(int i = 0; i < 128; ++i)
+    caffe::caffe_cpu_gemm<float>(CblasNoTrans, CblasTrans, N, 
+      K, M,
+        (float)1., output, data_col,
+        (float)0., weights);
+
+
+  gettimeofday(&t2, NULL);
+  gemm_tt = TIME(t1,t2);
+  printf("weight xMath M %d N %d K %d : %lf Gflops %lf sec\n", M, N, K, total_flops/gemm_tt, gemm_tt);
+  */
+
+
+
+  free((Type*)output_raw);
+  free((Type*)weights_raw);
+
+#undef Type
+}
