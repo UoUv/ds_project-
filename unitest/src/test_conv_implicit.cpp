@@ -334,3 +334,175 @@ int test_backward() {
         Ni,
         No,
         B);
+
+  conv_backward_impl<double>(
+        in,
+        out_diff,
+        weight,
+        in_diff_ref,
+        weight_diff_ref,
+        Ci,
+        Ri,
+        K,
+        Ni,
+        No,
+        B);
+
+  for( int i = 0; i < in_size; ++i )
+    if(fabs(in_diff[i] - in_diff_ref[i]) > 1e-4)
+      printf("in_diff %lf vs ref %lf\n", in_diff[i], in_diff_ref[i]);
+
+  for( int i = 0; i < weight_size; ++i )
+    if(fabs(weight_diff[i] - weight_diff_ref[i]) > 1e-4)
+      printf("weight_diff %lf vs ref %lf\n", weight_diff[i], weight_diff_ref[i]);
+  printf("backward test OK!");
+
+  free(in);
+  free(in_diff);
+  free(in_diff_ref);
+  free(weight_diff);
+  free(weight_diff_ref);
+  free(weight);
+  free(out_diff);
+}
+
+// in pad out pad double
+int test_backward_pad_float() {
+  int Ni, No, B, Co, Ro, Ci, Ri, K;
+  int pad = 1;
+  Ni = 128;
+  No = 128;
+  B  = 128;
+  Ci = 32; //112;
+  Ri = 32; //112;
+  //Ci = 4;
+  //Ri = 4;
+  K  = 3;
+  //for mem alloc
+  Co = Ci - K+1 + 2*pad;
+  Ro = Ri - K+1 + 2*pad;
+
+  int in_size     = Ni*B*Ci*Ri;
+  int weight_size = Ni*No*K*K;
+  int out_size    = No*B*Co*Ro;
+
+  printf("before sw_conv_backward_pad_impl_f\n");
+  float* in = (float*)malloc(sizeof(float)*in_size);
+  float* in_diff = (float*)malloc(sizeof(float)*in_size);
+  float* in_diff_ref = (float*)malloc(sizeof(float)*in_size);
+  float* weight_diff = (float*)malloc(sizeof(float)*weight_size);
+  float* weight_diff_ref = (float*)malloc(sizeof(float)*weight_size);
+  float* weight = (float*)malloc(sizeof(float)*weight_size);
+  float* out_diff = (float*)malloc(sizeof(float)*out_size);
+
+  printf("after mem alloc\n");
+  printf("in_size %d weight_size %d out_size %d\n", in_size, weight_size, out_size);
+  for( int i = 0; i < in_size; ++i) {
+    in[i] = rand()/(float)RAND_MAX;
+  }
+  printf("after mem alloc\n");
+  for( int i = 0; i < weight_size; ++i)
+    weight[i] = rand()/(float)RAND_MAX;
+  printf("after mem alloc\n");
+  for( int i = 0; i < out_size; ++i)
+    out_diff[i] = rand()/(float)RAND_MAX;
+
+  printf("after init\n");
+  struct timeval ts, te;
+  gettimeofday(&ts, NULL);
+  sw_conv_backward_pad_impl_f(
+        in,
+        out_diff,
+        weight,
+        in_diff,
+        weight_diff,
+        Ci,
+        Ri,
+        K,
+        Ni,
+        No,
+        B,
+        pad);
+  gettimeofday(&te, NULL);
+  double time = (te.tv_sec - ts.tv_sec) + (te.tv_usec - ts.tv_usec) / 1000000.0;
+  printf("sw_conv_backward_pad_impl_f OK, time is %lf\n", time);
+
+#ifdef CHECKRES
+  conv_backward_pad_impl<float>(
+        in,
+        out_diff,
+        weight,
+        in_diff_ref,
+        weight_diff_ref,
+        Ci,
+        Ri,
+        K,
+        Ni,
+        No,
+        B,
+        pad);
+
+  for( int i = 0; i < in_size; ++i )
+    if(fabs(in_diff[i] - in_diff_ref[i]) > 1e-2)
+      printf("in_diff %f vs ref %f\n", in_diff[i], in_diff_ref[i]);
+  for( int i = 0; i < weight_size; ++i )
+    if(fabs(weight_diff[i] - weight_diff_ref[i]) > 1e-2)
+      printf("weight_diff %f vs ref %f\n", weight_diff[i], weight_diff_ref[i]);
+  printf("backward test OK!");
+#endif
+
+  free(in);
+  free(in_diff);
+  free(in_diff_ref);
+  free(weight_diff);
+  free(weight_diff_ref);
+  free(weight);
+  free(out_diff);
+}
+
+int test_backward_pad() {
+  int Ni, No, B, Co, Ro, Ci, Ri, K;
+  int pad = 1;
+  Ni = 128;
+  No = 128;
+  B  = 128;
+  //Ci = 112;
+  //Ri = 112;
+  Ci = 8;
+  Ri = 8;
+  K  = 3;
+  K  = 3;
+  //for mem alloc
+  Co = Ci - K+1 + 2*pad;
+  Ro = Ri - K+1 + 2*pad;
+
+  int in_size     = Ni*B*Ci*Ri;
+  int weight_size = Ni*No*K*K;
+  int out_size    = No*B*Co*Ro;
+
+  double* in = (double*)malloc(sizeof(double)*in_size);
+  double* in_diff = (double*)malloc(sizeof(double)*in_size);
+  double* in_diff_ref = (double*)malloc(sizeof(double)*in_size);
+  double* weight_diff = (double*)malloc(sizeof(double)*weight_size);
+  double* weight_diff_ref = (double*)malloc(sizeof(double)*weight_size);
+  double* weight = (double*)malloc(sizeof(double)*weight_size);
+  double* out_diff = (double*)malloc(sizeof(double)*out_size);
+
+  for( int i = 0; i < in_size; ++i )
+    in[i] = rand()/(double)RAND_MAX;
+  for( int i = 0; i < weight_size; ++i )
+    weight[i] = rand()/(double)RAND_MAX;
+  for( int i = 0; i < out_size; ++i )
+    out_diff[i] = rand()/(double)RAND_MAX;
+
+  struct timeval ts, te;
+  gettimeofday(&ts, NULL);
+  sw_conv_backward_pad_impl_d(
+        in,
+        out_diff,
+        weight,
+        in_diff,
+        weight_diff,
+        Ci,
+        Ri,
+        K,
