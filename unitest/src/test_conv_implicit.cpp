@@ -698,3 +698,176 @@ void test_conv_backward_pad_impl_f(int Ci, int Ri, int K, int Ni, int No, int B,
 #endif
   printf("Calling sw_conv_backward_pad_impl_f...\n");
   sw_conv_backward_pad_impl_f(
+  //conv_backward_pad_impl_v2<float>(
+      in,
+      out_grad,
+      weight,
+      in_grad,
+      weight_diff,
+      Ci,
+      Ri,
+      K,
+      Ni,
+      No,
+      B,
+      pad);
+#ifdef PRINT_DATA
+  printf("SW in_grad value:\n");
+  for(int i=0;i<Ci*Ri;++i) {
+    if(i%Ci==0) printf("\n\t");
+    printf("%lf ",in_grad[i]);
+  }
+  printf("\n\n");
+  printf("SW weight_diff value:\n");
+  for(int i=0;i<K*K;++i) {
+    if(i%K==0) printf("\n\t");
+    printf("%lf ",weight_diff[i]);
+  }
+  printf("\n\n");
+#endif
+  printf("sw_conv_backward_pad_impl_f End.\n");
+  printf("Calliing MPE conv...\n");
+  conv_backward_pad_impl<Type>(
+      in_ref,
+      out_grad_ref,
+      weight_ref,
+      in_grad_ref,
+      weight_diff_ref,
+      Ci,
+      Ri,
+      K,
+      Ni,
+      No,
+      B,
+      pad);
+#ifdef PRINT_DATA
+  printf("Reference in_grad value:\n");
+  for(int i=0;i<Ci*Ri;++i) {
+    if(i%Ci==0) printf("\n\t");
+    printf("%lf ",in_grad_ref[i]);
+  }
+  printf("\n\n");
+  printf("Reference weight_diff value:\n");
+  for(int i=0;i<K*K;++i) {
+    if(i%K==0) printf("\n\t");
+    printf("%lf ",weight_diff_ref[i]);
+  }
+  printf("\n\n");
+#endif
+  printf("Reference MPE End\n");
+  printf("Calculating Errors...\n");
+  int count = 0;
+  int t_count;
+  double sum = 0.0, sum_ref = 0.0;
+
+  printf("Checking weight_diff...\n");
+  count = 0;
+  t_count = K*K*Ni*No;
+  for(int i=0;i<K*K*Ni*No;++i) {
+    if(fabs(weight_diff_ref[i]-weight_diff[i])>1e-2) {
+      ++count;
+#ifdef  PRINT_WA
+#ifndef PRINT_ALL
+      if(count<=100) {
+#endif
+        printf("\tWRONG at (%d,%d,%d,%d): SW: %lf vs Ref: %lf\n",
+            i/(K*Ni*No),i%(K*Ni*No)/(Ni*No),
+            i%(Ni*No)/No,i%No, weight_diff[i],weight_diff_ref[i]);
+#ifdef EXIT_WHEN_WRONG
+        printf("*****************TEST Failed*****************\n");
+        free(in);
+        free(out_grad);
+        free(weight);
+        free(in_grad);
+        free(in_grad_ref);
+        free(weight_diff);
+        free(weight_diff_ref);
+        return ;
+#endif
+#ifndef PRINT_ALL
+      }
+#endif
+#endif
+    }
+    sum     += weight_diff[i];
+    sum_ref += weight_diff_ref[i];
+  }
+  printf("weight_diff is OK. ( WA %d in %d )\n",count,t_count);
+  printf("weight_diff SUM: SW: %lf vs Ref: %lf\n",sum,sum_ref);
+  if(count || fabs(sum-sum_ref)>1e-1) {
+    printf("FAIL: weight_diff check\n");
+  } else {
+    printf("PASS: weight_diff check\n");
+  }
+  sum = 0.0; sum_ref = 0.0;
+  printf("Checking in_grad...\n");
+  printf("\t0: SW:%lf vs Ref:%lf\n",in_grad[0],in_grad_ref[0]);
+  t_count = B*Ni*Ci*Ri;
+  count = 0;
+  for(int i=0;i<B*Ni*Ci*Ri;++i) {
+    if(fabs(in_grad_ref[i]-in_grad[i])>1e-2) {
+      ++count;
+#ifdef  PRINT_WA
+#ifndef PRINT_ALL
+      if(count<=100) {
+#endif
+        printf("\tWRONG at (%d,%d,%d,%d): SW: %lf vs Ref: %lf\n",
+            i/(Ni*Ci*Ri),i%(Ni*Ci*Ri)/(Ci*Ri),
+            i%(Ci*Ri)/Ci,i%Ci, in_grad[i],in_grad_ref[i]);
+#ifdef EXIT_WHEN_WRONG
+        printf("*****************TEST Failed*****************\n");
+        free(in);
+        free(out_grad);
+        free(weight);
+        free(in_grad);
+        free(in_grad_ref);
+        free(weight_diff);
+        free(weight_diff_ref);
+        return ;
+#endif
+#ifndef PRINT_ALL
+      }
+#endif
+#endif
+    }
+    sum     += in_grad[i];
+    sum_ref += in_grad_ref[i];
+  }
+  printf("in_grad is OK. ( WA %d in %d )\n",count,t_count);
+  printf("in_grad SUM: SW: %lf vs Ref: %lf\n",sum,sum_ref);
+  if(count || fabs(sum-sum_ref)>1e-4) {
+    printf("FAIL: in_grad check\n");
+  } else {
+    printf("PASS: in_grad check\n");
+  }
+  printf("float conv backward with pad Check complete.\n\n");
+  free(in);
+  free(out_grad);
+  free(weight);
+  free(in_grad);
+  free(in_grad_ref);
+  free(weight_diff);
+  free(weight_diff_ref);
+#undef Type
+}
+
+int test_conv_implicit() {
+//printf("TEST conv pad\n");
+  //test_conv_pad_main();
+  int Ni = 3; //atoi(argv[1]);
+  int No = 64; // atoi(argv[2]);
+  int C = 224; //atoi(argv[3]);
+
+  //test_forward_pad();
+  //test_forward_pad_float();
+  //test_forward_pad_float();
+
+  //test_backward_pad();
+  test_backward_pad_float();
+  //test_backward_pad_split();
+  //for(int i = 0; i < 10; ++i)
+  //  test_backward_pad_split();
+
+  //test_backward();
+  //test_forward();
+  return 0;
