@@ -871,3 +871,4 @@ int test_conv_implicit() {
   //test_backward();
   //test_forward();
   return 0;
+}
