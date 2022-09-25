@@ -12,4 +12,7 @@
 #include "swblas.h"
 
 /******
- * a 
+ * a unitest for batch-pad-im2col
+ * Optimizations:
+ * 1. batch im2col: transpose input features (B, N, R, C) -> (N, R, C, B), then perform batch-im2col
+ * 2. zeropadding, (N, R, C, B) -> (K*K*N + pad, Ro*Co*B +pad),
