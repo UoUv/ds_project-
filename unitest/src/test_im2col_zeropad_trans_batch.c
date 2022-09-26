@@ -15,4 +15,7 @@
  * a unitest for batch-pad-im2col
  * Optimizations:
  * 1. batch im2col: transpose input features (B, N, R, C) -> (N, R, C, B), then perform batch-im2col
- * 2. zeropadding, (N, R, C, B) -> (K*K*N + pad, Ro*Co*B +pad),
+ * 2. zeropadding, (N, R, C, B) -> (K*K*N + pad, Ro*Co*B +pad), adding pad make GEMM easy
+ * 3. batch-GEMM , make sure filters are like (K*K*Ni+pad, No)
+ * ***/
+void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int hei
