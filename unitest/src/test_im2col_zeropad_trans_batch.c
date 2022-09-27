@@ -28,4 +28,6 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   int dilation_h, dilation_w, output_w, output_h;
   dilation_h = 1;
   dilation_w = 1;
-  output_h = 
+  output_h = (height + 2 * pad_h - (dilation_h * (kernel_h - 1) + 1)) / stride_h + 1;
+  output_w = (width  + 2 * pad_w - (dilation_w * (kernel_w - 1) + 1)) / stride_w + 1;
+  int im_s
