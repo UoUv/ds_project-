@@ -39,4 +39,6 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
   printf("forward: channels %d, filters %d, height %d, width %d, kernel_h %d, kernel_w %d, \
       pad_h %d, pad_w %d, output_w %d, output_h %d, stride_h %d, stride_w %d, zeropad_col_rowsize %d (%d)\
-      zeropad_col_colsiz
+      zeropad_col_colsize %d (%d), batch_size %d\n",
+          channels, filters, height, width, \
+          kernel_h,kernel_w,pad_h,pad_w,output_w,output_h,stride_h,stride_w, zeropad_col_rowsize, out
