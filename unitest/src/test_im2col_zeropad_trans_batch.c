@@ -45,4 +45,11 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
           kernel_h*kernel_w*channels,
           batch_size);
 
-  if(batch_size*((width + 2*pad_w) + output_w)*sizeof(float) > 60*102
+  if(batch_size*((width + 2*pad_w) + output_w)*sizeof(float) > 60*1024)   {
+    printf("batch_size is too large\n");
+    return;
+  }
+
+  //allocate memory
+  float* data_im = (float*)_aligned_malloc(sizeof(float)*im_size*batch_size, 128);
+  float* data_col = (
