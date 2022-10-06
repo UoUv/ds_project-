@@ -61,4 +61,10 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
 
   Type* zero_pad_data_col = (Type*)_aligned_malloc(sizeof(Type)*pad_col_size*batch_size, 128);
-  if(!zero_pad_dat
+  if(!zero_pad_data_col)
+    printf("allocate zero_pad_data_col failed!\n");
+  memset(zero_pad_data_col, 0.0, sizeof(Type)*pad_col_size*batch_size);
+
+  //params for GEMM
+  int N = filters;
+  int M = 
