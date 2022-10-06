@@ -56,4 +56,9 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   if(!data_col)
     printf("allocate data_col failed!\n");
   memset(data_col,0.0, sizeof(Type)*col_size*batch_size);
-  for(i = 0; i < im_
+  for(i = 0; i < im_size*batch_size; ++i)
+    data_im[i] = rand()/(float)RAND_MAX;
+
+
+  Type* zero_pad_data_col = (Type*)_aligned_malloc(sizeof(Type)*pad_col_size*batch_size, 128);
+  if(!zero_pad_dat
