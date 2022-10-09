@@ -67,4 +67,13 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
   //params for GEMM
   int N = filters;
-  int M = 
+  int M = zeropad_col_rowsize*batch_size;
+  int K = zeropad_col_colsize;
+
+  /*
+  //search for the best block size
+  int blkK = 0;
+  int blkM = 0;
+  int blkN = 0;
+  int cK, cM, cN;
+  for(cK 
