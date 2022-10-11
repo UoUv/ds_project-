@@ -76,4 +76,7 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   int blkM = 0;
   int blkN = 0;
   int cK, cM, cN;
-  for(cK 
+  for(cK = 8; cK <= K && cK < 512; cK += 8)
+    for(cM = 128; cM <= 2048; cM += 128) {
+      for(cN = 32; cN <= N; cN += 32) {
+        if(N%cN == 0 && K%cK == 0 && M%cM == 0 && (2*cK*cM + 2*cK*cN + cM*cN)*sizeof(d
