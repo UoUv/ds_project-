@@ -79,4 +79,11 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   for(cK = 8; cK <= K && cK < 512; cK += 8)
     for(cM = 128; cM <= 2048; cM += 128) {
       for(cN = 32; cN <= N; cN += 32) {
-        if(N%cN == 0 && K%cK == 0 && M%cM == 0 && (2*cK*cM + 2*cK*cN + cM*cN)*sizeof(d
+        if(N%cN == 0 && K%cK == 0 && M%cM == 0 && (2*cK*cM + 2*cK*cN + cM*cN)*sizeof(double) < 56*1024*64) {
+          blkM = cM;
+          blkK = cK;
+          blkN = cN;
+        }
+    }
+  }
+  printf("im2col M %d K %d N %d blkM %d blkK %d blkN %d\n", M, K, N, blkM, 
