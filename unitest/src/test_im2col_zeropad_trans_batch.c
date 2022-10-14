@@ -98,4 +98,8 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
 
   //begin im2col
-  double total_data_size = (output_w*output_h*kernel_h*kernel_w*channels + channels*height*w
+  double total_data_size = (output_w*output_h*kernel_h*kernel_w*channels + channels*height*width)*sizeof(float)*batch_size;
+  double im2col_tt = 0;
+  gettimeofday(&t1, NULL);
+  for(i = 0; i < batch_size; ++i)
+    swim2col_f(data_im + i*im_size,channels,height,width,kernel_h,kernel_w
