@@ -92,4 +92,10 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   float* output = (float*)malloc(sizeof(float)*M*N);
   float* weights = (float*)malloc(sizeof(float)*N*K);
   for(i = 0; i < M*N; ++i)
-    output[i] = rand(
+    output[i] = rand()/(float)RAND_MAX;
+  for(i = 0; i < N*K; ++i)
+    weights[i] = rand()/(float)RAND_MAX;
+
+
+  //begin im2col
+  double total_data_size = (output_w*output_h*kernel_h*kernel_w*channels + channels*height*w
