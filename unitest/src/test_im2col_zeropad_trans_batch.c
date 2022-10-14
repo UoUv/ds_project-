@@ -86,4 +86,10 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
         }
     }
   }
-  printf("im2col M %d K %d N %d blkM %d blkK %d blkN %d\n", M, K, N, blkM, 
+  printf("im2col M %d K %d N %d blkM %d blkK %d blkN %d\n", M, K, N, blkM, blkK, blkN);
+  */
+
+  float* output = (float*)malloc(sizeof(float)*M*N);
+  float* weights = (float*)malloc(sizeof(float)*N*K);
+  for(i = 0; i < M*N; ++i)
+    output[i] = rand(
