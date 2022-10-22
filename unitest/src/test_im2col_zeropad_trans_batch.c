@@ -112,4 +112,8 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   memset(batch_im, 0.0, im_size*batch_size*sizeof(float));
   gettimeofday(&t1, NULL);
   swap_lowdim_f(data_im, batch_im, batch_size, im_size);
-  swim2col_zeropad_batch_trans_f(batch_im, channels, height, width, kernel_h,
+  swim2col_zeropad_batch_trans_f(batch_im, channels, height, width, kernel_h, kernel_w,
+      pad_h,pad_w,stride_h,stride_w,dilation_h,dilation_w, zero_pad_data_col, batch_size);
+  gettimeofday(&t2, NULL);
+  batch_im2col_tt = TIME(t1, t2);
+  printf("2.batch im2col Ba
