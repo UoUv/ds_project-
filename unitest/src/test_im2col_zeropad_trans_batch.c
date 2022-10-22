@@ -106,4 +106,7 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
                   pad_h,pad_w,stride_h,stride_w,dilation_h,dilation_w,data_col + col_size*i);
   gettimeofday(&t2, NULL);
   im2col_tt = TIME(t1,t2);
-  printf("1.im2col Bandwidth : %lf
+  printf("1.im2col Bandwidth : %lf GB/s, time %lf sec\n", total_data_size/1e9/im2col_tt, im2col_tt);
+
+  float* batch_im = (float*)_aligned_malloc(im_size*batch_size*sizeof(float), 128);
+  memset(batch_im, 0.0, im_size*ba
