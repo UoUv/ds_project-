@@ -102,4 +102,8 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   double im2col_tt = 0;
   gettimeofday(&t1, NULL);
   for(i = 0; i < batch_size; ++i)
-    swim2col_f(data_im + i*im_size,channels,height,width,kernel_h,kernel_w
+    swim2col_f(data_im + i*im_size,channels,height,width,kernel_h,kernel_w,
+                  pad_h,pad_w,stride_h,stride_w,dilation_h,dilation_w,data_col + col_size*i);
+  gettimeofday(&t2, NULL);
+  im2col_tt = TIME(t1,t2);
+  printf("1.im2col Bandwidth : %lf
