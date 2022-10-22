@@ -109,4 +109,7 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   printf("1.im2col Bandwidth : %lf GB/s, time %lf sec\n", total_data_size/1e9/im2col_tt, im2col_tt);
 
   float* batch_im = (float*)_aligned_malloc(im_size*batch_size*sizeof(float), 128);
-  memset(batch_im, 0.0, im_size*ba
+  memset(batch_im, 0.0, im_size*batch_size*sizeof(float));
+  gettimeofday(&t1, NULL);
+  swap_lowdim_f(data_im, batch_im, batch_size, im_size);
+  swim2col_zeropad_batch_trans_f(batch_im, channels, height, width, kernel_h,
