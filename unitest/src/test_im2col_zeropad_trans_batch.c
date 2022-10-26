@@ -120,4 +120,13 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
   for(i = 0; i < batch_size; ++i)
     for(j = 0; j < im_size; ++j)
-      if(data_im[i*im_size + j] != batch_im[j
+      if(data_im[i*im_size + j] != batch_im[j*batch_size + i])
+        printf("swap_lowdim_f error\n");
+
+
+  _aligned_free(batch_im);
+
+  int cnt = 10;
+  double sum1 = 0., sum2 = 0.;
+  for(i = 0; i < kernel_h*kernel_w*channels; ++i)
+ 
