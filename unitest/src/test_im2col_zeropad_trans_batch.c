@@ -129,4 +129,7 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   int cnt = 10;
   double sum1 = 0., sum2 = 0.;
   for(i = 0; i < kernel_h*kernel_w*channels; ++i)
- 
+    for(j = 0; j < output_w*output_h; ++j) {
+      for(k = 0; k < batch_size; ++k) {
+        //(zeropad_col_rowsize, zeropad_col_rowsize, batch_size)
+        float a = 
