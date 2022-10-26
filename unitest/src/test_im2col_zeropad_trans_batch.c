@@ -116,4 +116,8 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
       pad_h,pad_w,stride_h,stride_w,dilation_h,dilation_w, zero_pad_data_col, batch_size);
   gettimeofday(&t2, NULL);
   batch_im2col_tt = TIME(t1, t2);
-  printf("2.batch im2col Ba
+  printf("2.batch im2col Bandwidth : %lf GB/s, time %lf sec\n", total_data_size/1e9/batch_im2col_tt, batch_im2col_tt);
+
+  for(i = 0; i < batch_size; ++i)
+    for(j = 0; j < im_size; ++j)
+      if(data_im[i*im_size + j] != batch_im[j
