@@ -132,4 +132,6 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
     for(j = 0; j < output_w*output_h; ++j) {
       for(k = 0; k < batch_size; ++k) {
         //(zeropad_col_rowsize, zeropad_col_rowsize, batch_size)
-        float a = 
+        float a = zero_pad_data_col[i*zeropad_col_rowsize*batch_size + j*batch_size + k];
+        float b = data_col[k*col_size + i*output_w*output_h + j];
+        if(fabs(a - b) > 1e-3 && 
