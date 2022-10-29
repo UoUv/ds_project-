@@ -142,4 +142,8 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
         sum2 += b;
       }
     }
-  printf("zeropa
+  printf("zeropad version pass validation, sum1 %lf, sum2 %lf\n", sum1, sum2);
+  double total_flops = (double)(2*(long)M*N*K)/1024/1024/1024;
+
+  //gettimeofday(&t1, NULL);
+  //for(i = 0; i < batch_si
