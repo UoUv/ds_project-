@@ -134,4 +134,12 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
         //(zeropad_col_rowsize, zeropad_col_rowsize, batch_size)
         float a = zero_pad_data_col[i*zeropad_col_rowsize*batch_size + j*batch_size + k];
         float b = data_col[k*col_size + i*output_w*output_h + j];
-        if(fabs(a - b) > 1e-3 && 
+        if(fabs(a - b) > 1e-3 && cnt) {
+          printf("i : %d, j : %d, zeropad %f vs origin %f\n", i, j, a, b);
+          cnt--;
+        }
+        sum1 += a;
+        sum2 += b;
+      }
+    }
+  printf("zeropa
