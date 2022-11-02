@@ -171,4 +171,7 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
       N, K,
         (float)1., weights, data_col,
         (float)0., output);
-  gettim
+  gettimeofday(&t2, NULL);
+  total_flops = (double)128*(2*(long)M*N*K)/1024/1024/1024;
+  gemm_tt = TIME(t1,t2);
+  printf("2.GEMM M %d N %d K %d : %lf Gflops %lf sec\n", M, N, K, total_flops/gemm_tt, g
