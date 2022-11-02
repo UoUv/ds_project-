@@ -160,4 +160,10 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   printf("4. batch GEMM M %d N %d K %d : %lf Gflops %lf sec\n", M, N, K, total_flops/batch_gemm_tt, batch_gemm_tt);
 
 
-  double overall_tt = batch_gemm_tt + batch_im2col
+  double overall_tt = batch_gemm_tt + batch_im2col_tt;
+  printf("5.CONV : %lf Gflops %lf sec\n", total_flops/overall_tt, overall_tt);
+  printf("============================================================\n");
+
+/*
+  gettimeofday(&t1, NULL);
+  for(i
