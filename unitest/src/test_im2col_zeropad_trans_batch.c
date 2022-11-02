@@ -166,4 +166,9 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
 
 /*
   gettimeofday(&t1, NULL);
-  for(i
+  for(int i = 0; i < 128; ++i)
+  caffe::caffe_cpu_gemm<float>(CblasNoTrans, CblasNoTrans, M, 
+      N, K,
+        (float)1., weights, data_col,
+        (float)0., output);
+  gettim
