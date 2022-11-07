@@ -177,4 +177,11 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   printf("2.GEMM M %d N %d K %d : %lf Gflops %lf sec\n", M, N, K, total_flops/gemm_tt, gemm_tt);
   overall_tt = gemm_tt + col2im_tt;
   printf("3.BLASCONV : %lf Gflops %lf sec\n", total_flops/overall_tt, overall_tt);
-  printf("============================================
+  printf("============================================================\n");
+  */
+  _aligned_free(data_col);
+  free(data_im);
+  _aligned_free(zero_pad_data_col);
+  _aligned_free(output);
+  _aligned_free(weights);
+#undef
