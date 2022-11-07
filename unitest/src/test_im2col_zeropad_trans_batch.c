@@ -184,4 +184,6 @@ void test_im2col_zeropad_batch_trans_swblas_float(int channels, int filters, int
   _aligned_free(zero_pad_data_col);
   _aligned_free(output);
   _aligned_free(weights);
-#undef
+#undef Type
+}
+
