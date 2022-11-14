@@ -27,4 +27,8 @@ int test_lstm()
 
   float * clip_t=(float*)malloc(sizeof(float)*512);
   float * pre_gate_t=(float*)malloc(sizeof(float)*512*4*1600);
-  float * h_to_gate=(float*)malloc(sizeof(float)*512*4*1
+  float * h_to_gate=(float*)malloc(sizeof(float)*512*4*1600);
+  float * c_t_1=(float*)malloc(sizeof(float)*512*1600);
+
+  float * gate_t=(float*)malloc(sizeof(float)*512*4*1600);
+  float * h_t=(float*)malloc(sizeof(float)*512*1
