@@ -14,3 +14,13 @@ int test_lstm()
   int a[10],b[10],c[10];
   a[0]=64;a[1]=128;a[2]=256;a[3]=512;
   b[0]=128;b[1]=256;b[2]=512;b[3]=1024;b[4]=1600;
+  int num,channels,w,h;
+  int spatial_dim;
+  int N,H,n,d;
+  int i,j,k,z;
+  int ii,jj,kk;
+  int blob_size;
+  float eps_=1e-4;
+  struct timeval t1,t2;
+  int outer_num_,inner_num_,dim;
+  float
