@@ -23,4 +23,8 @@ int test_lstm()
   float eps_=1e-4;
   struct timeval t1,t2;
   int outer_num_,inner_num_,dim;
-  float
+  float sum,cont;
+
+  float * clip_t=(float*)malloc(sizeof(float)*512);
+  float * pre_gate_t=(float*)malloc(sizeof(float)*512*4*1600);
+  float * h_to_gate=(float*)malloc(sizeof(float)*512*4*1
