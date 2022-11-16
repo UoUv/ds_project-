@@ -40,4 +40,13 @@ int test_lstm()
   float * my_pre_gate_t=(float*)malloc(sizeof(float)*512*4*1600);
 
   float * backup_c_t_1 = c_t_1;
-  float * backup_h
+  float * backup_h_to_gate = h_to_gate;
+  float * backup_my_h_t = my_h_t;
+  float * backup_my_gate_t = my_gate_t;
+  float * backup_my_c_t = my_c_t;
+
+
+
+  char out[20]="0 0 time";
+
+  printf("sta
