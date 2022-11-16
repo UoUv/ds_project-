@@ -49,4 +49,13 @@ int test_lstm()
 
   char out[20]="0 0 time";
 
-  printf("sta
+  printf("start\n");
+  for(ii=0;ii<4;++ii){
+    for(jj=0;jj<5;++jj){
+        //if(k==1) break;
+        printf("i=%d j=%d",ii,jj);
+        N=a[ii];H=b[jj];
+
+        blob_size=N*4*H;
+
+        //w
