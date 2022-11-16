@@ -31,4 +31,8 @@ int test_lstm()
   float * c_t_1=(float*)malloc(sizeof(float)*512*1600);
 
   float * gate_t=(float*)malloc(sizeof(float)*512*4*1600);
-  float * h_t=(float*)malloc(sizeof(float)*512*1
+  float * h_t=(float*)malloc(sizeof(float)*512*1600);
+  float * c_t=(float*)malloc(sizeof(float)*512*1600);
+
+  float * my_gate_t=(float*)malloc(sizeof(float)*512*4*1600);
+  float * my_h_t=(float*)malloc(sizeof(float)*
