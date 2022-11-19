@@ -58,4 +58,7 @@ int test_lstm()
 
         blob_size=N*4*H;
 
-        //w
+        //with origin data
+        //init
+        for(z = 0; z < blob_size; ++z ) my_pre_gate_t[z]=pre_gate_t[z] = rand()/(float)RAND_MAX;
+        for(z = 0; z < blob_size; ++z ) h_
