@@ -61,4 +61,10 @@ int test_lstm()
         //with origin data
         //init
         for(z = 0; z < blob_size; ++z ) my_pre_gate_t[z]=pre_gate_t[z] = rand()/(float)RAND_MAX;
-        for(z = 0; z < blob_size; ++z ) h_
+        for(z = 0; z < blob_size; ++z ) h_to_gate[z] = rand()/(float)RAND_MAX;
+        for(z = 0; z < N; ++z) clip_t[z] = (rand()/(float)RAND_MAX)>0.5?1:0;
+        for(z = 0; z < N*H; ++z) c_t_1[z] = rand()/(float)RAND_MAX;
+
+
+
+  
