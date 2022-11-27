@@ -67,4 +67,11 @@ int test_lstm()
 
 
 
-  
+        out[0]='0'+ii;
+        out[2]='0'+jj;
+
+        for (n = 0; n < N; ++n) {
+          cont = clip_t[n];
+          if (cont) {
+            //caffe_add(4*H_, pre_gate_t, h_to_gate, pre_gate_t);
+   
