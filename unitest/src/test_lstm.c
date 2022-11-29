@@ -74,4 +74,10 @@ int test_lstm()
           cont = clip_t[n];
           if (cont) {
             //caffe_add(4*H_, pre_gate_t, h_to_gate, pre_gate_t);
-   
+            for(d=0;d<4*H;++d)
+            {
+                my_pre_gate_t[d] += h_to_gate[d];
+            }
+          }
+          for (d = 0; d < H; ++d) {
+            // Apply nonlinear
