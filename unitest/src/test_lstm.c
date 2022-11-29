@@ -80,4 +80,7 @@ int test_lstm()
             }
           }
           for (d = 0; d < H; ++d) {
-            // Apply nonlinear
+            // Apply nonlinearity
+            my_gate_t[d] = sigmoid(my_pre_gate_t[d]);
+            my_gate_t[H + d] = cont ? sigmoid(my_pre_gate_t[H + d]) : 0.0;
+            my_gate_t[2*H + d] = si
