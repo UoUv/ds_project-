@@ -83,4 +83,8 @@ int test_lstm()
             // Apply nonlinearity
             my_gate_t[d] = sigmoid(my_pre_gate_t[d]);
             my_gate_t[H + d] = cont ? sigmoid(my_pre_gate_t[H + d]) : 0.0;
-            my_gate_t[2*H + d] = si
+            my_gate_t[2*H + d] = sigmoid(my_pre_gate_t[2*H + d]);
+            my_gate_t[3*H + d] = tanh(my_pre_gate_t[3*H + d]);
+
+            // Compute cell : c(t) = f(t)*c(t-1) + i(t)*g(t)
+            my
