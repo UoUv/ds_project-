@@ -87,4 +87,8 @@ int test_lstm()
             my_gate_t[3*H + d] = tanh(my_pre_gate_t[3*H + d]);
 
             // Compute cell : c(t) = f(t)*c(t-1) + i(t)*g(t)
-            my
+            my_c_t[d] = my_gate_t[H + d] * c_t_1[d] + my_gate_t[d] * my_gate_t[3*H + d];
+            my_h_t[d] = my_gate_t[2*H + d] * tanh(my_c_t[d]);
+          }
+          my_h_t += H;
+          my_c_t 
