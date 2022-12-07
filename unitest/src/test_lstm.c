@@ -91,4 +91,14 @@ int test_lstm()
             my_h_t[d] = my_gate_t[2*H + d] * tanh(my_c_t[d]);
           }
           my_h_t += H;
-          my_c_t 
+          my_c_t += H;
+          c_t_1 += H;
+          my_pre_gate_t += 4*H;
+          my_gate_t += 4*H;
+          h_to_gate += 4*H;
+        }
+        //to do
+
+
+        c_t_1 = backup_c_t_1;
+        h_to_gate
