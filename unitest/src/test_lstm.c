@@ -123,4 +123,12 @@ int test_lstm()
 
         gettimeofday(&t2, NULL);
         lstm_time = TIME(t1,t2);
-        double total_data_size=(N+19*N*H)*si
+        double total_data_size=(N+19*N*H)*sizeof(float);
+        int flag=1;
+        for(i=0;i<N;++i)
+        {
+          for(j=0;j<H;++j)
+          {
+              if(h_t[i*H+j]-my_h_t[i*H+j]>1e-4
+              || h_t[i*H+j]-my_h_t[i*H+j]<-1e-4)
+     
