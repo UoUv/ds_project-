@@ -115,4 +115,12 @@ int test_lstm()
           (float*)h_to_gate,
           (float*)gate_t,
           (float*)h_t,
-          (fl
+          (float*)c_t_1,
+          (float*)c_t,
+          N,
+          H
+            );
+
+        gettimeofday(&t2, NULL);
+        lstm_time = TIME(t1,t2);
+        double total_data_size=(N+19*N*H)*si
