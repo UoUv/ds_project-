@@ -101,4 +101,12 @@ int test_lstm()
 
 
         c_t_1 = backup_c_t_1;
-        h_to_gate
+        h_to_gate = backup_h_to_gate;
+        my_h_t = backup_my_h_t;
+        my_gate_t = backup_my_gate_t;
+        my_c_t = backup_my_c_t;
+
+
+        double lstm_time=0;
+        gettimeofday(&t1, NULL);
+        sw_lstm_cl
