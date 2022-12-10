@@ -109,4 +109,10 @@ int test_lstm()
 
         double lstm_time=0;
         gettimeofday(&t1, NULL);
-        sw_lstm_cl
+        sw_lstm_clip_forward_impl_f(
+          (float*)clip_t,
+          (float*)pre_gate_t,
+          (float*)h_to_gate,
+          (float*)gate_t,
+          (float*)h_t,
+          (fl
