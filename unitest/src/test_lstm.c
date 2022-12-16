@@ -135,4 +135,9 @@ int test_lstm()
                 flag=0;
                 printf("lstm  error h_t %d %d = %f my_h_t %d %d = %f\n",i,j,h_t[i*H+j],i,j,my_h_t[i*H+j]);
                 printf("gate t 0 %f gate t h %f gate t 2h %f gate t 3h %f\n",gate_t[i*4*H+j],gate_t[i*4*H+H+j],gate_t[i*4*H+2*H+j],gate_t[i*4*H+3*H+j]);
-                printf("myte t 0 %f myte t h %f myte t 2h %f 
+                printf("myte t 0 %f myte t h %f myte t 2h %f myte t 3h %f\n",my_gate_t[i*4*H+j],my_gate_t[i*4*H+H+j],my_gate_t[i*4*H+2*H+j],my_gate_t[i*4*H+3*H+j]);
+                exit(0);
+              }
+          }
+        }
+        if(flag
