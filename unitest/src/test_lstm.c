@@ -131,4 +131,7 @@ int test_lstm()
           {
               if(h_t[i*H+j]-my_h_t[i*H+j]>1e-4
               || h_t[i*H+j]-my_h_t[i*H+j]<-1e-4)
-     
+              {
+                flag=0;
+                printf("lstm  error h_t %d %d = %f my_h_t %d %d = %f\n",i,j,h_t[i*H+j],i,j,my_h_t[i*H+j]);
+                printf("gate t
