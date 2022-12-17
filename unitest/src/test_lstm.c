@@ -140,4 +140,11 @@ int test_lstm()
               }
           }
         }
-        if(flag
+        if(flag) printf("check ok\n");
+        printf("lstm_layer %dx%d : Bandwidth : %f GB/s, time : %f sec\n", N, H, total_data_size/1e9/lstm_time, lstm_time);
+
+    }
+  }
+
+  free(clip_t);
+  free(pre_
