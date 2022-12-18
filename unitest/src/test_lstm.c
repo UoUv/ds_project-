@@ -147,4 +147,15 @@ int test_lstm()
   }
 
   free(clip_t);
-  free(pre_
+  free(pre_gate_t);
+  free(h_to_gate);
+  free(c_t_1);
+  free(gate_t);
+  free(h_t);
+  free(c_t);
+  free(my_gate_t);
+  free(my_h_t);
+  free(my_c_t);
+  free(my_pre_gate_t);
+
+  //athread_init()
