@@ -10,4 +10,13 @@ int test_scale()
     a[0]=32;a[1]=64;a[2]=128;
     b[0]=3;b[1]=64;b[2]=128;b[3]=256;b[4]=512;
     cc[0]=6;cc[1]=14;cc[2]=28;cc[3]=56;
-    int num,cha
+    int num,channels_,width_,height_;
+    int spatial_dim;
+    int i,j,k,z,ph,pw,n,c,h,w;
+    int blob_size;
+    int ii,jj,kk;
+    float eps_=1e-4;
+    float factor;
+
+
+    float * bbottom_data=
