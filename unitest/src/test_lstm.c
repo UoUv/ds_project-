@@ -158,4 +158,11 @@ int test_lstm()
   free(my_c_t);
   free(my_pre_gate_t);
 
-  //athread_init()
+  //athread_init();
+
+
+  //athread_halt();
+
+  return 0;
+}
+
