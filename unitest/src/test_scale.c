@@ -19,4 +19,8 @@ int test_scale()
     float factor;
 
 
-    float * bbottom_data=
+    float * bbottom_data=(float*)malloc(sizeof(float)*128*512*56*56);
+    float * sscale_data=(float*)malloc(sizeof(float)*128*512*56*56);
+
+    //without origin data
+    float * top_data=(float*)malloc(
