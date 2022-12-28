@@ -23,4 +23,13 @@ int test_scale()
     float * sscale_data=(float*)malloc(sizeof(float)*128*512*56*56);
 
     //without origin data
-    float * top_data=(float*)malloc(
+    float * top_data=(float*)malloc(sizeof(float)*128*512*56*56);
+    float * my_top_data=(float*)malloc(sizeof(float)*128*512*56*56);
+
+    char out[20]="0 0 0 time";
+
+    athread_init();
+    printf("start\n");
+    for(ii=0;ii<3;++ii)
+    {
+      for(jj=0;
