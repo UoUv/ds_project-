@@ -32,4 +32,10 @@ int test_scale()
     printf("start\n");
     for(ii=0;ii<3;++ii)
     {
-      for(jj=0;
+      for(jj=0;jj<5;++jj)
+      {
+        for(kk=0;kk<4;++kk)
+        {
+            //if(k==1) break;
+            printf("i=%d j=%d k=%d\n",ii,jj,kk);
+            num=a[ii];channels_=b[jj];width_=hei
