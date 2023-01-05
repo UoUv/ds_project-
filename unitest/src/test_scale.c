@@ -38,4 +38,10 @@ int test_scale()
         {
             //if(k==1) break;
             printf("i=%d j=%d k=%d\n",ii,jj,kk);
-            num=a[ii];channels_=b[jj];width_=hei
+            num=a[ii];channels_=b[jj];width_=height_=cc[kk];
+            if(ii==2&&jj==4&&kk==3)
+            {
+              num=1;channels_=128*512;
+            }
+            spatial_dim=width_*height_;
+            blob_size=num*channels_*w
