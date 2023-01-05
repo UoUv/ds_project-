@@ -44,4 +44,9 @@ int test_scale()
               num=1;channels_=128*512;
             }
             spatial_dim=width_*height_;
-            blob_size=num*channels_*w
+            blob_size=num*channels_*width_*height_;
+            //with origin data
+            //printf("here 1\n");
+            //init
+            for(z = 0; z < blob_size; ++z ) bbottom_data[z] = rand()/(float)RAND_MAX;
+          
