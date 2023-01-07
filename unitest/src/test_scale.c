@@ -66,4 +66,18 @@ int test_scale()
             int kernel_h_= 2;
             int kernel_w_= 2;
             int pooled_height_;
-            int pooled_wi
+            int pooled_width_;
+            int stride_h_=2;
+            int stride_w_=2;
+            int pad_h_=0;
+            int pad_w_=0;
+
+
+
+
+
+  for(i=0;i<num;++i)
+  {
+    for(j=0;j<channels_;++j)
+    {
+ 
