@@ -80,4 +80,7 @@ int test_scale()
   {
     for(j=0;j<channels_;++j)
     {
- 
+      factor = sscale_data[j];
+      for(k=0;k<spatial_dim;++k)
+      {
+        my_top_data[i*channels_*spatial_dim+j*spatial_dim+k]=factor*bbottom_data[i*channels_*spatial_dim+j*s
