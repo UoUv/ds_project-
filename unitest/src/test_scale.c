@@ -58,4 +58,12 @@ int test_scale()
 
             int mode = 0;
             //mode==0 : max
-  
+            //mode==1 : avg
+
+            int use_top_mask = 0;
+            int global_pooling_ = 0;
+
+            int kernel_h_= 2;
+            int kernel_w_= 2;
+            int pooled_height_;
+            int pooled_wi
