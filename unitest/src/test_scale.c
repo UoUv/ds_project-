@@ -49,4 +49,13 @@ int test_scale()
             //printf("here 1\n");
             //init
             for(z = 0; z < blob_size; ++z ) bbottom_data[z] = rand()/(float)RAND_MAX;
-          
+            for(z = 0; z < blob_size; ++z ) sscale_data[z] = rand()/(float)RAND_MAX;
+
+            out[0]='0'+ii;
+            out[2]='0'+jj;
+            out[4]='0'+kk;
+
+
+            int mode = 0;
+            //mode==0 : max
+  
