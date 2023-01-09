@@ -83,4 +83,19 @@ int test_scale()
       factor = sscale_data[j];
       for(k=0;k<spatial_dim;++k)
       {
-        my_top_data[i*channels_*spatial_dim+j*spatial_dim+k]=factor*bbottom_data[i*channels_*spatial_dim+j*s
+        my_top_data[i*channels_*spatial_dim+j*spatial_dim+k]=factor*bbottom_data[i*channels_*spatial_dim+j*spatial_dim+k];
+      }
+    }
+  }
+
+
+
+
+  sw_scale_layer_f(
+      (float*)bbottom_data,
+      (float*)sscale_data,
+      (float*)top_data,
+      num,
+      spatial_dim,
+      channels_
+      )
