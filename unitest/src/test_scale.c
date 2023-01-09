@@ -98,4 +98,15 @@ int test_scale()
       num,
       spatial_dim,
       channels_
-      )
+      );
+
+
+
+   int flag=1;
+   for(i=0;i<blob_size;++i)
+   {
+     if(top_data[i]-my_top_data[i]>0.0001||
+        top_data[i]-my_top_data[i]<-0.0001)
+     {
+       flag=0;
+       printf("error n=%d c=%d top_data[%d]=%f
