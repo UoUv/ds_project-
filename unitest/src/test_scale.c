@@ -109,4 +109,17 @@ int test_scale()
         top_data[i]-my_top_data[i]<-0.0001)
      {
        flag=0;
-       printf("error n=%d c=%d top_data[%d]=%f
+       printf("error n=%d c=%d top_data[%d]=%f my_top_data[%d]=%f\n",num,channels_,i,top_data[i],i,my_top_data[i]);
+     }
+   }
+   if(flag) printf("ok\n");
+   else exit(0);
+
+        }
+      }
+    }
+
+
+     athread_halt();
+
+        free(bbottom_d
