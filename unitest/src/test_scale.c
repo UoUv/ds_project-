@@ -122,4 +122,11 @@ int test_scale()
 
      athread_halt();
 
-        free(bbottom_d
+        free(bbottom_data);
+        free(sscale_data);
+        free(top_data);
+        free(my_top_data);
+
+  return 0;
+}
+
