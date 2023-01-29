@@ -18,4 +18,11 @@ int test_softmax()
   int ii,jj,kk;
   int blob_size;
   int use_global_stats_=0;
-  float moving_a
+  float moving_average_fraction_=0.9;
+  float eps_=1e-4;
+  struct timeval t1,t2;
+  int outer_num_,inner_num_,dim;
+  float sum;
+
+  float * top_diff=(float*)malloc(sizeof(float)*128*512*56*56);
+  float * 
