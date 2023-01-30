@@ -25,4 +25,8 @@ int test_softmax()
   float sum;
 
   float * top_diff=(float*)malloc(sizeof(float)*128*512*56*56);
-  float * 
+  float * top_data=(float*)malloc(sizeof(float)*128*512*56*56);
+  float * bottom_diff=(float*)malloc(sizeof(float)*128*512*56*56);
+  float * scale_data=(float*)malloc(sizeof(float)*56*56);
+
+  float * my_bot
