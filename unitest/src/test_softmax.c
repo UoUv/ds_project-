@@ -29,4 +29,10 @@ int test_softmax()
   float * bottom_diff=(float*)malloc(sizeof(float)*128*512*56*56);
   float * scale_data=(float*)malloc(sizeof(float)*56*56);
 
-  float * my_bot
+  float * my_bottom_diff=(float*)malloc(sizeof(float)*128*512*56*56);
+  float * my_scale_data=(float*)malloc(sizeof(float)*56*56);
+
+  char out[20]="0 0 0 time";
+
+  printf("start\n");
+  for(ii=0
