@@ -41,4 +41,10 @@ int test_softmax()
       {
         //if(k==1) break;
         printf("i=%d j=%d k=%d\n",ii,jj,kk);
-        num=a[ii];channe
+        num=a[ii];channels=b[jj];w=h=c[kk];
+        spatial_dim=w*h;
+        blob_size=num*channels*w*h;
+
+        outer_num_=num;
+        inner_num_=spatial_dim;
+        dim=channels*spatial_
