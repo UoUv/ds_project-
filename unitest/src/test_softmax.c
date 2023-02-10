@@ -47,4 +47,8 @@ int test_softmax()
 
         outer_num_=num;
         inner_num_=spatial_dim;
-        dim=channels*spatial_
+        dim=channels*spatial_dim;
+        //with origin data
+        //init
+        for(z = 0; z < blob_size; ++z ) top_data[z] = rand()/(float)RAND_MAX;
+        for(z = 0; z < blob_size; ++z ) top_diff[
