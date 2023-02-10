@@ -51,4 +51,13 @@ int test_softmax()
         //with origin data
         //init
         for(z = 0; z < blob_size; ++z ) top_data[z] = rand()/(float)RAND_MAX;
-        for(z = 0; z < blob_size; ++z ) top_diff[
+        for(z = 0; z < blob_size; ++z ) top_diff[z] = rand()/(float)RAND_MAX;
+
+
+        out[0]='0'+ii;
+        out[2]='0'+jj;
+        out[4]='0'+kk;
+
+        /*
+        caffe_copy(blob_size, top_diff, my_bottom_diff);
+        for (int i = 
