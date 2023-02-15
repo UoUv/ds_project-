@@ -60,4 +60,7 @@ int test_softmax()
 
         /*
         caffe_copy(blob_size, top_diff, my_bottom_diff);
-        for (int i = 
+        for (int i = 0; i < outer_num_; ++i) {
+          for (int k = 0; k < inner_num_; ++k) {
+            my_scale_data[k] = caffe_cpu_strided_dot<Dtype>(channels,
+                my_bottom_di
