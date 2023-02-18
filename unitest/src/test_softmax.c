@@ -63,4 +63,8 @@ int test_softmax()
         for (int i = 0; i < outer_num_; ++i) {
           for (int k = 0; k < inner_num_; ++k) {
             my_scale_data[k] = caffe_cpu_strided_dot<Dtype>(channels,
-                my_bottom_di
+                my_bottom_diff + i * dim + k, inner_num_,
+                top_data + i * dim + k, inner_num_);
+          }
+          caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, channels, inner_num_, 1,
+     
