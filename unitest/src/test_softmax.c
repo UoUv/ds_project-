@@ -67,4 +67,8 @@ int test_softmax()
                 top_data + i * dim + k, inner_num_);
           }
           caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, channels, inner_num_, 1,
-     
+              -1., sum_multiplier_.cpu_data(), my_scale_data, 1., my_bottom_diff + i * dim);
+        }
+        caffe_mul(blob_size, my_bottom_diff, top_data, my_bottom_diff);
+        */
+        memcpy(my_
