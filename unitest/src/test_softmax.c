@@ -71,4 +71,11 @@ int test_softmax()
         }
         caffe_mul(blob_size, my_bottom_diff, top_data, my_bottom_diff);
         */
-        memcpy(my_
+        memcpy(my_bottom_diff, top_diff, blob_size*sizeof(float));
+        for(i=0; i<outer_num_; ++i)
+        {
+          for(k=0; k<inner_num_; ++k)
+          {
+            sum = 0.0;
+            for(j=0; j<channels; ++j)
+    
