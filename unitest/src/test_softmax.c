@@ -83,4 +83,11 @@ int test_softmax()
             }
             my_scale_data[k] = sum;
           }
-          for(
+          for(j=0;j<channels;++j)
+          {
+            for(k=0;k<inner_num_;++k)
+            {
+              my_bottom_diff[i*dim+j*inner_num_+k] -= my_scale_data[k];
+            }
+          }
+        }
