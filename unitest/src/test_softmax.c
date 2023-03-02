@@ -98,4 +98,11 @@ int test_softmax()
           {
             for(k=0;k<inner_num_;++k)
             {
-              my_bottom_dif
+              my_bottom_diff[i*dim+j*inner_num_+k] *= top_data[i*dim+j*inner_num_+k];
+            }
+          }
+        }
+
+        double softmax_time=0.0;
+        gettimeofday(&t1, NULL);
+        sw_softmax_backward_impl_f(
