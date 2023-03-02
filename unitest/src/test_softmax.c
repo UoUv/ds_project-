@@ -91,3 +91,11 @@ int test_softmax()
             }
           }
         }
+
+        for(i=0;i<outer_num_;++i)
+        {
+          for(j=0;j<channels;++j)
+          {
+            for(k=0;k<inner_num_;++k)
+            {
+              my_bottom_dif
