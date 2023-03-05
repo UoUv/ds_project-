@@ -106,3 +106,10 @@ int test_softmax()
         double softmax_time=0.0;
         gettimeofday(&t1, NULL);
         sw_softmax_backward_impl_f(
+          (float*)top_diff,
+          (float*)top_data,
+          (float*)bottom_diff,
+          (float*)scale_data,
+          outer_num_,
+          channels,
+          inn
