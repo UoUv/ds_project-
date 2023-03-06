@@ -112,4 +112,10 @@ int test_softmax()
           (float*)scale_data,
           outer_num_,
           channels,
-          inn
+          inner_num_,
+          dim
+            );
+
+        gettimeofday(&t2, NULL);
+        softmax_time = TIME(t1,t2);
+        double total_data_size=num*channels*w*h*3*sizeof(float)
