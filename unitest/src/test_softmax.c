@@ -118,4 +118,12 @@ int test_softmax()
 
         gettimeofday(&t2, NULL);
         softmax_time = TIME(t1,t2);
-        double total_data_size=num*channels*w*h*3*sizeof(float)
+        double total_data_size=num*channels*w*h*3*sizeof(float);
+        int flag=1;
+        for(i=0;i<outer_num_;++i)
+        {
+          for(j=0;j<channels;++j)
+          {
+            for(k=0;k<inner_num_;++k)
+            {
+              if
