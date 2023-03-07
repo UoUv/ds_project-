@@ -126,4 +126,6 @@ int test_softmax()
           {
             for(k=0;k<inner_num_;++k)
             {
-              if
+              if(bottom_diff[i*dim+j*inner_num_+k]-my_bottom_diff[i*dim+j*inner_num_+k]>1e-4
+              || bottom_diff[i*dim+j*inner_num_+k]-my_bottom_diff[i*dim+j*inner_num_+k]<-1e-4)
+            
