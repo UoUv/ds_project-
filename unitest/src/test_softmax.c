@@ -128,4 +128,6 @@ int test_softmax()
             {
               if(bottom_diff[i*dim+j*inner_num_+k]-my_bottom_diff[i*dim+j*inner_num_+k]>1e-4
               || bottom_diff[i*dim+j*inner_num_+k]-my_bottom_diff[i*dim+j*inner_num_+k]<-1e-4)
-            
+              {
+                flag=0;
+                printf("softmax backward error bottom_diff %d %d %d = %f my_bottom_diff %d %d %d = %f\n",i,j,k,bottom_diff[i*dim+j*inner_num_+k],i,j,k
