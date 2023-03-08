@@ -131,4 +131,8 @@ int test_softmax()
               {
                 flag=0;
                 printf("softmax backward error bottom_diff %d %d %d = %f my_bottom_diff %d %d %d = %f\n",i,j,k,bottom_diff[i*dim+j*inner_num_+k],i,j,k,my_bottom_diff[i*dim+j*inner_num_+k]);
-                printf("top_diff = %f\ntop_data = %f\nscale_data = %f\n",top_diff[i*dim+j*inner_num_+k],top_data[i*dim+j*inner_num_+k],my_scale_
+                printf("top_diff = %f\ntop_data = %f\nscale_data = %f\n",top_diff[i*dim+j*inner_num_+k],top_data[i*dim+j*inner_num_+k],my_scale_data[k]);
+                printf("top diff %f %f %f\n",top_diff[1],top_diff[50],top_diff[99]);
+                printf("top data %f %f %f\n",top_data[1],top_data[50],top_data[99]);
+                exit(0);
+              }
