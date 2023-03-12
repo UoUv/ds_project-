@@ -136,3 +136,8 @@ int test_softmax()
                 printf("top data %f %f %f\n",top_data[1],top_data[50],top_data[99]);
                 exit(0);
               }
+            }
+          }
+        }
+        if(flag) printf("check ok\n");
+        printf("softmax_layer %dx%dx%dx%d : Bandwidth : %f GB/s, time : %f sec\n", num, channels, w, h, total_d
