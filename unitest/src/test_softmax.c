@@ -140,4 +140,13 @@ int test_softmax()
           }
         }
         if(flag) printf("check ok\n");
-        printf("softmax_layer %dx%dx%dx%d : Bandwidth : %f GB/s, time : %f sec\n", num, channels, w, h, total_d
+        printf("softmax_layer %dx%dx%dx%d : Bandwidth : %f GB/s, time : %f sec\n", num, channels, w, h, total_data_size/1e9/softmax_time, softmax_time);
+
+      }
+    }
+  }
+  free(top_diff);
+  free(top_data);
+  free(bottom_diff);
+  free(scale_data);
+  free(my_bottom_diff
