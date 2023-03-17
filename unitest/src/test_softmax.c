@@ -149,4 +149,14 @@ int test_softmax()
   free(top_data);
   free(bottom_diff);
   free(scale_data);
-  free(my_bottom_diff
+  free(my_bottom_diff);
+  free(my_scale_data);
+
+  //athread_init();
+
+
+  //athread_halt();
+
+  return 0;
+}
+
