@@ -18,4 +18,10 @@ inline int image_swdnn_offset(int b, int n, int h, int w, int B, int N, int H, i
 }
 
 void test_tensor_trans_float() {
-  i
+  int i, j;
+  double tt, total_data_size;
+  struct timeval t1, t2;
+
+  int B = 128, H = 32, W = 32, N = 64;
+  int buff_size = B*H*W*N;
+  float* input = _aligned_malloc(size
