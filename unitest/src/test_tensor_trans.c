@@ -24,4 +24,9 @@ void test_tensor_trans_float() {
 
   int B = 128, H = 32, W = 32, N = 64;
   int buff_size = B*H*W*N;
-  float* input = _aligned_malloc(size
+  float* input = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
+  float* output = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
+
+  for(i = 0; i < buff_size; ++i)
+    input[i] = rand()/(float)RAND_MAX;
+  memset(output, 0, sizeof(float)
