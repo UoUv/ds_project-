@@ -29,4 +29,11 @@ void test_tensor_trans_float() {
 
   for(i = 0; i < buff_size; ++i)
     input[i] = rand()/(float)RAND_MAX;
-  memset(output, 0, sizeof(float)
+  memset(output, 0, sizeof(float)*buff_size);
+
+  gettimeofday(&t1, NULL);
+  image_caffe_to_swdnn_f(input, output, B, N, H, W);
+  gettimeofday(&t2, NULL);
+  tt = TIME(t1,t2);
+  total_data_size = B*H*W*N*4*sizeof(float);
+  printf("1
