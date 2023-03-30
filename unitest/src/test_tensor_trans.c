@@ -47,4 +47,9 @@ void test_tensor_trans_float() {
 
   double sum1 = 0., sum2 = 0.;
   int cnt = 10;
-  for(i = 0; i < B
+  for(i = 0; i < B; ++i)
+    for(j = 0; j < N*H*W; ++j) {
+      float a = input[i*N*H*W + j];
+      float b = output[j*B + i];
+      if(fabs(a - b) > 1e-3 && cnt--)
+        printf("a %f vs b %
