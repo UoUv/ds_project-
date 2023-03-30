@@ -52,4 +52,15 @@ void test_tensor_trans_float() {
       float a = input[i*N*H*W + j];
       float b = output[j*B + i];
       if(fabs(a - b) > 1e-3 && cnt--)
-        printf("a %f vs b %
+        printf("a %f vs b %f\n", a, b);
+      sum1 += a;
+      sum2 += b;
+    }
+  printf("sum1 %lf, sum2 %lf\n", sum1, sum2);
+
+}
+
+void test_tensor_trans_4D(int B, int N, int H, int W) {
+  int i, j;
+  double tt, total_data_size;
+  struct tim
