@@ -42,4 +42,9 @@ void test_tensor_trans_float() {
   swap_lowdim_f(input, output, B, N*H*W);
   gettimeofday(&t2, NULL);
   tt = TIME(t1,t2);
-  total_data_s
+  total_data_size = B*H*W*N*2*sizeof(float);
+  printf("1.Bandwidth : %lf GB/s, time %lf sec\n", total_data_size/1e9/tt, tt);
+
+  double sum1 = 0., sum2 = 0.;
+  int cnt = 10;
+  for(i = 0; i < B
