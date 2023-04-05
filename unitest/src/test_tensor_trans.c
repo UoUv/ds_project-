@@ -63,4 +63,10 @@ void test_tensor_trans_float() {
 void test_tensor_trans_4D(int B, int N, int H, int W) {
   int i, j;
   double tt, total_data_size;
-  struct tim
+  struct timeval t1, t2;
+
+  int buff_size = B*H*W*N;
+  float* input = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
+  float* output = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
+
+  for(i = 0; i < buff
