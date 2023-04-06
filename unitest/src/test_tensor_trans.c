@@ -69,4 +69,9 @@ void test_tensor_trans_4D(int B, int N, int H, int W) {
   float* input = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
   float* output = _aligned_malloc(sizeof(float)*B*H*W*N, 128);
 
-  for(i = 0; i < buff
+  for(i = 0; i < buff_size; ++i)
+    input[i] = rand()/(float)RAND_MAX;
+  memset(output, 0, sizeof(float)*buff_size);
+
+  gettimeofday(&t1, NULL);
+  image_caffe_to_swdnn_f(input, output, B, N,
