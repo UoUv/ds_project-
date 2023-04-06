@@ -78,4 +78,11 @@ void test_tensor_trans_4D(int B, int N, int H, int W) {
   gettimeofday(&t2, NULL);
   tt = TIME(t1,t2);
   total_data_size = B*H*W*N*4*sizeof(float);
-  printf("B %d N %d H %d W %d  Bandwidth : %lf GB/s, time %lf sec\n", B, N, H, W, total_dat
+  printf("B %d N %d H %d W %d  Bandwidth : %lf GB/s, time %lf sec\n", B, N, H, W, total_data_size/1e9/tt, tt);
+#ifdef CHECK_RES
+  int cB, cNi, cRi, cCi;
+  double sum1 = 0., sum2 = 0.;
+  int cnt = 10;
+  for(cB = 0; cB < B; ++cB)
+    for(cNi = 0; cNi < N; ++cNi)
+	  for(c
