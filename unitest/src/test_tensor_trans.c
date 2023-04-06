@@ -74,4 +74,8 @@ void test_tensor_trans_4D(int B, int N, int H, int W) {
   memset(output, 0, sizeof(float)*buff_size);
 
   gettimeofday(&t1, NULL);
-  image_caffe_to_swdnn_f(input, output, B, N,
+  image_caffe_to_swdnn_f(input, output, B, N, H, W);
+  gettimeofday(&t2, NULL);
+  tt = TIME(t1,t2);
+  total_data_size = B*H*W*N*4*sizeof(float);
+  printf("B %d N %d H %d W %d  Bandwidth : %lf GB/s, time %lf sec\n", B, N, H, W, total_dat
