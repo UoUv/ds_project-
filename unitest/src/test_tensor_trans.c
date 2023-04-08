@@ -88,4 +88,8 @@ void test_tensor_trans_4D(int B, int N, int H, int W) {
 	  for(cRi = 0; cRi < H; ++cRi)
           for(cCi = 0; cCi < W; ++cCi) {
             float a = input[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)];
-            float b = output[im
+            float b = output[image_swdnn_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+            if(fabs(a - b) > 1e-3 && cnt--)
+              printf("a %f vs b %f\n", a, b);
+            sum1 += a;
+       
