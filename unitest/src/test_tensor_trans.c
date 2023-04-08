@@ -85,4 +85,7 @@ void test_tensor_trans_4D(int B, int N, int H, int W) {
   int cnt = 10;
   for(cB = 0; cB < B; ++cB)
     for(cNi = 0; cNi < N; ++cNi)
-	  for(c
+	  for(cRi = 0; cRi < H; ++cRi)
+          for(cCi = 0; cCi < W; ++cCi) {
+            float a = input[image_caffe_offset(cB, cNi, cRi, cCi, B, N, H, W)];
+            float b = output[im
